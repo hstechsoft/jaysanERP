@@ -399,7 +399,7 @@ shw_toast("Invalid","Enter Date and Qty","")
 
 $('#mod_qty').on('input', function() {
   console.log($('#max_qty').text());
-  if($(this).val() > $('#max_qty').text() || $(this).val() <= 0)
+  if(parseInt($(this).val()) > parseInt($('#max_qty').text()) || parseInt($(this).val() <= 0))
   {
     if($(this).val() != "")
     $(this).val($('#max_qty').text())
