@@ -180,9 +180,12 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 $('#add_time_btn').on('click', function(e) {
         
           
-          var min_time = $('#min_time').val();
-          var max_time = $('#max_time').val();
-          
+          var min_time = parseFloat($('#min_time').val());
+          var max_time = parseFloat($('#max_time').val());
+          if ((min_time % 1 > 0 && (min_time % 1) * 100 > 60) || (max_time % 1 > 0 && (max_time % 1) * 100 > 60)) {
+            salert("Error", "Decimal part (minutes) cannot exceed 60", "error");
+            return;
+          }
           if(min_time == "" || max_time == "")
           {
              salert("Error", "Please enter time", "error")
@@ -202,9 +205,15 @@ $('#add_time_btn').on('click', function(e) {
         $('#update_time_btn').on('click', function(e) {
             
             
-            var min_time = $('#min_time').val();
-            var max_time = $('#max_time').val();
+            var min_time = parseFloat($('#min_time').val());
+            var max_time = parseFloat($('#max_time').val());
             
+               if ((min_time % 1 > 0 && (min_time % 1) * 100 > 60) || (max_time % 1 > 0 && (max_time % 1) * 100 > 60)) {
+            salert("Error", "Decimal part (minutes) cannot exceed 60", "error");
+            return;
+          }
+
+          
             if(min_time == "" || max_time == "")
             {
                 salert("Error", "Please enter time", "error")
