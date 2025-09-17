@@ -403,7 +403,7 @@ $.get("php/get_existing_work_data.php", {
 
 var totalExtra = 0;
   $("#extra_time_table1 tr").each(function () {
-    const time = parseInt($(this).find("td").eq(2).text()) || 0;
+    const time =     parseFloat($(this).find("td").eq(2).text()) || 0;
     totalExtra += time;
   });
 
@@ -450,7 +450,7 @@ $("#process_sts").html(`
 
 
   $("#extra_time_text").text(totalExtra);
-  var totalTimeText = parseInt(data.act_work_time) + totalExtra;
+  var totalTimeText =     parseFloat(data.act_work_time) + totalExtra;
 $("#total_time_text").text(totalTimeText + " Mins (" + (totalTimeText / 60).toFixed(2) + " hours)");
     // Load remark
     if (data.remark) {
@@ -588,7 +588,7 @@ $("#add_extra_btn").click(function () {
   const selected = $("#extra_work option:selected");
   const ext_id = selected.val();
   const name = selected.text();
-  const time = parseInt($("#extra_time_in").val());
+  const time =     parseFloat($("#extra_time_in").val());
 
   if (!ext_id || !time || isNaN(time)) {
     salert("Error", "Select valid item and enter time", "error");
@@ -773,11 +773,11 @@ $("#summary_btn").click(function () {
 
   $("#work_time_table tr").each(function () {
   
-    
+    parseFloat
     const process = $(this).find("td").eq(2).text().trim();
     const qty = parseInt($(this).find("td").eq(3).text().trim()) || 0;
-    const minTime = parseInt($(this).data("min-time")) || 0;
-    const maxTime = parseInt($(this).data("max-time")) || 0;
+    const minTime =     parseFloat($(this).data("min-time")) || 0;
+    const maxTime =     parseFloat($(this).data("max-time")) || 0;
     const part_id = $(this).data('part-id');
 const part_name = $(this).data('part-name');
 const wtid = $(this).data("wtid") || "unknown";
@@ -801,8 +801,8 @@ const wtid = $(this).data("wtid") || "unknown";
   console.log("Total Max Time:", totalMaxTime);
   
   // Get actual work time
-  const actWorkTime = parseInt($("#act_work_time").text()) || 0;
- const totalExtra = parseInt($("#extra_time_text").text()) || 0;
+  const actWorkTime =     parseFloat($("#act_work_time").text()) || 0;
+ const totalExtra =     parseFloat($("#extra_time_text").text()) || 0;
 
  var freeTime = 0;
  var totalWorkUsed = 0;
@@ -899,7 +899,7 @@ $("#submit_btn").click(function () {
   $("#submit_btn").prop("disabled", true);
 
   const summaryRows = $("#work_time_summary_table tr");
-  const act_work_time = parseInt($("#act_work_time").text().trim()) || 0;
+  const act_work_time =     parseFloat($("#act_work_time").text().trim()) || 0;
 
   // determine if insert or update
 const action = window.currentWorkId ? "update" : "insert";
@@ -933,7 +933,7 @@ const action = window.currentWorkId ? "update" : "insert";
   const work_break = [];
   $("#extra_time_table1 tr").each(function () {
     const ext_id = $(this).data("ext-id");
-    const break_time = parseInt($(this).find("td").eq(2).text().trim()) || 0;
+    const break_time =     parseFloat($(this).find("td").eq(2).text().trim()) || 0;
     if (ext_id && break_time > 0) {
       work_break.push({ ext_id, break_time });
     }
@@ -1221,7 +1221,7 @@ function updateExtraTimeSummary() {
   let totalExtra = 0;
 
   $("#extra_time_table1 tr").each(function () {
-    const time = parseInt($(this).find("td").eq(2).text()) || 0;
+    const time =     parseFloat($(this).find("td").eq(2).text()) || 0;
     totalExtra += time;
   });
 
@@ -1230,7 +1230,7 @@ function updateExtraTimeSummary() {
   // subtract from total_time_text
   const totalTimeText = $("#total_time_text").text();
   const totalMatch = totalTimeText.match(/(\d+)\s+Mins/);
-  const totalMinutes = totalMatch ? parseInt(totalMatch[1]) : 0;
+  const totalMinutes = totalMatch ?     parseFloat(totalMatch[1]) : 0;
 
   const actTime = totalMinutes - totalExtra;
   $("#act_work_time").text(`${actTime} Mins`);
