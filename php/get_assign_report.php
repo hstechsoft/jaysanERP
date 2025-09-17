@@ -6,10 +6,10 @@
 
 
 $date_query = ($_GET['date_query']);
- $emp_id = ($_GET['emp_id']);
- $sub_type = ($_GET['sub_type']);
-  $model = ($_GET['model']);
-   $type = ($_GET['type']);
+ $cus_query = ($_GET['cus_query']);
+ $sub_type_query = ($_GET['sub_type_query']);
+  $model_query = ($_GET['model_query']);
+   $type_query = ($_GET['type_query']);
  
 function test_input($data) {
 $data = trim($data);
@@ -24,15 +24,16 @@ $sql .= "SELECT
     assign_data.*,
     IFNULL(SUM(pma.qty),
     0) AS modify_qty,
+     concat('<ul class=\"list-group small  mt-1\">', '<li class=\"list-group-item active small\">Modification requseted</li>',
     GROUP_CONCAT(
         CONCAT(
-            '<p class=\"small\">',
-            pma.dated,
+            '<li class=\"list-group-item small\">',
+            DATE_FORMAT(pma.modify_date, '%d-%m-%Y'),
             ' - ',
             pma.qty,
-            '<\p>'
-        )
-    ) AS date_info
+            '</li>'
+        ) SEPARATOR ''
+    ) ,'</ul>')AS date_info
 FROM
     (
     SELECT
@@ -71,7 +72,7 @@ FROM
         FROM
             customer
         WHERE
-            customer.cus_id = sales_order_form.customer_id
+            customer.cus_id = sales_order_form.customer_id 
     ) AS customer
 FROM
     (
@@ -86,11 +87,11 @@ FROM
         `assign_product`
     INNER JOIN sales_order_product ON assign_product.opid = sales_order_product.opid
     WHERE
-        1 AND assign_product.assign_type = 'Production' AND dcf_id = 0
+        $date_query AND assign_product.assign_type = 'Production' AND dcf_id = 0 and $sub_type_query
 ) AS pm
 INNER JOIN jaysan_product_model ON pm.model_id = jaysan_product_model.model_id
 INNER JOIN jaysan_model_type ON pm.type_id = jaysan_model_type.mtid
-INNER JOIN sales_order_form ON pm.oid = sales_order_form.oid
+INNER JOIN sales_order_form ON pm.oid = sales_order_form.oid where $cus_query and $model_query and $type_query 
 GROUP BY
     customer_id,
     opid

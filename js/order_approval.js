@@ -545,8 +545,12 @@ var count =0
      count = count +1;
 
      
-     $('#production_table').append(" <tr data-opid ='"+obj.opid+"'   data-dated ='"+cal_date+"'  data-qty ='"+obj.qty+"'  class='small'> <td  style='max-width: 50px;'>"+ count + "</td> <td style='max-width: 150px;'>"+obj.customer+"</td> <td>"+obj.product+"</td> </tr>")
- 
+     $('#production_table').append(" <tr data-opid ='"+obj.opid+"'   data-dated ='"+cal_date+"'  data-qty ='"+obj.aqty+"'  class='small'> <td  style='max-width: 50px;'>"+ count + "</td> <td style='max-width: 150px;'>"+obj.customer+"</td> <td>"+obj.product+"</td> </tr>")
+ if(parseInt(obj.modify_qty)>0)
+ {
+ console.log(  $('#production_table tr:last').find("td").eq(2).append(obj.date_info));
+
+ }
  })
 
 }
