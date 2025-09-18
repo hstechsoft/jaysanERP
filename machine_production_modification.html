@@ -147,24 +147,37 @@
    
       </section>
 
-      <div class="modal fade" id="assign_date" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="assign_dateLabel" aria-hidden="true">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="assign_dateLabel">Date</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body m-0  mb-2">
-                    <div id="spinner" class="d-none justify-content-center align-items-center" 
-                    style="position: fixed; top: 50%; left: 50%; width: 100%; height: 100%; 
-                           background-color: rgba(255, 255, 255, 0.7); z-index: 1050;
-                           transform: translate(-50%, -50%); display: flex;">
-                 <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
-                   <span class="visually-hidden">Loading...</span>
-                 </div>
-               </div>
-                    <div id="calendar_div" >
-                        <div id="calendar" class="p-2"></div>
+ 
+     
+<div class="container-fluid ">
+   
+    <!-- top bar -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header small">
+            <strong class="me-auto toast-title">Toast Title</strong>
+            <small class="text-muted">Just now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body toast-description  small">
+            Hello, this is a Bootstrap toast message!
+          </div>
+        </div>
+      </div>
+   
+    
+<section id="menu_bar">
+   
+</section>
+<!-- Add New Process Modal -->
+
+   <div class="row">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-6">
+ <div id="calendar_div" >
+                        <div id="calendar" class="p-3"></div>
                         <div class="d-flex justify-content-center gap-2" id="production_div">
                             <div>
                                 <div class='input-group  input-group-sm' >
@@ -219,7 +232,13 @@
                             <table id='production_table1' class='table table-bordered border-dark border-opacity-50 text-center table-sm '>
                                 <thead class="small">
                                     <tr class="small">
-                                        <th colspan='3' scope='col' class='bg-info bg-opacity-25'>Production Report</th>
+
+                                        <th colspan='3' scope='col' class='bg-info bg-opacity-25'>
+                                   <div class="d-flex justify-content-between">
+                                    <p class="m-0 p-0">Production Report</p>
+                                   <p class="m-0 p-0" id="report_date"></p>
+                                   </div>
+                                        </th>
                                     </tr>
                                     <tr class="small">
                                         <th scope='col'>#</th>
@@ -235,294 +254,13 @@
                         </div>
                         
                     </div>
-                    
-
-                    <form id="assign_de_form"   onsubmit="return false">
-                       <div class="p-2">
-                        <!-- <div class="input-group mb-2 ">
-                            
-                            <textarea class="form-control" rows="3" id="assign_de" placeholder="Details" ></textarea>
-                        </div> -->
-
-                        <div class='input-group mb-2'>
-                            <div class='input-group-prepend '>
-                            <span class='input-group-text ' id='basic-addon1'>
-                            godown </span>
-                            
-                            </div> 
-                            <select class='custom-select form-control' id='godown'>
-                        <option disabled  selected>Choose Options...</option>
-                        
-                            
-                            </select>
-                          
-                            </div>
-
-                        <div class="d-flex justify-content-center">
-                        
-                            <button type="button" id="assign_de_btn" class="btn btn-primary btn-sm">Submit</button>
-                        </div>
-                       </div>
-                       
-                       
-                       
-                    </form>
-                </div>
-                </div>
-            </div>
-        </div>
-      </div>
-<div class="container-fluid ">
-   
-    <!-- top bar -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header small">
-            <strong class="me-auto toast-title">Toast Title</strong>
-            <small class="text-muted">Just now</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body toast-description  small">
-            Hello, this is a Bootstrap toast message!
-          </div>
-        </div>
-      </div>
-   
-    
-<section id="menu_bar">
-   
-</section>
-<!-- Add New Process Modal -->
-
-<div class="card d-none ">
-    <div class="card-header d-flex justify-content-between">
-        <p class="my-auto small">      Sales  Order Approval Form</p>
-<button class="btn btn-outline-dark border-0"><i class="fas fa-calendar-check    "></i> </button>
     </div>
-    <div class="card-body">
-      
-
-
-            <div class='input-group mb-2'>
-                <div class='input-group-prepend '>
-                <span class='input-group-text ' id='basic-addon1'>
-                    order No </span>
-                
-                </div> 
-                <select class='custom-select form-control'  id='sale_order_no'  >
-               <option  value="" selected disabled>Choose Options...</option>
-             
-               
-                
-                </select>
-                </div>
-      
-            <div >
-
-            </div>
-
-            <div class="d-flex justify-content-center mt-2 border border-1 text-bg-secondary">
-           
-                    <p class="small my-auto p-2 "> order catergory : <span class="fw-bold"> Sales Order</span></p>
-
-           
-
-            </div>
-            
-            <table id='qty_table1' class='  table table-sm table-bordered border-dark border-opacity-50 text-center ' >
-                <thead >
-                    <tr class="small">
-                        <th scope="col" class="small">Order No</th>
-                        <td class="small" id="order_no"></td>
-                       
-                        <th scope="col" class="small">Employee</th>
-                        <td class="small" id="emp_name"></td>
-                        
-                      
-                    </tr>  
-                   
-                        
-                <tr class="small">
-                
-                <th colspan='6' scope='col' class='bg-secondary bg-opacity-25 small'>Product</th>
-                
-                </tr>
-                
-             
-                </thead>
-                <tbody class='align-middle small' id='sales_order_table'>
-                    <tr class="small">
-                        <th scope="col" class="small">Production Untill</th>
-                        <td colspan="3" id="production_untill" class="small "></td>
-                      
-    
-                        
-                      
-                    </tr>
-                <tr>
-                    <th scope="col" class="small">Product</th>
-                    <td colspan="3" id="product" class="small "></td>
-                  
-
-                    
-                  
-                </tr>
-                
-                <tr>
-                    <th scope="col" class="small">Model</th>
-                    <td class="small" id="pmodel"></td>
-                   
-                    <th scope="col" class="small">Type</th>
-                    <td class="small" id="ptype"></td>
-                    
-                  
-                </tr>
-
-                <tr class="">
-                    <td colspan="4" class="small" id="sub_type">
-
-                    </td>
-                </tr>
-                <tr class="small">
-                
-                    <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Customer</th>
-                  
-                    </tr>
-
-                    <tr class="small">
-
-                        </tr>          
-        
-    <tr class="small">
-        <th scope="col"> Name</th>
-        <td id="cus_name"></td>
-        <th scope="col">Phone</th>
-        <td id="cus_phone"></td>
-
-    </tr>
-    <tr class="small">
-        <th scope="col">Address</th>
-        <td id="delivery_address" colspan="3"></td>
-    </tr>
-    <tr class="small">
-                
-        <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Payment</th>
-       
-        </tr>
-        <tr class="small">
-           
-            <td colspan="2"> Total  : <span id="total_payment"></span> </td>
-            <td colspan="2"> Advance : <span id="advance_payment"></span></td>
-            
-        </tr>
-        <tr class="small">
-            <td colspan="4">
-                Balance : <span id ="balance_payment"></span>
-            </td>
-            </tr>
-
-        <tr class="small">
-        <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Order Details</th>
-        </tr>
-        <tr class="small">
-            <th scope="col">Order Type</th>
-            <td id="order_type"></td>
-            <th scope="col">
-                OE Supply
-            </th>
-            <td id="oe_supply"></td>
-           
-            
-            </tr>
-            <tr  class="small">
-                <th scope="col">Document Date</th>
-                <td id="document_date"></td>
-                <th scope="col"> Qty</th>
-                <td id="required_qty"></td>
-
-            </tr>
-            <tr  class="small">
-                <th scope="col">Color Type</th>
-                <td colspan="3" id="regular_clr_chk"></td>
-             
-
-            </tr>
-            <tr class="small">
-                <th scope="col">Color Choice</th>
-                <td colspan="3" id="color_choice_des"></td>
-            </tr>
-            <tr  class="small">
-                <th scope="col">Chasis No</th>
-                <td colspan="3" id="regular_chasis_chk"></td>
-              
-
-            </tr>
-
-            <tr  class="small">
-                <th scope="col">Chasis Choice</th>
-                <td colspan="3" id="chasis_choice_des"></td>
-            </tr>
-
-            
-            <tr  class="small">
-                <th scope="col">Loading Type</th>
-                <td colspan="3" id="loading_type"></td>
-            </tr>
-
-      <tr class="small">
-        <th colspan='6' scope='col' class='bg-secondary bg-opacity-25'>Any Other Specs</th>
-        
-        </tr>
-        <tr class="small">
-            <td colspan="6" id="any_other_spec">  </td>
-
-
-        </tr>
-                      
-                </tbody>
-                </table>   
-        
-            
-
-  
-
-    
-
-</div>
-<div class="card-footer d-flex justify-content-between">
-    <button id="approve_btn" class="btn btn-primary btn-sm"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> </button>
-    <button id="dis_approve_btn"  class="btn btn-danger btn-sm"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></button>
-</div>
-    
-
-
+   </div>
  
-</div>
-<div class="">
-    <div class="card">
-      <div class="card-header small text-center d-flex justify-content-between">
-        <p class="my-auto small"> Sales  Order Approval</p>
-        <button class="btn btn-outline-danger btn-sm border-0" id="view_cal"> <i class="fa fa-calendar" aria-hidden="true"></i> </button>
-      </div> 
-      <!-- <div class="card-header small text-center d-none m-0 p-0 text-bg-secondary" id="selected_date_div">
-       selected Date : <span id="selected_date"></span>
-      </div> -->
-      <div class="card-body m-0 p-0"  style="max-height: 75vh; overflow-y: auto;">
-        <ul class="list-group m-0 p-0" id="order_list">
-       
-          
-        </ul>
-      </div>
-    </div>
-    </div>
 
-   
+
 </div>
 
-<ul class="list-group">
-    <li class="list-group-item">17-09-2025 - 2<li>
-        <li class="list-group-item">18-09-2025 - 1<li>
-            <ul>
        
     
 

@@ -22,6 +22,8 @@ $sql = "SET time_zone = '+05:30';";
 $sql .= "SELECT
 
     assign_data.*,
+    ifnull(assign_data.qty -  IFNULL(SUM(pma.qty),
+    0),0) as aqty,
     IFNULL(SUM(pma.qty),
     0) AS modify_qty,
      concat('<ul class=\"list-group small  mt-1\">', '<li class=\"list-group-item active small\">Modification requseted</li>',
@@ -39,6 +41,7 @@ FROM
     SELECT
         COUNT(*) AS qty,
         opid,
+        assign_date,
         CONCAT(
             '<div class=\"d-flex justify-content-center gap-2 p-1 \">
 <p class=\"small  m-0 p-0\">',
@@ -77,6 +80,7 @@ FROM
 FROM
     (
     SELECT
+     assign_product.dated as assign_date,
         sales_order_product.opid,
         sales_order_product.oid,
         sales_order_product.type_id,
@@ -99,7 +103,7 @@ GROUP BY
 LEFT JOIN production_modify_approval pma ON
     assign_data.opid = pma.opid
 GROUP BY
-    assign_data.opid;";
+    assign_data.opid,assign_data.assign_date;";
 
 // Execute the multi_query
 if ($conn->multi_query($sql)) {

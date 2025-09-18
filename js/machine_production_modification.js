@@ -109,8 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // $('#selected_date_div').removeClass('d-none')
 // $('#selected_date').html(info.dateStr)
   console.log((info.dateStr));
- 
-  // $("#assign_date").modal('hide');
+   // $("#assign_date").modal('hide');
   if(edit_mode != "mod")
   {
     $('#production_date').val(info.dateStr)
@@ -123,6 +122,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
   }
+
+ 
   
 
  },
@@ -161,30 +162,12 @@ $(document).ready(function(){
         }, 300); 
       });
     }
-  $('#assign_date').on('shown.bs.modal', function () {
-     selected_date = "" 
-  if(selected_type == "Production")
-    calendar.render(); // Re-render calendar when modal is shown
-  else if(selected_type == "Production_mod")
-    calendar.render(); 
-   else   if(selected_type == "Finshed")
-   {
-    calendar.destroy()
-    get_godown_name();
-   }
-   else
-   calendar.destroy()
 
-});
 
-$("#view_cal").on("click",function(){
-  $("#calendar_div").show()
-  $("#assign_de_form").hide()
- 
 
-  $("#assign_date").modal('show');
-  selected_type = "Production_mod"
-})
+  calendar.render();
+
+
 
 
 
@@ -214,14 +197,10 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
     
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
-get_sales_order_summary()
 
 
-$('#sale_order_no').change(function() {
-  var order_no = $(this).val();
-  get_order_details(order_no)   
 
-});
+
 
 
 
@@ -233,86 +212,18 @@ console.log(edit_mode);
 });
 
 
-   $('#approve_btn').on('click', function() {
-update_sales_order_form("1")
-   });
+
    
 
-   $('#dis_approve_btn').on('click', function() {
-    update_sales_order_form("2")
-       });
-       $('#order_list').on('click', '.pro_btn', function() {
-      
-        console.log($(this).parent().siblings().find('select').val());
-      
-        var qty = 0;
-        if($(this).parent().siblings().find('input').val() !="")
-        qty = $(this).parent().siblings().find('input').val();
-      if(qty > 0)
-          insert_assign_product($(this).val(),qty,selected_type,selected_date)
-        else
-        shw_toast("Error","Please Enter Quantity","error")
-       });
 
-
-       $('#order_list').on('change', 'select', function() {
    
-        $('.order_list_control').removeClass('border border-warning shawdow');
-        $(this).closest('.order_list_control').addClass('border border-warning shawdow');
-      selected_date = ""
-      selected_type = $(this).val()
-    
-      $("#calendar_div").hide()
-      $("#assign_de_form").hide()
-     
-      console.log($("#calendar_div").html());
-      
-       if($(this).val() == "Production") 
-       {
-        $("#calendar_div").show()
-        $("#assign_de_form").hide()
-       
 
-        $("#assign_date").modal('show');
-       }
-       else if ($(this).val() == "Finshed") 
-       {
-       
-        $("#calendar_div").hide()
-        $("#assign_de_form").show()
-        $("#assign_date").modal('show');
-       }
-      
-    
-       });
 
-       $('#order_list').on('input', '.pro_qty', function() {
-        console.log($(this).data('max_qty'));
-        if($(this).val() > $(this).data('max_qty') || $(this).val() <= 0)
-        {
-          if($(this).val() != "")
-          $(this).val($(this).data('max_qty'))
-        }
-       });
+
+ 
        
        
-       $('#order_list').on('click', 'button', function() {
-       if($(this).children().hasClass("fa-regular"))
-{
-  is_emergency = 1
-  $(this).children().removeClass("fa-regular")
-  $(this).children().addClass("fa-solid")
-}
-else
-{
-  is_emergency = 0
-  $(this).children().removeClass("fa-solid")
-  $(this).children().addClass("fa-regular  ")
-}
-        console.log($(this).children().attr("class"));
-        
-       
-       }); 
+   
 
        $('#assign_de_btn').on('click', function() {
         console.log($("#godown").val() );
@@ -334,6 +245,8 @@ shw_toast("Error","Please Enter Description","error")
       
         
         if ($(this).hasClass("selected")) {
+        
+          
 edit_mode = ""
           $(this).removeClass("selected");
 
@@ -408,14 +321,84 @@ $('#mod_qty').on('input', function() {
 
 });
 
+// function modify_assign_product()
+// {
+ 
+
+// $.ajax({
+//   url: "php/modify_assign_product.php",
+//   type: "get", //send it through get method
+//   data: {
+//     opid : opid,
+//     dated : old_date,
+//     qty : $('#mod_qty').val(),
+//     ins_date : $('#production_mod_date').val()
+//   },
+//   success: function (response) {
+//   console.log(response);
+  
+   
+
+//   if (response.trim() == "ok") {
+//     shw_toast("Success","Product Assigned","success")
+//     $('#production_table').empty()
+//     get_cal_assign_report(selected_date)
+//     old_date = ""
+//     opid = ""
+//       $('#max_qty').html("0")
+//     edit_mode = ""
+//     $('#mod_qty').val("")
+//     $('#production_mod_date').val("")
+
+//      if($("#production_div").hasClass("d-none")) 
+//          {
+//           $("#production_div").addClass("d-flex")
+//           $("#production_div").removeClass("d-none")
+//          }
+         
+       
+//          if($("#production_mod_div").hasClass("d-flex")) 
+//          {
+//           $("#production_mod_div").addClass("d-none")
+//           $("#production_mod_div").removeClass("d-flex")
+//          }
+//   // Destroy the calendar
+//   calendar.destroy();
+
+//   // Show the spinner
+//   $('#spinner').removeClass('d-none');
+//   calendar.render(); 
+//   // Re-render the calendar after a slight delay to allow spinner visibility
+//   setTimeout(() => {
+//     $('#spinner').addClass('d-none');
+//   // Re-render after spinner hides
+//   }, 1000); // 
+//     }
+
+
+
+    
+//   },
+//   error: function (xhr) {
+//       //Do Something to handle error
+//   }
+// });
+
+
+
+   
+// }
+
+
 function modify_assign_product()
 {
  
 
 $.ajax({
-  url: "php/modify_assign_product.php",
+  url: "php/modify_assign_product_approve.php",
   type: "get", //send it through get method
   data: {
+    emp_id : current_user_id,
     opid : opid,
     dated : old_date,
     qty : $('#mod_qty').val(),
@@ -427,13 +410,28 @@ $.ajax({
    
 
   if (response.trim() == "ok") {
-    shw_toast("Success","Product Assigned","success")
+    shw_toast("Success","Product Modification requested","success")
     $('#production_table').empty()
+    get_cal_assign_report(selected_date)
     old_date = ""
     opid = ""
+      $('#max_qty').html("0")
     edit_mode = ""
     $('#mod_qty').val("")
     $('#production_mod_date').val("")
+
+     if($("#production_div").hasClass("d-none")) 
+         {
+          $("#production_div").addClass("d-flex")
+          $("#production_div").removeClass("d-none")
+         }
+         
+       
+         if($("#production_mod_div").hasClass("d-flex")) 
+         {
+          $("#production_mod_div").addClass("d-none")
+          $("#production_mod_div").removeClass("d-flex")
+         }
   // Destroy the calendar
   calendar.destroy();
 
@@ -460,7 +458,6 @@ $.ajax({
 
    
 }
-
 
 
 function get_godown_name()
@@ -548,9 +545,15 @@ var count =0
      $('#production_table').append(" <tr data-opid ='"+obj.opid+"'   data-dated ='"+cal_date+"'  data-qty ='"+obj.aqty+"'  class='small'> <td  style='max-width: 50px;'>"+ count + "</td> <td style='max-width: 150px;'>"+obj.customer+"</td> <td>"+obj.product+"</td> </tr>")
  if(parseInt(obj.modify_qty)>0)
  {
- console.log(  $('#production_table tr:last').find("td").eq(2).append(obj.date_info));
+  $('#production_table tr:last').find("td").eq(2).append(obj.date_info);
 
  }
+$("#report_date").text(
+  selected_date
+    ? new Date(selected_date).toLocaleDateString('en-GB')
+    : ""
+)
+
  })
 
 }
@@ -677,7 +680,7 @@ godown : $("#godown").val()
   },
   success: function (response) {
 
-console.log(response);
+
 
 if (response.trim() == "ok") {
 shw_toast("Success","Product Assigned","success")
