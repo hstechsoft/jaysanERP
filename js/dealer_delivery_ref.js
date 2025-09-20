@@ -371,7 +371,7 @@ $.ajax({
    });
    
    
-   
+   localStorage.setItem("","")
       
    }
 
