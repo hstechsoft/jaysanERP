@@ -53,7 +53,8 @@ $term  = "%" .  $term ."%";
  $sql = "SELECT * from(SELECT
 
     customer.cus_name,
-    customer.cus_phone
+    customer.cus_phone,
+    customer_id as cus_id
 FROM
     (
     SELECT
