@@ -143,6 +143,26 @@ soiv.model_name,
 soiv.type_name,
 soiv.sub_type,
 soiv.order_no,
+ soiv.type_id,
+    soiv.model_id,
+    soiv.customer_id,
+    concat(soiv.cus_name,' - ', soiv.cus_phone) as cus_info,
+     CONCAT(
+             '<div class=\"d-flex justify-content-center gap-2 p-1 \">
+ <p class=\"small  m-0 p-0\">',
+            soiv.product,
+         '</p>  <p class=\"small m-0 p-0\">',
+        soiv.model_name,
+         '</p> <p class=\"small  m-0 p-0\">',
+         soiv.type_name,
+         '</p>',
+         '<p class=\" m-0 p-0 small \"> Qty :',
+         soiv.required_qty,
+         '</p></div><p class=\" m-0 p-0 small text-muted\">',
+         soiv.sub_type,
+         '</p>'
+         ) AS product_html,
+
 (
     soiv.required_qty - SUM(ap.qty) OVER(
 PARTITION BY opid
@@ -156,7 +176,10 @@ ORDER BY
     unassi ASC
 )
 SELECT
-    *
+    assign_info.dated,
+    assign_info.product_html,
+     assign_info.cus_info,
+(concat(modify_date)) as modify_order
 FROM
     assign_info
 LEFT JOIN(
@@ -175,7 +198,7 @@ LEFT JOIN(
         actual_date
 ) AS pma
 ON
-    assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $dated and  $type_query and  $model_query and $sub_type_query and $product_query ;  
+        assign_info.opid = pma.opid AND assign_info.dated = pma.actual_date  where $date_query and $cus_query and  $type_query and  $model_query and $sub_type_query and $product_query  and assign_info.assign_type = "Production"  group by assign_info.opid,assign_info.dated limit 30;;  ;  
 SQL;
 
 
