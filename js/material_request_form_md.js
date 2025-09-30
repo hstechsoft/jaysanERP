@@ -151,11 +151,73 @@ console.log(mrf_id_g);
   get_material_request_form_details_print(mrf_id);
     }
 });
-
+get_demo()
 
 });
 
+function get_demo()
+   {
+    
+   
+   $.ajax({
+     url: "php/get_demo.php",
+     type: "POST", //send it through get method
+     data: {
+    
 
+     },
+     success: function (response) {
+console.log(response);
+
+   
+   
+   if (response.trim() != "error") {
+
+    if (response.trim() != "0 result")
+    {
+   
+     var obj = JSON.parse(response);
+   var count =0 
+ 
+ 
+     obj.forEach(function (obj) {
+      
+     
+
+
+        count = count +1;
+$('#demo').append(
+  "<tr><td>"+obj.final+"</td></tr>"
+
+ 
+  
+);
+ console.log(obj.final);
+
+     });
+   
+    
+   }
+   else{
+   // $("#@id@") .append("<td colspan='7' scope='col'>No Data</td>");
+ 
+   }
+  }
+   
+  
+   
+   
+       
+     },
+     error: function (xhr) {
+         //Do Something to handle error
+     }
+   });
+   
+   
+   
+      
+   }
 
 function get_material_request_form_details(mrf_id)
    {
