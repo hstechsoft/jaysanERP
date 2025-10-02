@@ -7,6 +7,8 @@ var current_user_name =  localStorage.getItem("ls_uname") ;
   var mrf_id_g = 0;
   var purchase_mrf_id_g = 0;
   var purchase_id=0;
+
+
 $(document).ready(function(){
  
  $("#badge_table_body tr").find("td").eq(1).find("*").prop("disabled", true);
@@ -14,6 +16,7 @@ $(document).ready(function(){
   
   $("#menu_bar").load('menu.html',
     function() { 
+     
       var lo = (window.location.pathname.split("/").pop());
       var web_addr = "#"+ (lo.substring(0, lo.indexOf(".")))
  
@@ -27,7 +30,7 @@ $(document).ready(function(){
 $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 }
       
-     
+      
     }
  );
  $("#print_container").load('material_request_form_report.html',
@@ -49,7 +52,7 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 
 
     check_login();
-    
+
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
  $("#material_requset_form_table").closest("table").hide();
