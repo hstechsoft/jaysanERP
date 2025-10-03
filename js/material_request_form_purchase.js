@@ -955,52 +955,52 @@ $('#material_requset_form_table').append(
 
      // your logic here
    
-console.log($('#order_to').data("selected-creditor_id"));
+console.log( $('#raw_material_part_no').data("selected-part_id"));
 
-//    $.ajax({
-//      url: "php/insert_material_request_form_purchase.php",
-//      type: "POST", //send it through get method
-//      data: {
-//   mrf_id : mrf_id_g,
+   $.ajax({
+     url: "php/insert_material_request_form_purchase.php",
+     type: "POST", //send it through get method
+     data: {
+  mrf_id : mrf_id_g,
 
-// order_to_id : $('#order_to').data("selected-creditor_id"),
+order_to_id : $('#order_to').data("selected-creditor_id"),
 
-// delivery_to_id : $('#delivery_to').data("selected-creditor_id"),
-// uom:$("#uom").val(),
-// purchase_email : $('#purchase_email').val(),
-// approx_delivery_days : $('#approx_delivery_days').val(),
-// raw_material_part_id :  $('#raw_material_part_no').val(),
-// raw_material_stock :  $('#raw_material_stock').val(),
-// order_qty :  $('#order_qty').val(),
-// // batch_qty :  $('#batch_qty').val(),
-// raw_material_rate :  $('#raw_material_rate').val(),
-// // next_batch_date :  $('#next_batch_date').val(),
-// // next_po_date :  $('#next_po_date').val(),
-// raw_material_budget :  $('#raw_material_budget').val(),
-// purchase_requested_by : current_user_id,
-// batch_details : JSON.stringify(batch_details),
+delivery_to_id : $('#delivery_to').data("selected-creditor_id"),
+uom:$("#uom").val(),
+purchase_email : $('#purchase_email').val(),
+approx_delivery_days : $('#approx_delivery_days').val(),
+raw_material_part_id :  $('#raw_material_part_no').val(),
+raw_material_stock :  $('#raw_material_part_no').data("selected-part_id"),
+order_qty :  $('#order_qty').val(),
+// batch_qty :  $('#batch_qty').val(),
+raw_material_rate :  $('#raw_material_rate').val(),
+// next_batch_date :  $('#next_batch_date').val(),
+// next_po_date :  $('#next_po_date').val(),
+raw_material_budget :  $('#raw_material_budget').val(),
+purchase_requested_by : current_user_id,
+batch_details : JSON.stringify(batch_details),
 
 
-//      },
-//      success: function (response) {
-//    console.log(response);
+     },
+     success: function (response) {
+   console.log(response);
    
    
-//    if (response.trim() == "ok") {
+   if (response.trim() == "ok") {
 
  
-//     location.reload();
-//   }
+    location.reload();
+  }
    
   
    
    
        
-//      },
-//      error: function (xhr) {
-//          //Do Something to handle error
-//      }
-//    });
+     },
+     error: function (xhr) {
+         //Do Something to handle error
+     }
+   });
    
    
    
@@ -1020,7 +1020,7 @@ console.log($('#order_to').data("selected-creditor_id"));
 order_to :  $('#order_to').val(),
 delivery_to :  $('#delivery_to').val(),
 raw_material_part_id :  $('#raw_material_part_no').val(),
-raw_material_stock :  $('#raw_material_stock').val(),
+raw_material_stock :  $('#raw_material_part_no').data("selected-part_id"),
 order_qty :  $('#order_qty').val(),
 batch_qty :  $('#batch_qty').val(),
 raw_material_rate :  $('#raw_material_rate').val(),
