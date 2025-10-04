@@ -589,7 +589,7 @@ if(obj.bom_production == 1)
      },
      success: function (response) {
  
-   
+   $('#stock_table_body').empty();
    
    if (response.trim() != "error") {
 
