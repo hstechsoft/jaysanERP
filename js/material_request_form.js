@@ -244,7 +244,7 @@ $("#stock_table_body").on("click", "tr td button",function(event) {
     }
 });
 var sts_array = [];
-get_material_request_form_list(sts_array,'all',"created");
+get_material_request_form_list(sts_array,'all');
 
 // $("#material_requset_form_table").on("click", "tr td button", function(event) {
 //   event.preventDefault();
@@ -278,7 +278,7 @@ $("#clear_btn").on("click", function(event) {
   event.preventDefault();
   // TODO: handle click here
   var sts_array = [];
-get_material_request_form_list(sts_array,'all',"created");
+get_material_request_form_list(sts_array,'all');
 });
 
 });
@@ -630,7 +630,7 @@ $('#stock_table_body').append("<tr  data-godown-id='"+obj.godown_id+"'><td>"+obj
    }
 
 
-  function get_material_request_form_list(sts_array, emp_id, field_name)
+  function get_material_request_form_list(sts_array, emp_id)
    {
     
    
@@ -660,86 +660,40 @@ console.log(response);
      obj.forEach(function (obj) {
      
         var edit_btn = "disabled";
-  if(field_name == "tally_stock_approved_by")
-   {
-    if(obj.tally_stock_approved_by == current_user_id && obj.status == "tally_stock_approved")
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
-    }
 
-   }
-  else if(field_name == "created" && obj.status == "created")
-   {
+   if(obj.emp_id == current_user_id && obj.status == "created")
    
-    if(obj.emp_id == current_user_id)
-    {
       edit_btn = "";
-    }
+  
     else
-    {
+  
       edit_btn = "disabled";
 
-    }
+    
 
 
-   }
-     else if(field_name == "purchase_requested_by" && obj.status == "purchase_requested")
-   {
-    if(obj.purchase_requested_by == current_user_id)
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
+   
+  
 
-    }
-   }
-    else if(field_name == "purchase_verified_by" )
-   {
-    if(obj.purchase_verified_by == current_user_id)
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
 
-    }
-   }
-       else if(field_name == "purchase_approved_by")
-   {
-    if(obj.purchase_approved_by == current_user_id)
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
 
-    }
-   }
+// var emp_invalved_list = [];
+// emp_invalved_list.push("Created by " + obj.emp_name);
 
-var emp_invalved_list = [];
-emp_invalved_list.push("Created by " + obj.emp_name);
+// if (obj.tally_stock_approved_by != null && obj.tally_stock_approved_by != "" && obj.tally_stock_approved_by != "0") {
+//   emp_invalved_list.push("Tally Stock Approved by " + obj.tally_stock_approved_by_name);
+// }
+// if (obj.purchase_requested_by != null && obj.purchase_requested_by != "" && obj.purchase_requested_by != "0") {
+//   emp_invalved_list.push("Purchase Requested by " + obj.purchase_requested_by_name);
+// }
+// if (obj.purchase_verified_by != null && obj.purchase_verified_by != "" && obj.purchase_verified_by != "0") {
+//   emp_invalved_list.push("Purchase Verified by " + obj.purchase_verified_by);
+// }
+// if (obj.purchase_approved_by != null && obj.purchase_approved_by != "" && obj.purchase_approved_by != "0") {
+//   emp_invalved_list.push("Purchase Approved by " + obj.purchase_approved_by);
+// }
+// var emp_invalved = "<ul class='list-group small'><li class='list-group-item small m-0 p-0'>" + emp_invalved_list.join("</li><li class='list-group-item  m-0 p-0 small'>") + "</li></ul>";
 
-if (obj.tally_stock_approved_by != null && obj.tally_stock_approved_by != "" && obj.tally_stock_approved_by != "0") {
-  emp_invalved_list.push("Tally Stock Approved by " + obj.tally_stock_approved_by_name);
-}
-if (obj.purchase_requested_by != null && obj.purchase_requested_by != "" && obj.purchase_requested_by != "0") {
-  emp_invalved_list.push("Purchase Requested by " + obj.purchase_requested_by_name);
-}
-if (obj.purchase_verified_by != null && obj.purchase_verified_by != "" && obj.purchase_verified_by != "0") {
-  emp_invalved_list.push("Purchase Verified by " + obj.purchase_verified_by);
-}
-if (obj.purchase_approved_by != null && obj.purchase_approved_by != "" && obj.purchase_approved_by != "0") {
-  emp_invalved_list.push("Purchase Approved by " + obj.purchase_approved_by);
-}
-var emp_invalved = "<ul class='list-group small'><li class='list-group-item small m-0 p-0'>" + emp_invalved_list.join("</li><li class='list-group-item  m-0 p-0 small'>") + "</li></ul>";
 var order_type_badge = "";
 
 if(obj.order_type == "Regular")

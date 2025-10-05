@@ -596,6 +596,111 @@ $('#delivery_to').prop('disabled', true);
 
 
 });
+
+function get_mrf_purchase_details(mrf_id,part_id)
+   {
+    
+   
+   $.ajax({
+     url: "php/get_mrf_purchase_details.php",
+     type: "get", //send it through get method
+     data: {
+     mrf_id : mrf_id,
+      part_id : part_id
+
+     },
+     success: function (response) {
+   console.log(response);
+
+   if (response.trim() != "error") {
+ $("#delivery_to").val("");
+  $("#delivery_to").removeAttr("selected-creditor_id");
+  $("#order_to").val("");
+  $("#order_to").removeAttr("selected-creditor_id");
+   $("#raw_material_part_no").val("");
+  $("#uom").val("")
+  $("#raw_material_part_no").removeAttr("selected-part_id")
+  $("#raw_material_rate").val("")
+  $("#purchase_email").val("")
+  $("#approx_delivery_days").val("")
+
+    if (response.trim() != "0 result")
+    {
+   
+     var obj = JSON.parse(response);
+   var count =0 
+
+   
+     obj.forEach(function (obj) {
+        count = count +1;
+ 
+        var batch_mat = JSON.parse(obj.batch_materials)
+               console.log(batch_mat.length);
+               if(batch_mat.length >1)
+               {
+                $('#multiple_badge_chk').prop('checked', true).trigger('change');
+                var batch_count = 0
+                 batch_mat.forEach(function (batch_mat) {
+                batch_count += 1
+$("#batch_table").append("<tr><td>"+ batch_count + "</td></tr>")
+               })
+              }
+               else
+               {
+
+               }
+if(obj.po_order_to != null && obj.po_order_to != "")
+{
+$("#order_to").val(obj.creditors_name);
+$("#order_to").data("selected-creditor_id", obj.po_order_to);
+}
+
+if(obj.po_delivery_to != null && obj.po_delivery_to != "")
+{
+  $("#delivery_to").val(obj.deliver_name);
+  $("#delivery_to").data("selected-creditor_id", obj.po_delivery_to);
+}
+
+
+if(obj.raw_material_part_id != null && obj.raw_material_part_id != "")
+{
+  
+  $("#raw_material_part_no").val(obj.raw_material_name);
+  $("#raw_material_part_no").data("selected-part_id", obj.raw_material_part_no);
+}
+
+
+
+$("#uom").val(obj.uom)
+$("#raw_material_rate").val(obj.raw_material_rate)
+  $("#purchase_email").val(obj.po_email)
+  $("#approx_delivery_days").val(obj.approx_delivery_days)
+
+     });
+   
+    
+   }
+   else{
+   // $("#@id@") .append("<td colspan='3' scope='col'>No Data</td>");
+ 
+   }
+  }
+   
+  
+   
+   
+       
+     },
+     error: function (xhr) {
+         //Do Something to handle error
+     }
+   });
+   
+   
+   
+      
+   }
+
   function get_mrf_details(mrf_id)
    {
     
@@ -618,6 +723,7 @@ $('#delivery_to').prop('disabled', true);
    
      var obj = JSON.parse(response);
    var count =0 
+var part_id = 0;
 
    var receive_sts = "<i class='fa fa-thumbs-o-up text-success h6' aria-hidden='true'></i>"
      obj.forEach(function (obj) {
@@ -627,7 +733,7 @@ if( obj.uom != "" && obj.uom != null)
 {
 uom1 = " " + obj.uom;
 }
-
+part_id = obj.part_id;
 
 
 
@@ -643,7 +749,7 @@ $("#details_body").find("tr").eq(3).find("td").eq(2).html(obj.last_purchase_date
 $("#details_body").find("tr").eq(3).find("td").eq(3).html(obj.emp_name )
      });
    
-    
+    get_mrf_purchase_details(mrf_id,part_id);
    }
    else{
    // $("#@id@") .append("<td colspan='3' scope='col'>No Data</td>");
@@ -1091,22 +1197,22 @@ console.log(response);
       console.log(obj.status);
     
 
-var emp_invalved_list = [];
-emp_invalved_list.push("Created by " + obj.emp_name);
+// var emp_invalved_list = [];
+// emp_invalved_list.push("Created by " + obj.emp_name);
 
-if (obj.tally_stock_approved_by != null && obj.tally_stock_approved_by != "" && obj.tally_stock_approved_by != "0") {
-  emp_invalved_list.push("Tally Stock Approved by " + obj.tally_stock_approved_by_name);
-}
-if (obj.purchase_requested_by != null && obj.purchase_requested_by != "" && obj.purchase_requested_by != "0") {
-  emp_invalved_list.push("Purchase Requested by " + obj.purchase_requested_by);
-}
-if (obj.purchase_verified_by != null && obj.purchase_verified_by != "" && obj.purchase_verified_by != "0") {
-  emp_invalved_list.push("Purchase Verified by " + obj.purchase_verified_by);
-}
-if (obj.purchase_approved_by != null && obj.purchase_approved_by != "" && obj.purchase_approved_by != "0") {
-  emp_invalved_list.push("Purchase Approved by " + obj.purchase_approved_by);
-}
-var emp_invalved = "<ul class='list-group small'><li class='list-group-item small m-0 p-0'>" + emp_invalved_list.join("</li><li class='list-group-item  m-0 p-0 small'>") + "</li></ul>";
+// if (obj.tally_stock_approved_by != null && obj.tally_stock_approved_by != "" && obj.tally_stock_approved_by != "0") {
+//   emp_invalved_list.push("Tally Stock Approved by " + obj.tally_stock_approved_by_name);
+// }
+// if (obj.purchase_requested_by != null && obj.purchase_requested_by != "" && obj.purchase_requested_by != "0") {
+//   emp_invalved_list.push("Purchase Requested by " + obj.purchase_requested_by);
+// }
+// if (obj.purchase_verified_by != null && obj.purchase_verified_by != "" && obj.purchase_verified_by != "0") {
+//   emp_invalved_list.push("Purchase Verified by " + obj.purchase_verified_by);
+// }
+// if (obj.purchase_approved_by != null && obj.purchase_approved_by != "" && obj.purchase_approved_by != "0") {
+//   emp_invalved_list.push("Purchase Approved by " + obj.purchase_approved_by);
+// }
+// var emp_invalved = "<ul class='list-group small'><li class='list-group-item small m-0 p-0'>" + emp_invalved_list.join("</li><li class='list-group-item  m-0 p-0 small'>") + "</li></ul>";
 
    
 var order_type_badge = "";
