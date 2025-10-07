@@ -8,7 +8,8 @@ use PHPMailer\PHPMailer\Exception;
 
 // ========= Collect Parameters =========
 $params = [
-    'save_path'     => $_POST['save_path'] ?? (__DIR__ . '/storage/pdf/invoice_' . time() . '.pdf'),
+    'save_path'     => $_POST['save_path'] ?? '',
+        'unique_file' => $_POST['unique_file'] ?? 'no', // ✅ New parameter
     'file_name'     => $_POST['file_name'] ?? 'invoice.pdf',
     'header_html'   => $_POST['header_html'] ?? '',
     'footer_html'   => $_POST['footer_html'] ?? '',
@@ -24,6 +25,30 @@ $params = [
     'email_body'    => $_POST['email_body'] ?? 'Please find your invoice attached.',
     'watermark_text'=> $_POST['watermark_text'] ?? ''
 ];
+
+
+
+
+
+
+$params['body_html'] = urldecode($params['body_html']);
+if (empty($params['save_path'])) {
+    // fallback if nothing provided
+    $params['save_path'] = __DIR__ . '/storage/pdf/invoice_' . time();
+}
+
+
+$dir = dirname($params['save_path']);
+if (!is_dir($dir)) {
+    mkdir($dir, 0775, true);
+}
+
+// ✅ Add timestamp or .pdf depending on unique_file
+if (strtolower($params['unique_file']) === 'yes') {
+    $params['save_path'] .= '_' . time() . '.pdf';
+} else {
+    $params['save_path'] .= '.pdf';
+}
 
 // ========= Setup Dompdf =========
 $options = new Options();
@@ -77,10 +102,7 @@ $dompdf->setPaper($params['paper_size'], $params['orientation']);
 $dompdf->render();
 
 // ========= Auto-create Folder & Save =========
-$dir = dirname($params['save_path']);
-if (!is_dir($dir)) {
-    mkdir($dir, 0775, true);
-}
+
 
 $pdfOutput = $dompdf->output();
 if (file_put_contents($params['save_path'], $pdfOutput) === false) {
