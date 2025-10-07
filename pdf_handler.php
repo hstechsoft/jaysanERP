@@ -19,11 +19,9 @@ $params = [
     'margin_bottom' => $_POST['margin_bottom'] ?? '50px',
     'margin_left'   => $_POST['margin_left'] ?? '40px',
     'margin_right'  => $_POST['margin_right'] ?? '40px',
-    'stream'        => $_POST['stream'] ?? 'no', // yes = download
     'email_to'      => $_POST['email_to'] ?? '',
     'email_subject' => $_POST['email_subject'] ?? 'Invoice',
     'email_body'    => $_POST['email_body'] ?? 'Please find your invoice attached.',
-    'pdf_password'  => $_POST['pdf_password'] ?? '',
     'watermark_text'=> $_POST['watermark_text'] ?? ''
 ];
 
@@ -78,20 +76,9 @@ $dompdf->loadHtml($html, 'UTF-8');
 $dompdf->setPaper($params['paper_size'], $params['orientation']);
 $dompdf->render();
 
-// ========= Optional Password Protection =========
-// if (!empty($params['pdf_password'])) {
-//     $dompdf->getCanvas()->get_cpdf()->setEncryption(
-//         $params['pdf_password'],   // user password
-//         $params['pdf_password'],   // owner password
-//         ['print', 'copy']          // allowed actions
-//     );
-// }
-
-// ========= Save PDF =========
-$dir = dirname($params['save_path']);  // get folder from path
-
+// ========= Auto-create Folder & Save =========
+$dir = dirname($params['save_path']);
 if (!is_dir($dir)) {
-    // Create folder recursively with proper permissions
     mkdir($dir, 0775, true);
 }
 
@@ -103,8 +90,7 @@ if (file_put_contents($params['save_path'], $pdfOutput) === false) {
     exit;
 }
 
-
-// ========= Email (Optional) =========
+// ========= Optional Email =========
 if (!empty($params['email_to'])) {
     $mail = new PHPMailer(true);
     try {
@@ -118,21 +104,26 @@ if (!empty($params['email_to'])) {
 
         $mail->setFrom('info@hstechsoft.com', 'HS Tech Soft');
         $mail->addAddress($params['email_to']);
-
         $mail->isHTML(true);
         $mail->Subject = $params['email_subject'];
         $mail->Body    = $params['email_body'];
         $mail->addAttachment($params['save_path'], $params['file_name']);
-
         $mail->send();
-        $result = ['status' => 'ok', 'message' => '✅ PDF generated & emailed successfully!'];
+
+        $email_status = '✅ Email sent successfully';
     } catch (Exception $e) {
-        $result = ['status' => 'error', 'message' => '❌ Email failed: ' . $mail->ErrorInfo];
+        $email_status = '❌ Email failed: ' . $mail->ErrorInfo;
     }
 } else {
-    $result = ['status' => 'ok', 'message' => '✅ PDF generated successfully!', 'file' => $params['save_path']];
+    $email_status = '📄 File saved (email not sent)';
 }
 
-// ========= Return JSON =========
+// ========= Return JSON for AJAX =========
 header('Content-Type: application/json');
-echo json_encode($result);
+echo json_encode([
+    'status' => 'ok',
+    'message' => '✅ PDF generated successfully!',
+    'email_status' => $email_status,
+    'file_path' => $params['save_path'],       // Full path
+    'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path']) // for frontend
+]);
