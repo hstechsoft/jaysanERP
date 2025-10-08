@@ -623,7 +623,7 @@ function get_mrf_purchase_details(mrf_id,part_id)
   $("#raw_material_rate").val("")
   $("#purchase_email").val("")
   $("#approx_delivery_days").val("")
-
+ $('#multiple_badge_chk').prop('checked', false).trigger('change');
     if (response.trim() != "0 result")
     {
    
@@ -647,7 +647,7 @@ $("#batch_table").append("<tr><td>"+ batch_count + "</td></tr>")
               }
                else
                {
-
+  $('#multiple_badge_chk').prop('checked', false).trigger('change');
                }
 if(obj.po_order_to != null && obj.po_order_to != "")
 {
