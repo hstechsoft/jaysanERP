@@ -172,7 +172,10 @@ if ($(this).hasClass("view_hide")) {
         // Highlight the selected row
         $(this).closest("tr").addClass("table-active");
 
-        get_material_request_form_details(purchase_id);
+        // get_material_request_form_details(purchase_id);
+
+        get_mrf_details(mrf_id_g)
+$('#details').text(" part Name : "+ $(this).data("part_name"))
   }
     if ($(this).hasClass("print")) {
       var mrf_id = $(this).val();
@@ -633,8 +636,9 @@ function get_mrf_purchase_details(mrf_id,part_id)
    
      obj.forEach(function (obj) {
         count = count +1;
- 
-        var batch_mat = JSON.parse(obj.batch_materials)
+ if(JSON.parse(obj.batch_materials) != null)
+ {
+      var batch_mat = JSON.parse(obj.batch_materials)
                console.log(batch_mat.length);
                if(batch_mat.length >1)
                {
@@ -642,13 +646,24 @@ function get_mrf_purchase_details(mrf_id,part_id)
                 var batch_count = 0
                  batch_mat.forEach(function (batch_mat) {
                 batch_count += 1
-$("#batch_table").append("<tr><td>"+ batch_count + "</td></tr>")
+$("#batch_table").append("<tr><td>"+ batch_count + "</td> <td>"+batch_mat.batch_date +"</td> <td>"+batch_mat.batch_qty +"</td><td><button type='button' class='btn btn-outline-danger border-0' ><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+
+// $("#batch_table").append( "<tr> <td>"+ count+"</td> <td>"+dateStr +"</td> <td>"+$("#order_qty").val()+"</td> <td><button type='button' class='btn btn-outline-danger border-0' ><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
                })
               }
-               else
-               {
-  $('#multiple_badge_chk').prop('checked', false).trigger('change');
-               }
+              else{
+                       batch_mat.forEach(function (batch_mat) {
+              
+                $("#order_qty").val(batch_mat.batch_qty)
+                $("#order_date").val(batch_mat.batch_date)
+                       })
+              }
+ }
+     
+              else
+              {
+
+              }
 if(obj.po_order_to != null && obj.po_order_to != "")
 {
 $("#order_to").val(obj.creditors_name);
@@ -1075,8 +1090,8 @@ delivery_to_id : $('#delivery_to').data("selected-creditor_id"),
 uom:$("#uom").val(),
 purchase_email : $('#purchase_email').val(),
 approx_delivery_days : $('#approx_delivery_days').val(),
-raw_material_part_id :  $('#raw_material_part_no').val(),
-raw_material_stock :  $('#raw_material_part_no').data("selected-part_id"),
+raw_material_part_id : $('#raw_material_part_no').data("selected-part_id") ,
+raw_material_stock : $('#raw_material_stock').val() ,
 order_qty :  $('#order_qty').val(),
 // batch_qty :  $('#batch_qty').val(),
 raw_material_rate :  $('#raw_material_rate').val(),
