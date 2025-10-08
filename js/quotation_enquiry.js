@@ -286,10 +286,10 @@ show_preview()
                       console.log(data);
                       response($.map(data, function(item) {
                         return {
-                            label: item.vendor_name + "-" + item.vendor_phone,
-                            value: item.vendor_phone,
-                            id: item.vid,
-                            vendor_name: item.vendor_name,
+                            label: item.creditor_name + "-" + item.creditor_mobile,
+                            value: item.creditor_mobile,
+                            id: item.creditor_id,
+                            vendor_name: item.creditor_name,
                            
                         };
                     }));
@@ -302,7 +302,7 @@ show_preview()
                     cacheLength: 0,
                     select: function(event, ui) {
                      
-                      $('#vendor_name').val(ui.item.vendor_name)
+                      $('#vendor_name').val(ui.item.creditor_name)
                      
                       vendor_id = ui.item.id;
                
@@ -342,10 +342,10 @@ show_preview()
                           console.log(data);
                           response($.map(data, function(item) {
                             return {
-                                label: item.vendor_name + "-" + item.vendor_phone,
-                                value: item.vendor_name,
-                                id: item.vid,
-                                vendor_phone: item.vendor_phone,
+                                label: item.creditor_name + "-" + item.creditor_mobile,
+                                value: item.creditor_name,
+                                id: item.creditor_id,
+                                vendor_phone: item.creditor_mobile,
                                
                             };
                         }));
@@ -358,7 +358,7 @@ show_preview()
                         cacheLength: 0,
                         select: function(event, ui) {
                          
-                          $('#vendor_phone').val(ui.item.vendor_phone)
+                          $('#vendor_phone').val(ui.item.creditor_mobile)
                          
                           vendor_id = ui.item.id;
                    
@@ -755,13 +755,13 @@ var count =0
 
   obj.forEach(function (obj) {
      count = count +1;
-$('#vendor_name').val(obj.vendor_name)
-$('#vendor_phone').val(obj.vendor_phone)
-$('#vendor_gst').val(obj.vendor_gst)
-$('#vendor_addr').val(obj.vendor_addr)
+$('#vendor_name').val(obj.creditor_name)
+$('#vendor_phone').val(obj.creditor_phone)
+$('#vendor_gst').val(obj.creditor_gst)
+$('#vendor_addr').val(obj.creditors_addr)
 
-$('#vendor_email').val(obj.vendor_email)
-$('#vendor_website').val(obj.vendor_website)
+$('#vendor_email').val(obj.creditors_email)
+$('#vendor_website').val(obj.creditor_website)
 
   });
 
@@ -842,34 +842,34 @@ function insert_part_spec()
 {
  
 
-$.ajax({
-  url: "php/insert_part_spec.php",
-  method: 'POST',
-  data: {
-      part_spec: part_spec,
-      part_id: part_id,
-      vendor_id : vendor_id
-  },
-  success: function (response) {
-console.log(response);
+// $.ajax({
+//   url: "php/insert_part_spec.php",
+//   method: 'POST',
+//   data: {
+//       part_spec: part_spec,
+//       part_id: part_id,
+//       vendor_id : vendor_id
+//   },
+//   success: function (response) {
+// console.log(response);
 
 
-if (response.trim() > 0) {
-qid = response.trim()
-  $("#submit_btn").prop("disabled", true);
-shw_toast("Success","Specification Sucessfully Added")
-$("#spec_form :input").prop("disabled", true);
-}
+// if (response.trim() > 0) {
+// qid = response.trim()
+//   $("#submit_btn").prop("disabled", true);
+// shw_toast("Success","Specification Sucessfully Added")
+// $("#spec_form :input").prop("disabled", true);
+// }
 
 
 
 
     
-  },
-  error: function (xhr) {
-      //Do Something to handle error
-  }
-});
+//   },
+//   error: function (xhr) {
+//       //Do Something to handle error
+//   }
+// });
 
 
 
