@@ -842,34 +842,34 @@ function insert_part_spec()
 {
  
 
-// $.ajax({
-//   url: "php/insert_part_spec.php",
-//   method: 'POST',
-//   data: {
-//       part_spec: part_spec,
-//       part_id: part_id,
-//       vendor_id : vendor_id
-//   },
-//   success: function (response) {
-// console.log(response);
+$.ajax({
+  url: "php/insert_part_spec.php",
+  method: 'POST',
+  data: {
+      part_spec: part_spec,
+      part_id: part_id,
+      vendor_id : vendor_id
+  },
+  success: function (response) {
+console.log(response);
 
 
-// if (response.trim() > 0) {
-// qid = response.trim()
-//   $("#submit_btn").prop("disabled", true);
-// shw_toast("Success","Specification Sucessfully Added")
-// $("#spec_form :input").prop("disabled", true);
-// }
+if (response.trim() > 0) {
+qid = response.trim()
+  $("#submit_btn").prop("disabled", true);
+shw_toast("Success","Specification Sucessfully Added")
+$("#spec_form :input").prop("disabled", true);
+}
 
 
 
 
     
-//   },
-//   error: function (xhr) {
-//       //Do Something to handle error
-//   }
-// });
+  },
+  error: function (xhr) {
+      //Do Something to handle error
+  }
+});
 
 
 
