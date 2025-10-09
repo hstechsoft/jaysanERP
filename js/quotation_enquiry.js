@@ -1146,6 +1146,7 @@ part_id : part_id
    
    console.log(response);
    
+   
    if (response.trim() == "ok") {
 
     $('#field_type').val("")

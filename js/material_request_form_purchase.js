@@ -681,7 +681,7 @@ if(obj.raw_material_part_id != null && obj.raw_material_part_id != "")
 {
   
   $("#raw_material_part_no").val(obj.raw_material_name);
-  $("#raw_material_part_no").data("selected-part_id", obj.raw_material_part_no);
+  $("#raw_material_part_no").data("selected-part_id", obj.raw_material_part_id);
 }
 
 
