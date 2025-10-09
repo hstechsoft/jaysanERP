@@ -80,16 +80,21 @@
 
     <div class="card">
   
-        <div class="card-header  d-flex justify-content-between m-0 p-0 text-bg-secondary bg-opacity-75">
+        <div class="card-header  d-flex justify-content-between  text-bg-light ">
          
-        <button class="btn btn-outline-light border-0 " id="add_part_btn"><i class="fa fa-plus" aria-hidden="true"></i></button>
-        <div class="my-auto">
-          <p class="my-auto">Parts</p>
-        </div>
-        <button class="btn btn-outline-light border-0 "><i class=" fa fa-pencil" aria-hidden="true"></i></button>
+        <!-- <button class="btn btn-outline-light border-0 " id="add_part_btn"><i class="fa fa-plus" aria-hidden="true"></i></button> -->
+      <p id="type_text" class="my-auto">Parts</p>
+<div class="form-check form-switch mb-4">
+   <input class="form-check-input" type="checkbox"  id="switch_type" >
+   <label class="form-check-label" for="switch_type">
+Process
+   </label>
+ </div>
+
+        <!-- <button class="btn btn-outline-light border-0 "><i class=" fa fa-pencil" aria-hidden="true"></i></button> -->
           </div>
         <div class="card-body small">
-          <div class="row">
+          <div class="row" id="part_div">
 <div class="col-sm-9">
   <div class='input-group  input-group-sm'> 
     <label class='input-group-text' for='part_name'><span>
@@ -109,15 +114,15 @@
 
       <!-- Status Labels using Bootstrap -->
 <!-- Status Labels with Text -->
-<div>
-  <p class=" m-0 p-0 mt-2 ">Status : <span id="sts_txt" class="ms-2 text-primary h6 text-decoration-underline">No Entry</span></p>
-</div>
+
 
 <div class="d-flex justify-content-center mt-1">
 <button class="btn btn-primary btn-sm" id="add_part_submit">Add Part</button>
 </div>
 
 </div>
+
+
 <div class="col-sm-3 d-flex justify-content-end ">
   <div class="input-group visually-hidden">
     <input type="file" accept="image/*" capture="environment"  class="form-control" id="part_photo_up">
@@ -126,8 +131,22 @@
   <img id="part_photo_preview"  class="img-thumbnail" style="width: 120px; height: 120px;" src="img/insert-image-icon.png" alt>
 </div>
           </div>
+
+          <div class="row d-none"  id="process_div">
+            <div class="col">
+                <div class='input-group  input-group-sm'> 
+    <label class='input-group-text' for='process_name'><span>
+    Process Name 
+    </span>
+    </label>
+    <input id='process_name' type='text' class='form-control'  >
+    </div>
+            </div>
+          </div>
           
-     
+     <div>
+  <p class=" m-0 p-0 mt-2 ">Status : <span id="sts_txt" class="ms-2 text-primary h6 text-decoration-underline">No Entry</span></p>
+</div>
             
         </div>
         <div class="card-footer d-flex justify-content-center gap-3">

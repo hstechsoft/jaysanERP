@@ -3,7 +3,8 @@ var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
- var part_id = 0;
+ var part_id = null;
+  var process_id = null;
  var part_image_addr = ""
  var vendor_id = 0
 var new_part = "no"
@@ -11,7 +12,8 @@ var part_spec= [];
 var qid= 0;
 $(document).ready(function(){
 
- 
+
+
 
 
   $("#menu_bar").load('menu.html',
@@ -34,6 +36,77 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
  );
 
 
+ $('#process_name').on('input',function(){
+    //check the value not empty
+    if ($(this).val().trim() !== "") {
+        $("label[for='process_name']").fadeOut(300);
+    } else {
+        $("label[for='process_name']").fadeIn(300);
+    }
+
+
+        if($('#process_name').val() !="")
+        {
+          $('#process_name').autocomplete({
+            //get data from databse return as array of object which contain label,value
+         
+            source: function(request, response) {
+              $.ajax({
+                url: "php/get_process_auto.php",
+                type: "get", //send it through get method
+                data: {
+                
+                  process : request.term
+              
+              },
+              dataType: "json", 
+                success: function (data) {
+         
+              console.log(data);
+              response($.map(data, function(item) {
+                return {
+                    label: item.process_name ,
+                    value: item.process_name,
+                    
+                    process_id: item.process_id
+                };
+            }));
+                  
+                }
+            
+              });
+            },
+            minLength: 2,
+            cacheLength: 0,
+            select: function(event, ui) {
+             
+              $(this).data("selected-process_id", ui.item.process_id);
+              $("#machine_name").closest('.col').removeClass('d-none')
+              $("#machine_name").focus()
+
+              $("label[for='process_name']").fadeIn(300);
+              $('#process_name').closest('.col').find('*').prop('disabled', true);
+              process_id = ui.item.process_id;
+            //   get_machine_time(ui.item.process_id)
+             get_part_spec()
+     get_sts()
+            } ,
+     
+          })
+        }
+       
+       });
+
+$("#switch_type").on("change", function(event) {
+
+ 
+  // your logic here
+if($(this).prop("checked")==true)
+  switch_process("process")
+else
+  switch_process("part")
+
+});
 
 
  get_quotation_list("0")
@@ -95,6 +168,7 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
        });
 
    $('#preview').on('click', function() {
+  
     console.log($('#field_type').val());
     
     if($('#field_type').val()!= 0)
@@ -129,7 +203,8 @@ show_preview()
    });
 
    $('#add_field').on('click', function() {
-    insert_custom_field_master()
+     insert_custom_field_master()
+    
    });
 
    $('#part_name').on('input',function(){
@@ -177,7 +252,7 @@ show_preview()
               $('#spec_itemacc').show();
               part_id = ui.item.id;
               part_image_addr = ui.item.img_addr
-              if(part_image_addr != "")
+              if(part_image_addr != "" && part_image_addr != null )
               {
                 console.log(part_image_addr);
                 
@@ -387,7 +462,7 @@ show_preview()
 
            $("#submit_btn").on("click", function() {
             getFieldData();
-          if(vendor_id != 0 && part_id != 0)
+          if(vendor_id != 0 && (part_id != null || process_id != null ))
             insert_part_spec()
           else
           shw_toast("Warning","Enter vendor or part first")
@@ -474,16 +549,24 @@ show_preview()
 
         $("#quotation_list_table").on("dblclick","tr", function(event) {
           console.log($(this).find("td").data('part-id'));
-          part_id = $(this).find("td").data('part-id')
+         
+           if($(this).find("td").data('part-id') == null)
+switch_process("process")
+ else
+  switch_process("part")
+
+
           $('#partId').val(part_id);
+          $("#process_name").val($(this).find("td").data('part_name'))
           $('#part_name').val($(this).find("td").data('part_name'));
           $('#part_no').val($(this).find("td").data('part-no'));
           $('#part_name').prop("disabled",true)
+          $('#process_name').prop("disabled",true)
           $('#part_no').prop("disabled",true)
        
           $('#spec_itemacc').show();
           part_image_addr = $(this).find("td").data('img_addr')
-          if(part_image_addr != "")
+          if(part_image_addr != "" && part_image_addr != "undefined")
           {
             console.log(part_image_addr);
             
@@ -493,10 +576,36 @@ show_preview()
           }
  get_part_spec()
  get_sts()
+
+ 
             });
 
 });
 
+
+function switch_process(stype)
+{
+part_id = null
+process_id = null
+  $("#process_name").val("")
+  $("#part_name").val("")
+    $("#part_no").val("")
+    $("#sts_txt").text("No Entry")
+if(stype== "process")
+{
+
+$("#type_text").text("Process")
+$("#process_div").toggleClass("d-none")
+$("#part_div").toggleClass("d-none")
+}
+if(stype== "part")
+{
+  $("#process_div").toggleClass("d-none")
+$("#part_div").toggleClass("d-none")
+$("#type_text").text("Parts")
+}
+
+}
 
 function get_quotation_list(sts)
 {
@@ -520,10 +629,15 @@ if (response.trim() != "error") {
   var obj = JSON.parse(response);
 var count =0 
 
+var qtype = ""
 
   obj.forEach(function (obj) {
+    if(obj.process_id != null)
+    {
+qtype = "<i class=\"fa-solid fa-industry\"></i>"
+    }
      count = count +1;
-     $('#quotation_list_table').append("<tr><td data-part-id='"+obj.part_id+"' data-part-no='"+obj.part_no+"'data-img_addr='"+obj.img_addr+"'data-part_name='"+obj.part_name+"'>"+obj.part_name+"<span class= 'text-danger'> ("+obj.qno+")</span></td></tr>")
+     $('#quotation_list_table').append("<tr><td data-part-id='"+obj.part_id+"' data-process-id='"+obj.process_id+"' data-part-no='"+obj.part_no+"'data-img_addr='"+obj.img_addr+"'data-part_name='"+obj.part_name+"'>"+obj.part_name+"<span class= 'text-danger'> ("+obj.qno+") </span><span class= 'text-success'>" +qtype+" </span></td></tr>")
 
 
   });
@@ -612,13 +726,17 @@ else{
 
 function get_sts()
 {
- 
+   var qtype = "part"
+if(part_id == null)
+qtype = "process"
 
  $.ajax({
    url: "php/get_part_qsts.php",
    type: "get", //send it through get method
    data: {
-  part_id : part_id
+  part_id : part_id,
+   process_id : process_id,
+   qtype : qtype
    
  },
   success: function (response) {
@@ -840,15 +958,18 @@ $("#vendor_form :input").prop("disabled", true);
 
 function insert_part_spec()
 {
- 
-
+   var quotation_type = "process"
+if($("#type_text").val()== "Parts")
+quotation_type = "parts"
 $.ajax({
   url: "php/insert_part_spec.php",
   method: 'POST',
   data: {
       part_spec: JSON.stringify(part_spec) ,
       part_id: part_id,
-      vendor_id : vendor_id
+      process_id: process_id,
+      vendor_id : vendor_id,
+      quotation_type : quotation_type
   },
   success: function (response) {
 console.log(response);
@@ -979,13 +1100,17 @@ else {
 }
 function get_part_spec()
 {
- 
+  var qtype = "part"
+if(part_id == null)
+qtype = "process"
 
  $.ajax({
    url: "php/get_part_spec.php",
    type: "get", //send it through get method
    data: {
-    part_id : part_id
+    part_id : part_id,
+    process_id : process_id,
+    qtype : qtype
    
  },
   success: function (response) {
@@ -1139,7 +1264,8 @@ return  "attachment/parts/"+ part_id + "/" + part_id+ "." + file_extension
 fvalue :  $('#fvalue').val(),
 ftype :  $('#field_type :selected').val(),
 std : 0,
-part_id : part_id
+part_id : part_id,
+process_id : process_id
 
      },
      success: function (response) {
