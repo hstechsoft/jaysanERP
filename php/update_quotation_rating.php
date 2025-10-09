@@ -2,7 +2,7 @@
 <?php
  include 'db_head.php';
 
- $q_type =test_input($_GET['flabel']);
+ $q_type =test_input($_GET['q_type']);
   $q_value =test_input($_GET['q_value']);
    $rqid =test_input($_GET['rqid']);
   
