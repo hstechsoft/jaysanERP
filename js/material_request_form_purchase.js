@@ -1131,29 +1131,54 @@ batch_details : JSON.stringify(batch_details),
 
   function update_material_request_form_purchase()
    {
-    
+       
+    var batch_details = [];
+   // Iterate through each row of the table
+    if($("#batch_table tr").length == 0)
+    {
+      if( $("#order_qty").val() == "" || parseInt($("#order_qty").val()) == 0 || $("#order_date").val() == "")
+      {
+        salert("Error", "Please enter order date and order quantity", "error");
+      }
+      else
+      {
+        batch_details.push({order_date: $("#order_date").val(), qty: $("#order_qty").val()});
+      }
+    }
+    else{
+   $("#batch_table tr").each(function() {
+    batch_details.push({order_date: $(this).find("td").eq(1).text(), qty: $(this).find("td").eq(2).text()});
+
+   });
+    }
    
    $.ajax({
      url: "php/update_material_request_form_purchase.php",
      type: "get", //send it through get method
      data: {
      mrf_id : mrf_id_g,
-order_to :  $('#order_to').val(),
-delivery_to :  $('#delivery_to').val(),
-raw_material_part_id :  $('#raw_material_part_no').val(),
-raw_material_stock :  $('#raw_material_part_no').data("selected-part_id"),
+
+order_to_id : $('#order_to').data("selected-creditor_id"),
+
+delivery_to_id : $('#delivery_to').data("selected-creditor_id"),
+uom:$("#uom").val(),
+purchase_email : $('#purchase_email').val(),
+approx_delivery_days : $('#approx_delivery_days').val(),
+raw_material_part_id : $('#raw_material_part_no').data("selected-part_id") ,
+raw_material_stock : $('#raw_material_stock').val() ,
 order_qty :  $('#order_qty').val(),
-batch_qty :  $('#batch_qty').val(),
+// batch_qty :  $('#batch_qty').val(),
 raw_material_rate :  $('#raw_material_rate').val(),
-next_batch_date :  $('#next_batch_date').val(),
-next_po_date :  $('#next_po_date').val(),
+// next_batch_date :  $('#next_batch_date').val(),
+// next_po_date :  $('#next_po_date').val(),
 raw_material_budget :  $('#raw_material_budget').val(),
 purchase_requested_by : current_user_id,
-approx_delivery_days : $('#approx_delivery_days').val(),
-mrf_purchase_id : purchase_id // Use the global purchase_id variable
+batch_details : JSON.stringify(batch_details),
+
 
      },
      success: function (response) {
+console.log(response);
 
    console.log(purchase_id);
    
