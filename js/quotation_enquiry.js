@@ -846,7 +846,7 @@ $.ajax({
   url: "php/insert_part_spec.php",
   method: 'POST',
   data: {
-      part_spec: part_spec,
+      part_spec: JSON.stringify(part_spec) ,
       part_id: part_id,
       vendor_id : vendor_id
   },
