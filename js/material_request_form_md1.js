@@ -59,7 +59,7 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 
 
 
-var sts_array_tally = ["tally_stock_approved"];
+var sts_array_tally = ["purchase_requested"];
 get_material_request_form_list_purchase(sts_array_tally,'all');
 
 
