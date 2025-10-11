@@ -54,8 +54,9 @@
                </div> 
 
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer d-flex justify-content-between">
               <button type="submit" class="btn btn-danger " id="reject_btn">Reject</button>
+               <button type="submit" class="btn btn-secondary " id="redo_btn">REDO</button>
             </div>
           </div>
         </div>
@@ -189,10 +190,13 @@
 
 </table>
 </div>
-
+<div class="d-flex   justify-content-between  align-content-center">
 <button type="button" class="btn btn-danger d-none" id="reject_modal_btn" data-bs-toggle="modal" data-bs-target="#reject_modal">
- Reject
+ Reject/Redo
 </button>
+<button type="button" class="btn btn-success d-none" id="approve_btn">Approve</button>
+</div>
+
 </div>
 <form class="  bg-light needs-validation p-2" id="material_request_form_purchase" novalidate onsubmit="return false">
 
@@ -553,7 +557,7 @@
 
 <div class="d-flex   justify-content-center  align-content-center mt-2">
 <!-- <button type="submit" class="btn btn-primary " id="material_request_form_purchase_btn">Insert</button> -->
-<!-- <button type="submit" class="btn btn-primary d-none" id="material_request_form_purchase_update_btn">Update</button> -->
+<button type="submit" class="btn btn-primary d-none" id="material_request_form_purchase_update_btn">Update</button>
 </div>
 </form>
   </div>
@@ -667,7 +671,7 @@
   <script src="js/material_request_form_report.js" type="module"></script>
 <script src="js/material_request_form_md1.js" type="module"></script>
  <script src="js/menu.js" type="module"></script>
- <script src="js/get_all_id.js" type="module"></script>
+ <!-- <script src="js/get_all_id.js" type="module"></script> -->
 <script src="js/mrf_popover.js" type="module"></script>
 
 

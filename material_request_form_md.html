@@ -36,6 +36,109 @@
           </div>
         </div>
       </div>
+      <div class="modal fade" id="reject_modal" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" aria-labelledby="reject_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered   ">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="reject_modalLabel">Reject MRF</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="form-floating mb-3">
+                 <textarea class="form-control rounded-3" placeholder=""  id="reject_reason" required style="height: 120px"></textarea>
+              <label for="reject_reason">reject_reason</label>
+               <span class="text-danger">*</span>
+                  <div class="invalid-feedback">
+                      Kindly Enter  Vaild
+                   </div>
+               </div> 
+
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+              <button type="submit" class="btn btn-danger " id="reject_btn">Reject</button>
+               <button type="submit" class="btn btn-secondary " id="redo_btn">REDO</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="creditors_modal" data-bs-backdrop="static" data-bs-keyboard="false"   tabindex="-1" aria-labelledby="creditors_modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered   ">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="creditors_modalLabel">Create Vendor</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="creditors_form" novalidate onsubmit="return false">
+                <div class="row">
+                <div class="col-md-6">
+   <div class="form-floating mb-2">
+                <input type="text" class="form-control rounded-3" id="creditor_name" placeholder="" required>
+                <label for="creditor_name">Creditor Name
+                <span class="text-danger">*</span> </label>
+              
+                <div class="invalid-feedback">
+                  Kindly Enter  Vaild Data
+                </div>
+              </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-2">
+                <input type="text" class="form-control rounded-3" id="creditor_phone" placeholder="" >
+                <label for="creditor_phone">Creditor Phone
+                 </label>
+              
+                <div class="invalid-feedback">
+                  Kindly Enter  Vaild Data
+                </div>
+              </div>
+                </div>
+                <div class="col-md-6">
+                  
+                  <div class="form-floating mb-2">
+                <input type="email" class="form-control rounded-3" id="creditor_email" placeholder="" >
+                <label for="creditor_email">Creditor Email
+                 </label>
+              
+                <div class="invalid-feedback">
+                  Kindly Enter  Vaild Data
+                </div>
+            </div>
+                </div>
+                <div class="col-md-6">
+                  
+                <div class="form-floating mb-2">
+              <input type="text" class="form-control rounded-3" id="creditor_gst" placeholder="" >
+              <label for="creditor_gst">Creditor Gst
+               </label>
+            
+              <div class="invalid-feedback">
+                Kindly Enter  Vaild Data
+              </div>
+            </div>
+                </div>
+              
+              </div>
+              <div class="d-flex   justify-content-center  ">
+                  <button type="submit" class="btn btn-primary " id="">Add</button>
+              
+              </div>
+              </form>
+            
+
+                
+
+
+
+
+            </div>
+            <div class="modal-footer">
+           
+            </div>
+          </div>
+        </div>
+      </div>
 <div class="container-fluid ">
     <!-- top bar -->
    
@@ -46,52 +149,405 @@
 </section>
 
 <!-- content -->
+<div class="row">
 
-<div class="p-2 rounded-4 shadow-sm bg-light " style="max-height: 60vh; overflow-y: auto;">
-  <div class="table-responsive">
-  <table class="table caption-top table-bordered  text-center">
-      <caption>Material Request Form - MD Approval</caption>
-    <thead>
-  
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Part</th>
-        <th scope="col">Requirement Date</th>
-        <th scope="col">Created By</th>
-        <th scope="col">Created On</th>
-        
-             <th scope="col">Print</th>
-  
-      </tr>
-    </thead>
-    <tbody id="material_requset_form_md_table">
-   
-    </tbody>
-  
-  
-  </table>
-  </div>
+  <div class="col-md-6">
+<div class="shadow shadow-lg mb-1 rounded-4 p-2 text-bg-light border border-2">
+ 
+
+<div class="table-responsive">
+<table class="table caption-top table-bordered table-striped ">
+    <caption>MRF Details</caption>
+
+  <tbody id="details_body" class="small">
+    <tr>
+      <th scope="col">Part Name</th>
+      <th scope="col">Req Qty</th>
+     
+      <th scope="col">Form Date</th>
+      <th scope="col">Req Date</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+   <tr>
+       <th scope="col">Order Type</th>
+      <th scope="col">Stock Availble</th>
+      <th scope="col">last Purchase Date</th>
+      <th scope="col">Employee</th>
+    </tr>
+<tr>
+  <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+</tr>
+  </tbody>
+
+
+</table>
 </div>
-<form class="p-4 border rounded-4 shadow-sm bg-light needs-validation" id="material_request_form_md" novalidate onsubmit="return false">
+<div class="d-flex   justify-content-between  align-content-center">
+<button type="button" class="btn btn-danger d-none" id="reject_modal_btn" data-bs-toggle="modal" data-bs-target="#reject_modal">
+ Reject/Redo
+</button>
+<button type="button" class="btn btn-success d-none" id="approve_btn">Approve</button>
+</div>
+
+</div>
+<form class="  bg-light needs-validation p-2" id="material_request_form_purchase" novalidate onsubmit="return false">
 
 
  <div class="container">
   <div class="row">
-    <div class="col-md-12">
-<div class="form-floating mb-3">
-  <select class="form-select" id="md_approve_option" required>
-    <option selected disabled value="">Choose...</option>
-    <option value="approved">approved</option>
-    <option value="declined">declined</option>
-    <option value="need change">need change</option>
-  </select>
- <label for="md_approve_option">Approval</label>
-   <div class="invalid-feedback">
-      Kindly Select  Vaild
+    <div class="col-md-6 d-flex align-content-center align-items-center ">
+      <div class="flex-fill">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control rounded-3" id="order_to" placeholder="Company name" required>
+        <label for="order_to">Order to <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+      </div>
+  
+<div class="  d-flex align-items-center h-100 mb-3">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#creditors_modal ">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+  </button>
+</div>
+   
+
+ 
     </div>
+
+    <div class="col-md-6 d-flex align-content-center align-items-center ">
+      <div class="flex-fill">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control rounded-3" id="delivery_to" placeholder="Company Name" required>
+        <label for="delivery_to">Delivery to <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+
+      </div>
+<div class="  d-flex align-items-center h-100 mb-3">
+         <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#creditors_modal ">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+  </button>
+      </div>
+    </div>
+
+    <div class="col-md-6 d-flex">
+      <div class="form-floating mb-3 flex-fill">
+        <input type="text" class="form-control rounded-3" id="raw_material_part_no" placeholder="" required>
+        <label for="raw_material_part_no">Raw Material Part No <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+      <div class="form-floating mb-3">
+        <select class="form-select" id="uom" required>
+          <option selected disabled value="">Choose...</option>
+          <option value="Nos">Nos</option>
+      <option value="No">No</option>
+      <option value="NUM">NUM</option>
+      <option value="Pcs">Pcs</option>
+      <option value="Sets">Sets</option>
+      <option value="Sheet">Sheet</option>
+      <option value="kgs">kgs</option>
+      <option value="Ltr">Ltr</option>
+      <option value="mls">mls</option>
+      <option value="Mts">Mts</option>
+      <option value="mtrs">mtrs</option>
+      <option value="mm">mm</option>
+      <option value="CUM">CUM</option>
+        </select>
+       <label for="uom">UOM <span class="text-danger">*</span></label>
+         <div class="invalid-feedback">
+            Kindly Select  Vaild
+          </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control rounded-3" id="raw_material_stock" placeholder="Quantity" required>
+        <label for="raw_material_stock">Raw Material Stock <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+
+    <div class="col-md-6 d-flex ">
+      <div class="flex-fill">
+ <div class="form-floating mb-3">
+        <input type="number" class="form-control rounded-3" id="raw_material_rate" placeholder="Rs">
+        <label for="raw_material_rate">Raw Material Rate <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+      </div>
+     <div class="flex-fill">
+        <div class="form-floating mb-3">
+        <input type="number" class="form-control rounded-3" id="raw_material_budget" placeholder="Rs">
+        <label for="raw_material_budget">Raw Material Budget <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+     </div>
+     
+    </div>
+
+    <div class="col-md-6 d-flex">
+<div class="flex-fill">
+  <div class="form-floating mb-2">
+       <input type="email" class="form-control rounded-3" id="purchase_email" placeholder="" required>
+       <label for="purchase_email">Email ID
+       <span class="text-danger">*</span> </label>
+     
+       <div class="invalid-feedback">
+         Kindly Enter  Vaild Data
+       </div>
+     </div>
+</div>
+  <div class="flex-fill">
+  <div class="form-floating mb-2">
+       <input type="number" class="form-control rounded-3" id="approx_delivery_days" placeholder="" required>
+       <label for="approx_delivery_days">Approx Delivery Days 
+       <span class="text-danger">*</span> </label>
+     
+       <div class="invalid-feedback">
+         Kindly Enter  Vaild Data
+       </div>
+     </div>
+  </div>
+       
+
+
+    </div>
+
+
+    <div class="col-md-6 d-flex align-items-center justify-content-between">
+      <div class="">
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" value="" id="multiple_badge_chk">
+        <label class="form-check-label" for="multiple_badge_chk">
+        Need Multiple
+        </label>
+      </div>
+      </div>
+      <div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control rounded-3" id="order_qty" placeholder="Quantity" required>
+        <label for="order_qty">Order Quantity <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+      </div>
+    </div>
+
+        <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input type="date" class="form-control rounded-3" id="order_date" placeholder="">
+        <label for="order_date"> Order Date <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div>
+    <div id="multiple_badge_div" class="col-12 d-none">
+   
+      <h6 class="text-center fw-bold">Multiple Badge Details</h6>
+<div class="table-responsive">
+<table class="table table-bordered text-center ">
+    <caption></caption>
+  <thead>
+
+    <tr>
+      <th scope="col">
+   
+        <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="badge_cat" id="stop_until_radio" value="" checked >
+              <label class="form-check-label" for="stop_until_radio">Stop Until</label> 
+            </div>
+         
+      </th>
+     <th scope="col">
+   
+        <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="badge_cat" id="split_badge_radio" value="" >
+              <label class="form-check-label" for="split_badge_radio">Split Badge</label> 
+            </div>
+         
+      </th>
+        <th scope="col">
+   
+        <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="badge_cat" id="manual_badge_radio" value="" >
+              <label class="form-check-label" for="manual_badge_radio">Manual Badge</label> 
+            </div>
+         
+      </th>
+
+    </tr>
+  </thead>
+  <tbody id="badge_table_body">
+    <tr>
+
+      <td >
+            <div class="form-floating mb-2">
+          <input type="date" class="form-control rounded-3" id="batch_start1" placeholder="" >
+          <label for="batch_start1">Start Date
+         </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+        </div>
+
+            <div class="form-floating mb-2">
+          <input type="text" class="form-control rounded-3" id="batch_time_gap1" placeholder="" >
+          <label for="batch_time_gap1">Time Gap (Days)
+          </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+        </div>
+            <div class="form-floating mb-2">
+          <input type="date" class="form-control rounded-3" id="batch_end1" placeholder="" >
+          <label for="batch_end1">End Date
+         </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+            </div>
+
+            <div>
+              <button type="button" class="btn btn-primary btn-sm " id="stop_untill_btn">Add</button>
+            </div>
+        
+      </td>
+      <td> 
+            <div class="form-floating mb-2">
+          <input type="date" class="form-control rounded-3" id="batch_start2" placeholder="" >
+          <label for="batch_start2">Start Date
+           </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+        </div>
+
+            <div class="form-floating mb-2">
+          <input type="text" class="form-control rounded-3" id="batch_time_gap2" placeholder="" >
+          <label for="batch_time_gap2">Time Gap (Days)
+           </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+        </div>
+            <div class="form-floating mb-2">
+          <input type="number" class="form-control rounded-3" id="badge_qty2" placeholder="" >
+          <label for="badge_qty2">Split Qty
+           </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+        </div>
+                <div>
+              <button type="button" class="btn btn-primary btn-sm " id="split_badge_btn">Add</button>
+            </div>
+      </td>
+      <td>
+            <div class="form-floating mb-2">
+          <input type="text" class="form-control rounded-3" id="batch_remaining" placeholder="" value="0" disabled>
+          <label for="batch_remaining">Remaining Qty
+         
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+        </div>
+
+            <div class="form-floating mb-2">
+          <input type="date" class="form-control rounded-3" id="manual_batch_date" placeholder="" >
+          <label for="manual_batch_date">date
+          </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+        </div>
+            <div class="form-floating mb-2">
+          <input type="number" class="form-control rounded-3" id="manual_batch_qty" placeholder="" >
+          <label for="manual_batch_qty">Qty
+           </label>
+        
+          <div class="invalid-feedback">
+            Kindly Enter  Vaild Data
+          </div>
+            </div>
+                <div>
+              <button type="button" class="btn btn-primary btn-sm " id="manual_btn">Add</button>
+            </div>
+      </td>
+
+    </tr>
+
+
+  </tbody>
+</table>
+
+</div>
+
+
+<div class="table-responsive">
+<table class="table caption-top table-bordered table-striped ">
+    <caption>Material Badge Table</caption>
+  <thead>   
+
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Batch Date</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Action</th>
+
+
+    </tr>
+  </thead>
+  <tbody id="batch_table">
+   
+
+
+  </tbody>
+
+
+</table>
 </div>
     </div>
 
+    <!-- <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control rounded-3" id="batch_qty" placeholder="Quantity" required>
+        <label for="batch_qty">Batch Quantity <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div> -->
+
+    <!-- <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input type="date" class="form-control rounded-3" id="next_batch_date" placeholder="">
+        <label for="next_batch_date">Next Batch Date <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div> -->
+<!-- 
+    <div class="col-md-6">
+      <div class="form-floating mb-3">
+        <input type="date" class="form-control rounded-3" id="next_po_date" placeholder="Date">
+        <label for="next_po_date">Next PO Date <span class="text-danger">*</span></label>
+        <div class="invalid-feedback">Kindly Enter Valid Data</div>
+      </div>
+    </div> -->
+
+   
   </div>
 </div>
 
@@ -100,32 +556,37 @@
 
 
 <div class="d-flex   justify-content-center  align-content-center mt-2">
-<button type="submit" class="btn btn-primary " id="material_request_form_md_btn">Insert</button>
-<button type="submit" class="btn btn-primary d-none" id="material_request_form_md_update_btn">Update</button>
+<!-- <button type="submit" class="btn btn-primary " id="material_request_form_purchase_btn">Insert</button> -->
+<button type="submit" class="btn btn-primary d-none" id="material_request_form_purchase_update_btn">Update</button>
 </div>
 </form>
+  </div>
 
+   <div class="col-md-6">
 
-
-<div class="p-2 rounded-4 shadow-sm bg-light ">
+      <div class="form-check form-switch">
+       <input class="form-check-input" type="checkbox"  id="switch_view" >
+       <label class="form-check-label" for="switch_view">
+      Toggle View 
+       </label>
+     </div>
+     
+    <div class="p-2 rounded-4 shadow-sm bg-light " style="max-height: 80vh; overflow-y: auto;">
   <div class="table-responsive">
   <table class="table caption-top table-bordered  text-center">
-      <caption>Material Request Form</caption>
+      <caption>Material Request Form - Purchase Entry</caption>
     <thead>
-  
-      <tr>
+  <tr class="small">
         <th scope="col">#</th>
         <th scope="col">Part</th>
-        <th scope="col">Requirement Date</th>
-        <th scope="col">Created By</th>
-        <th scope="col">Created On</th>
-        <th scope="col">Status</th>
+       
+     
         <th scope="col">Action</th>
-        <th scope="col">Print</th>
+       
   
       </tr>
     </thead>
-    <tbody id="material_requset_form_table">
+    <tbody id="material_requset_form_purchase_table">
    
     </tbody>
   
@@ -133,60 +594,58 @@
   </table>
   </div>
 </div>
+<div class="p-2 rounded-4 shadow-sm bg-light " style="max-height: 80vh; overflow-y: auto;"></div>
 
-
-
+  <div class="table-responsive">
+  <table class="table caption-top table-bordered  text-center">
+      <caption>Material Request Form - Finished Entry</caption>
+    <thead>
+  
+    <tr class="small">
+        <th scope="col">#</th>
+        <th scope="col">Part</th>
+       
+     
+        <th scope="col">Action</th>
+       
+  
+      </tr>
+    </thead>
+    <tbody id="material_requset_form_table">
+  
+    </tbody>
+  
+  
+  </table>
+  </div>
+  <div style="max-height: 85vh; overflow-y: auto;">
 <div class="p-1 borer border-2" id="print_container">
 
 </div>
-
-
-
 </div>
-
-<div class="table-responsive">
-<table class="table caption-top table-bordered table-striped ">
-    <caption></caption>
-  <thead>
-
-    <tr>
-      <th scope="col">Demo</th>
-
-    </tr>
-  </thead>
-  <tbody id="demo">
- 
-
-
-  </tbody>
-
-
-</table>
-
-
-<div class="accordion" id="accordion_235">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="acc_head_235">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse_235" data-bs-target="#collapse_235" aria-expanded="false" aria-controls="collapseThree">
-       235
-      </button>
-    </h2>
-    <div id="collapse_235" class="accordion-collapse collapse" aria-labelledby="acc_head_"235 data-bs-parent="#accordion_235">
-      <div class="accordion-body">
-       <ul class="list-group " ><li class="list-group-item ">scale,with door</li>,<li class="list-group-item ">scale,with door</li>,<li class="list-group-item ">scale,with door</li></ul>
-      </div>
-    </div>
+</div>
   </div>
 </div>
-  <div class="d-flex,justify-content-between">
-<p class="">
-scale,with door
-       </p>
-       <button type="button" class="btn btn-outline-primary  " value="235" ><i class=" fa-solid fa-trash "></i></button>
-       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </div>
 
+
+ 
    
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -208,10 +667,14 @@ scale,with door
 
 <script src="js/printThis.js" type="module"></script>
 <!-- external js -->
+
   <script src="js/material_request_form_report.js" type="module"></script>
-<script src="js/material_request_form_md.js" type="module"></script>
-<script src="js/menu.js" type="module"></script>
-<!-- <script src="js/get_all_id.js" type="module"></script> -->
+<script src="js/material_request_form_md1.js" type="module"></script>
+ <script src="js/menu.js" type="module"></script>
+ <!-- <script src="js/get_all_id.js" type="module"></script> -->
+<script src="js/mrf_popover.js" type="module"></script>
+
+
 
 </body>
 </html>

@@ -63,8 +63,8 @@ var sts_array_tally = ["purchase_requested"];
 get_material_request_form_list_purchase(sts_array_tally,'all');
 
 
-var sts_array = ["purchase_requested"];
-get_material_request_form_list(sts_array,current_user_id,"purchase_requested");
+var sts_array = ["md_approved",,"md_redo","md_rejected"];
+get_material_request_form_list(sts_array,current_user_id,"all");
 
 $("#material_requset_form_purchase_table").on("click", "tr", function(event) {
     event.preventDefault();
@@ -76,8 +76,9 @@ mrf_id_g = $(this).find("button.print").val();
 
 get_mrf_details(mrf_id_g)
 $('#details').text(" part Name : "+ $(this).data("part_name"))
- $("#reject_modal_btn").removeClass("d-none");
-$("#reject_btn").data("mrf_id", mrf_id_g);
+
+if($("#material_request_form_purchase_update_btn").hasClass("d-none") == true)
+  $("#material_request_form_purchase_update_btn").removeClass("d-none");
     });
 
     $("#material_requset_form_purchase_table").on("click", "tr td  button", function(event) {
@@ -596,6 +597,9 @@ $('#delivery_to').prop('disabled', true);
  $("#material_requset_form_purchase_table").closest("table").toggle();
  if($("#reject_modal_btn").hasClass("d-none") == false)
  $("#reject_modal_btn").addClass("d-none");
+
+  if($("#approve_btn").hasClass("d-none") == false)
+ $("#approve_btn").addClass("d-none");
 });
 
 $("#reject_btn").on("click", function(event) {
@@ -603,7 +607,7 @@ $("#reject_btn").on("click", function(event) {
   // TODO: handle click here
   if($("#reject_reason").val()!="")
   {
-    update_reject($(this).data("mrf_id"))
+    update_reject($(this).data("mrf_id"),"md_rejected",$("#reject_reason").val())
   }
   else
   {
@@ -611,21 +615,46 @@ $("#reject_btn").on("click", function(event) {
   }
 });
 
+$("#redo_btn").on("click", function(event) {
+  event.preventDefault();
+  // TODO: handle click here
+  if($("#reject_reason").val()!="")
+  {
+    update_reject($(this).data("mrf_id"),"md_redo",$("#reject_reason").val())
+  }
+  else
+  {
+    shw_toast("Warning","Enter Reason","")
+  }
+});
+
+$("#approve_btn").on("click", function(event) {
+  event.preventDefault();
+  // TODO: handle click here
+ 
+    update_reject($(this).data("mrf_id"),"md_approved",'')
+  
+ 
+});
+
+
 
 });
 
 
-  function update_reject(mrf_id)
+  function update_reject(mrf_id,sts,cmd)
    {
     
    
    $.ajax({
-     url: "php/update_material_request_form_status.php",
+     url: "php/update_material_request_form_md_sts.php",
      type: "get", //send it through get method
      data: {
-     status : "purchase_rejected",
+     status : sts,
 mrf_id : mrf_id,
-emp_id : current_user_id
+emp_id : current_user_id,
+reason : cmd
+
 
      },
      success: function (response) {
@@ -792,7 +821,12 @@ $("#raw_material_rate").val(obj.raw_material_rate)
 
     if (response.trim() != "0 result")
     {
-   
+    $("#approve_btn").removeClass("d-none");
+  $("#reject_modal_btn").removeClass("d-none");
+$("#redo_btn").data("mrf_id", mrf_id_g);
+$("#reject_btn").data("mrf_id", mrf_id_g);
+$("#approve_btn").data("mrf_id", mrf_id_g);
+
      var obj = JSON.parse(response);
    var count =0 
 var part_id = 0;
@@ -962,70 +996,8 @@ console.log(response);
  
      obj.forEach(function (obj) {
       console.log(obj.status);
-        var edit_btn = "disabled";
-  if(field_name == "tally_stock_approved_by")
-   {
-    if(obj.tally_stock_approved_by == current_user_id && obj.status == "tally_stock_approved")
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
-    }
+        var edit_btn = "";
 
-   }
-  else if(field_name == "created" && obj.status == "created")
-   {
-   
-    if(obj.emp_id == current_user_id)
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
-
-    }
-
-
-   }
-     else if(field_name == "purchase_requested" && obj.status == "purchase_requested")
-   {
-    if(obj.purchase_requested_by == current_user_id)
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
-
-    }
-   }
-    else if(field_name == "purchase_verified_by" )
-   {
-    if(obj.purchase_verified_by == current_user_id)
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
-
-    }
-   }
-       else if(field_name == "purchase_approved_by")
-   {
-    if(obj.purchase_approved_by == current_user_id)
-    {
-      edit_btn = "";
-    }
-    else
-    {
-      edit_btn = "disabled";
-
-    }
-   }
 
 var emp_invalved_list = [];
 emp_invalved_list.push("Created by " + obj.emp_name);
