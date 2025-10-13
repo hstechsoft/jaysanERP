@@ -59,7 +59,7 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 
 
 
-var sts_array_tally = ["tally_stock_approved"];
+var sts_array_tally = ["purchase_requested"];
 get_material_request_form_list_purchase(sts_array_tally,'all');
 
 
@@ -670,7 +670,7 @@ function get_mrf_purchase_details(mrf_id,part_id)
      },
      success: function (response) {
    console.log(response);
-
+$("#batch_table").empty()
    if (response.trim() != "error") {
  $("#delivery_to").val("");
   $("#delivery_to").removeAttr("selected-creditor_id");
@@ -691,6 +691,7 @@ function get_mrf_purchase_details(mrf_id,part_id)
 
    
      obj.forEach(function (obj) {
+      
         count = count +1;
          $("#order_qty").val(obj.order_qty)
  if(JSON.parse(obj.batch_materials) != null)
