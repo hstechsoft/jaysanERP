@@ -61,12 +61,14 @@ $("#payment_table").on("click","button", function(event) {
 
   $("#payment_list").on("click","button", function(event) {
     var btn_val = $(this).val()
-   
-    console.log($(this).closest("tr").find("td").eq(0).find('input').val());
+   var pay_sts = "approved"
+    if($(this).hasClass == "decline")
+  pay_sts = "decline"
+
     var pay_date = $(this).closest("tr").find("td").eq(0).find('input').val()
     {
       swal({
-        title: "Are you sure - Approve?",
+        title: "Are you sure -?" + pay_sts,
         text: "You will not be able to recover this again!",
         icon: "warning",
         buttons: [
@@ -77,10 +79,12 @@ $("#payment_table").on("click","button", function(event) {
       }).then(function(isConfirm) {
         if (isConfirm) {
           $(this).attr('disabled', true);
-          update_jaysan_payment(btn_val,pay_date);
+          update_jaysan_payment(btn_val,pay_date,pay_sts);
         }
       });
      }
+
+
     });
     // let pressTimer;
     // $("#payment_list").on("mousedown touchstart","table", function(event) {
@@ -130,7 +134,7 @@ var count =0
 
 $('#payment_table').append("  <tr class='small'><td>"+count+"</td><td>"+obj.cus_name+"</td><td>"+obj.emp_name+"</td><td>"+obj.order_no+"</td><td>"+obj.date_f+"</td><td>"+obj.ref_no +"</td><td> "+formattedPayment+"</td><td><button class='btn btn-success btn-sm' value='"+obj.payment_id+"'>"+'ok'+"</button></td> </tr>")
 
-$('#payment_list').append(" <li class=' list-group-item m-0 p-0'> <table class='table table-bordered table-sm m-0 p-0'> <tbody> <tr  class='small text-bg-light'> <td class = 'small'> <span class='me-2'><i class='fa fa-user' aria-hidden='true'></i></span>"+obj.cus_name+"</td> <td colspan='2' class='text-end small'> <span><i class='fa fa-phone me-2' aria-hidden='true'></i></span> "+obj.cus_phone+"</td> </tr> <tr> <td style='max-width: 120px;'class='small'><span><i class='fa fa-id-badge me-2' aria-hidden='true'></i></span>"+obj.emp_name+"</td> <td class='small' style='max-width: 120px;'>"+obj.order_no+"</td> <td class='small text-end'> "+obj.date_f+"</td> </tr> <tr> <td class='small text-bg-warning'> "+formattedPayment+"</td> <td colspan='2' class='small'> <span class='text-decoration-underline'> Ref :</span>"+obj.ref_no +" </td> </tr> <tr><td colspan='2' class='text-center'><input type='datetime-local' class='form-control form-control-sm' value = '"+obj.payment_date+"' placeholder='Date' ></td><td class = 'd-flex align-content-center justify-content-end'><button value='"+obj.payment_id+"' class=' btn btn-primary btn-sm'>Approve</button></td></tr> </tbody> </table> </li>") 
+$('#payment_list').append(" <li class=' list-group-item m-0 p-0'> <table class='table table-bordered table-sm m-0 p-0'> <tbody> <tr  class='small text-bg-light'> <td class = 'small'> <span class='me-2'><i class='fa fa-user' aria-hidden='true'></i></span>"+obj.cus_name+"</td> <td colspan='2' class='text-end small'> <span><i class='fa fa-phone me-2' aria-hidden='true'></i></span> "+obj.cus_phone+"</td> </tr> <tr> <td style='max-width: 120px;'class='small'><span><i class='fa fa-id-badge me-2' aria-hidden='true'></i></span>"+obj.emp_name+"</td> <td class='small' style='max-width: 120px;'>"+obj.order_no+"</td> <td class='small text-end'> "+obj.date_f+"</td> </tr> <tr> <td class='small text-bg-warning'> "+formattedPayment+"</td> <td colspan='2' class='small'> <span class='text-decoration-underline'> Ref :</span>"+obj.ref_no +" </td> </tr> <tr><td colspan='2' class='text-center'><input type='datetime-local' class='form-control form-control-sm' value = '"+obj.payment_date+"' placeholder='Date' ></td><td class = 'd-flex align-content-center justify-content-between'><button value='"+obj.payment_id+"' class=' btn btn-primary btn-sm decline'>Decline</button><button value='"+obj.payment_id+"' class=' btn btn-primary btn-sm'>Approve</button></td></tr> </tbody> </table> </li>") 
 });
 
  
@@ -158,7 +162,7 @@ else{
 }
 
 
-function update_jaysan_payment(btn_val,pay_date)
+function update_jaysan_payment(btn_val,pay_date,pay_sts)
 {
  
 
@@ -168,7 +172,8 @@ $.ajax({
   data: {
 emp_id:current_user_id,
 payment_id:btn_val,
-pay_date :pay_date
+pay_date :pay_date,
+pay_sts : pay_sts
 
 
   },

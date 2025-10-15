@@ -1229,12 +1229,16 @@ var count =0
 
 
   obj.forEach(function (obj) {
+    var bd = ""
      count = count +1;
     //  $('#order_table').append("<tr><td>"+count+"</td><td>"+obj.order_no+"</td><td>"+obj.order_category+"</td><td>"+obj.product+"</td><td>"+obj.customer+"</td><td>"+obj.so_date+"</td><td><button type = 'button' value='"+obj.oid+"'  class='edit_btn btn btn-outline-primary border-0'><i class='fa-solid fa-edit'></i> </button></td><td><button  type = 'button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td></tr>")
+if(obj.pay_sts == "na")
+bd = "disabled"
+
+console.log(obj.pay_sts);
 
 
-
-     $('#order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary edit_btn border-0'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td></tr>")
+     $('#order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary edit_btn border-0'><i class='fa-solid fa-edit'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='delete_btn btn btn-outline-danger border-0'><i class='fa-solid fa-trash-can'></i></button></td><td><button  type = 'button'  value='"+obj.oid+"' class='pay_btn btn btn-success btn-sm border-0'>Pay</td><td style='max-width: 50px;'><button  "+bd+" type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td></tr>")
   });
 
  
