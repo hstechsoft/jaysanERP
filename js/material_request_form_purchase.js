@@ -702,9 +702,9 @@ $("#batch_table").empty()
                {
                 $('#multiple_badge_chk').prop('checked', true).trigger('change');
                 var batch_count = 0
-                 batch_mat.forEach(function (batch_mat) {
+                 batch_mat.forEach(function (batch_mat_obj) {
                 batch_count += 1
-$("#batch_table").append("<tr><td>"+ batch_count + "</td> <td>"+batch_mat.batch_date +"</td> <td>"+batch_mat.batch_qty +"</td><td><button type='button' class='btn btn-outline-danger border-0' ><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+$("#batch_table").append("<tr><td>"+ batch_count + "</td> <td>"+batch_mat_obj.batch_date +"</td> <td>"+batch_mat_obj.batch_qty +"</td><td><button type='button' class='btn btn-outline-danger border-0' ><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 
 // $("#batch_table").append( "<tr> <td>"+ count+"</td> <td>"+dateStr +"</td> <td>"+$("#order_qty").val()+"</td> <td><button type='button' class='btn btn-outline-danger border-0' ><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
                })
