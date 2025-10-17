@@ -76,12 +76,12 @@ $html = "
     @page { margin: {$params['margin_top']} {$params['margin_right']} {$params['margin_bottom']} {$params['margin_left']}; }
     header { position: fixed; top: -{$params['margin_top']}; left: 0; right: 0; height: 60px; }
     footer { position: fixed; bottom: -{$params['margin_bottom']}; left: 0; right: 0; height: 30px; text-align:center; font-size:10px; color:#666; }
-    body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+    body { font-family: DejaVu Sans, sans-serif; font-size: 8px; }
     .page-break { page-break-after: always; }
 
     /* Clean Invoice Table */
-    table { border-collapse: collapse; width: 100%; font-size: 12px; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    table {  border: 0.5px ; border-collapse: collapse; font-size: 9px; }
+    th, td { border: 0.5px solid #ccc; padding: 6px; text-align: left; }
     th { background: #f2f2f2; }
     tfoot td { font-weight: bold; background: #eee; }
     thead { display: table-header-group; }
