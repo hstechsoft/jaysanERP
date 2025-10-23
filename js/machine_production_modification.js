@@ -401,7 +401,7 @@ function get_assign_report() {
                         count = count + 1;
                         // append logic here
 
-                        $("#report_tbl").append("<tr><td>" + count + "</td ><td>" + obj.cus_info + "</td><td>" + obj.product_html + "</td><td>" + obj.dated + "</td></tr>");
+                        $("#report_tbl").append("<tr><td>" + count + "</td ><td>" + obj.cus_info + "</td><td>" + obj.product_html +"</td><td>" + obj.assgin_date + "</td></tr>");
                     });
 
 
