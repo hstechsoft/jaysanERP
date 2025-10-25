@@ -5,7 +5,94 @@ var phone_id = urlParams.get('phone_id');
 var current_user_name =  localStorage.getItem("ls_uname") ; 
  var physical_stock_array = [];
 $(document).ready(function(){
+  var allWeldingData = [];
+
+  var processData = {
+    process_id: "297",
+   
+  };
+
+   
+ var arr_obj = []
+ arr_obj[1] = [];
+  arr_obj[0] = [];
+arr_obj[1].push({
+  godown_id: "1",
+  dep_id: "1",
+  dep_sec_id : "",
+  dep_sec_machine_id : "",
+  min_time : "",
+  max_time : "",
+  cost : ""
+
+});
+
+arr_obj[1].push({
+  godown_id: "10",
+  dep_id: "1",
+  dep_sec_id : "",
+  dep_sec_machine_id : "",
+  min_time : "",
+  max_time : "",
+  cost : ""
+});
+
+ allWeldingData.push({
+      input_parts: arr_obj[0],
+      process: processData,
+    
+    
+    });
+
+    processData = {
+    process_id: "298",
+   
+  };
+     allWeldingData.push({
+      input_parts: arr_obj[1],
+      process: processData,
+    
+    
+    });
+
+console.log(allWeldingData);
+
+
+$.ajax({
+  url: "php/ref_delete.php",
+  type: "POST", //send it through get method
+  data: {
+   allWeldingData: JSON.stringify(allWeldingData),
+  },
+  success: function (response) {
+
+
+if (response.trim() != "error") {
+console.log(response);
+
+ if (response.trim() != "0 result")
+ {
+
+  
+
  
+}
+else{
+// $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+}
+}
+
+
+
+
+    
+  },
+  error: function (xhr) {
+      //Do Something to handle error
+  }
+});
+
   
   $("#menu_bar").load('menu.html',
     function() { 
@@ -32,7 +119,7 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
     
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
-get_jaysan_po_material()
+
 $("#printInvoice").on("click", function(event) {
   event.preventDefault();
   // TODO: handle click here
@@ -147,50 +234,30 @@ $("#print").on("click", function(event) {
 // });
 
 
- function get_jaysan_po_material()
+
+function insert_new_process(processId)
 {
- 
 
 $.ajax({
-  url: "php/get_jaysan_po_material.php",
+  url: "php/insert_nprocess.php",
   type: "get", //send it through get method
   data: {
-  jaysan_po_id : 9
+
+    process_id : processId,
+       edit_process_id : edit_process_id,
+       input_part_id : sel_input_part_id,
+       output_part_id : sel_output_part_id,
   },
   success: function (response) {
-
-
-if (response.trim() != "error") {
 console.log(response);
 
- if (response.trim() != "0 result")
- {
-
-  var obj = JSON.parse(response);
-var count =0 
 
 
-  obj.forEach(function (obj) {
-    console.log(obj.con_email);
-    
-   var material = JSON.parse(obj.materials_list);
-
-
- material.forEach(function (mat) {
-console.log(mat.material_name);
- })
-   
-
-
-
-  });
-
- 
-}
-else{
-// $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
-
-}
+if (response.trim()) {
+  sessionStorage.setItem('editProcessId', response.trim());
+  sessionStorage.setItem('breadcrumb', $('#out_breadcrumb').html());
+  // Reload the page
+   location.reload();
 }
 
 
@@ -207,6 +274,8 @@ else{
 
    
 }
+
+
 
 
 
