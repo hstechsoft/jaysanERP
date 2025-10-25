@@ -384,7 +384,7 @@ else if($(this).hasClass('pay_btn'))
            {
            
            
-            window.open("dispatch_clearance_form.html?oid=" + order_no, "_blank");
+            window.open("dispatch_clearance_form.html?phone_id="+phone_id+"&oid=" + order_no, "_blank");
                 
            }
               else
@@ -2406,7 +2406,7 @@ function convertToRupeesWords(num) {
 
 function check_login()
 {
- 
+
 if (localStorage.getItem("logemail") == null && phone_id == null )  {
  window.location.replace("login.html");
 }

@@ -49,7 +49,7 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
    {
    
    
-    window.open("dispatch_clearance_form.html?oid=" + order_no, "_blank");
+  window.open("dispatch_clearance_form.html?phone_id="+phone_id+"&oid=" + order_no, "_blank");
         
    }
       else
