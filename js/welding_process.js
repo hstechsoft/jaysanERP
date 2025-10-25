@@ -186,11 +186,6 @@ if(tbl_valid == true)
  {
 
 
-
-
-
-
-
 var allWeldingData = [];
 var output_part = "0"
 $("#welding_table tr").each(function() {
