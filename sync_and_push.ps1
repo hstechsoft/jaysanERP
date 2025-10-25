@@ -3,7 +3,7 @@ param([string]$msg)
 
 # Source and Destination
 $SRC = Join-Path (Get-Location) "php"       # only copy /php subfolder
-$DEST = "C:\xampp\htdocs\jaysanERP\php"            # destination (adjust path)
+$DEST = "E:\web\htdocs\jaysanERP\php"            # destination (adjust path)
 
 Write-Output "Copying /php folder..."
 robocopy $SRC $DEST /MIR
@@ -17,7 +17,7 @@ git push origin main
 
 # Push Folder B (second repo)
 Write-Output "Pushing Folder B..."
-cd "C:\xampp\htdocs\jaysan"
+cd "E:\web\htdocs\jaysan"
 git add .
 git commit -m "$msg"
 git push origin main
