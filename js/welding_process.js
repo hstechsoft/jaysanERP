@@ -221,6 +221,7 @@ $("#welding_table tr").each(function() {
 
 console.log(allWeldingData);
 
+
 $.ajax({
   
   url: 'php/insert_wel_process1.php',
