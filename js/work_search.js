@@ -174,7 +174,7 @@ get_work_report_detailed(query);
       count = count + 1;
       //   $("#detailed_work_report_table") .append("<tr> <td>" + count + " </td><td>" + obj.emp_name + " </td><td>" + obj.emp_nme + " </td> <td>" + millis_to_date(parseFloat(obj.his_date) )+ "</td> <td>" + obj.work_description + "</td> <td>" +obj.STATUS + " </td> <td>" + obj.comments+ "</td> <td>" + obj.work_type + "</td>  <td>" + "<a target='_blank' href='user_search.html?cus_id= " + obj.cus_id + "' class='btn btn-primary btn-sm' role='button'>View</a>" + "</td></tr>")
 
-      $("#detailed_work_report_table") .append( " <tr><td>" + count + "</td> <td>" + obj.emp_name + "</td> <td>" + millis_to_date(parseFloat(obj.work_date) ) + "</td> <td>" + obj.work_type + "</td> <td>" + obj.work_description + "</td> <td>" + obj.work_status + "</td> <td>" + obj.work_com_status + "</td> <td>" + "<a target='_blank' href='user_search.html?cus_id= " + obj.cus_id + "' class='btn btn-primary btn-sm' role='button'>View</a>" + "</td></tr>");
+      $("#detailed_work_report_table") .append( " <tr><td>" + count + "</td> <td>" + obj.emp_name + "</td> <td>" + millis_to_date(parseFloat(obj.work_date) ) + "</td> <td>" + obj.work_type + "</td> <td>" + obj.work_description + "</td> <td>" + obj.work_status + "</td> <td>" + obj.work_com_status + "</td> <td>" + "<a target='_blank' href='user_call.html?cus_id= " + obj.cus_id + "' class='btn btn-primary btn-sm' role='button'>View</a>" + "</td></tr>");
        });
       
        
