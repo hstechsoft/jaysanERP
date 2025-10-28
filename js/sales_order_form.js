@@ -10,7 +10,14 @@ var current_user_name =  localStorage.getItem("ls_uname") ;
  var type_id = []
   var subtype_name = []
   var oid= ""
+
+
+
+
 $(document).ready(function(){
+
+
+
   let autocompleteTimer;
   $('#update_order_btn').hide()
   
@@ -443,15 +450,19 @@ else if($(this).hasClass('pay_btn'))
           $('#product_sub_type_card').addClass('d-none')
           $('#sub_type_div').empty()
           $('#required_qty').val("") 
-var total_qty = 0
+var qty = 0
+var amount = 0
 var total_amount = 0
+var total_qty = 0
           $('#sales_product').find('tr').each(function(){
-            total_qty = total_qty +   Number( $(this).find("td").eq(5).html())
-            total_amount = total_amount +   Number( $(this).find("td").eq(6).html())
+         qty =   parseFloat( $(this).find("td").eq(5).html())
+            amount =   parseFloat( $(this).find("td").eq(6).html())
+total_amount = total_amount+ (parseFloat(qty *  amount))
+total_qty = total_qty + parseFloat(qty)
                       });
                       
             $('#required_qty').val(total_qty)
-            $('#total_payment').val(total_amount*total_qty)
+            $('#total_payment').val(total_amount)
         }
         
           
@@ -466,16 +477,19 @@ var total_amount = 0
        $('#sales_product').on('blur', '.editable-qty, .editable-price',function(){
         var btn_val = $(this).html()
         console.log(btn_val);
-
-        var total_qty = 0
+var qty = 0
+var amount = 0
 var total_amount = 0
-          $('#sales_product').find('tr').each(function(){
-            total_qty = total_qty +   Number( $(this).find("td").eq(5).html())
-            total_amount = total_amount +   Number( $(this).find("td").eq(6).html())
+var total_qty = 0
+            $('#sales_product').find('tr').each(function(){
+         qty =   parseFloat( $(this).find("td").eq(5).html())
+            amount =   parseFloat( $(this).find("td").eq(6).html())
+total_amount = total_amount+ (parseFloat(qty *  amount))
+total_qty = total_qty + parseFloat(qty)
                       });
                       
             $('#required_qty').val(total_qty)
-            $('#total_payment').val(total_amount*total_qty)
+            $('#total_payment').val(total_amount)
 
             if($('#price_word_div').hasClass('d-none')== false)
               $('#price_word_div').addClass('d-none')
@@ -632,11 +646,14 @@ $('#machine_price').on('input',function(){
     if(   $('#price_word_div').hasClass('d-none'))
     $('#price_word_div').removeClass('d-none')
     $('#price_word').text(convertToRupeesWords($(this).val()))
+
+
 } else {
   $('#price_word').text("")
   if($('#price_word_div').hasClass('d-none')== false)
     $('#price_word_div').addClass('d-none')
-}   
+}  
+$("#credit_amount").text(Number($("#billing_price").val())-Number($("#machine_price").val()))  
 });
 
 $('#machine_price').on('blur',function(){
