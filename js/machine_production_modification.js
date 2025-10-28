@@ -5,6 +5,68 @@ var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 console.log(current_user_id);
+var calendar = ""
+var csdate = ""
+ var cedate = ""
+  var selected_date = ""
+ var selected_type = "" 
+
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+   calendar = new FullCalendar.Calendar(calendarEl, {
+ 
+    initialView: 'dayGridMonth',
+    
+  
+    headerToolbar: {
+        left: 'prev,next today',
+        right: 'title',
+       
+    },
+  
+   
+    themeSystem: 'bootstrap',  // Use Bootstrap theme if you are using Bootstrap
+    height: 'auto' ,
+     // Event to trigger when calendar starts rendering
+    
+    dayCellDidMount: function(info) {
+      let dayNumber = info.date.getDay(); // 0 = Sunday
+      if (dayNumber === 0) {
+          info.el.style.backgroundColor = '#ebe5e5'; // Light red for Sundays
+      }
+  },
+  datesSet: function(info) {
+    csdate = info.startStr; // First visible day of the month
+   cedate = info.endStr;     // Last visible day of the month
+
+ 
+  
+  
+   // Call your custom function to get the events for the whole month
+  get_calender_assign(format_date_mysql(format_date_start(csdate)),format_date_mysql(format_date_start(cedate)))
+ },
+ dateClick: function(info) {
+  // Display the clicked date
+  removeHighlightedDates();
+
+  // Highlight the clicked date
+  highlightSelectedDate(info.dateStr);
+
+// $('#selected_date_div').removeClass('d-none')
+// $('#selected_date').html(info.dateStr)
+  console.log((info.dateStr));
+ 
+  // $("#assign_date").modal('hide');
+    $('#production_date').val(info.dateStr)
+ selected_date = info.dateStr
+    get_cal_assign_report(selected_date)
+
+
+ },
+
+  });
+  
+});
 
 $(document).ready(function () {
 
@@ -27,7 +89,7 @@ $(document).ready(function () {
     );
 
 
-
+ calendar.render();
     check_login();
 
     assign_product_get_product_list();
@@ -121,6 +183,97 @@ $(document).ready(function () {
 
 });
 
+
+function get_calender_assign(sdate,edate)
+{
+
+$.ajax({
+url: "php/get_assign_cal_details.php",
+type: "get", //send it through get method
+data: {
+
+
+astart_date :sdate.split(' ')[0] ,
+aend_date : edate.split(' ')[0]
+},
+success: function (response) {
+
+console.log(response);
+
+if (response.trim() != "error") {
+
+var title = ""
+var color = ""
+var customClass = ""
+if (response.trim() != "0 result") {
+ var obj = JSON.parse(response);
+
+// Clear previous events before adding new ones
+calendar.getEvents().forEach(event => event.remove());
+obj.forEach(function (obj) {
+ if(obj.tot == '0')
+   {
+    title = "0"
+    color = "gray"
+    customClass = "no_qty"; // Default styling
+   }
+   else if(obj.tot > 20 ){
+ title = obj.tot
+     color = "#008000 "
+     customClass = "above_qty"; // Default styling
+   }
+   else{
+    title = obj.tot
+     color = "#008000 "
+     customClass = "below_qty"; // Default styling
+   }
+  
+
+     
+ calendar.addEvent({
+   title: title,
+   start: obj.Date,
+   color:  'white', // Use color from data or default to blue
+   textColor: color, // Text color
+   classNames: customClass
+});
+
+
+
+});
+
+$(".his").fadeToggle(0);
+}
+
+
+}
+
+else {
+salert("Error", "User ", "error");
+}
+
+
+ 
+},
+error: function (xhr) {
+   //Do Something to handle error
+}
+});
+
+}
+
+
+function format_date_mysql(date)
+{
+ let formattedDate = date.getFullYear() + '-' + 
+ ('0' + (date.getMonth() + 1)).slice(-2) + '-' + 
+ ('0' + date.getDate()).slice(-2) + ' ' + 
+ ('0' + date.getHours()).slice(-2) + ':' + 
+ ('0' + date.getMinutes()).slice(-2) + ':' + 
+ ('0' + date.getSeconds()).slice(-2);
+return formattedDate
+
+}
 
 // get data from database
 function assign_product_get_product_list() {
@@ -335,6 +488,70 @@ function assign_product_get_sub_type_list() {
 
 
 
+}
+
+function get_cal_assign_report(cal_date)
+{
+ 
+
+$.ajax({
+  url: "php/get_cal_assign_report.php",
+  type: "get", //send it through get method
+  data: {
+
+  dated : cal_date
+
+  },
+  success: function (response) {
+    $('#production_table_cal').empty()
+
+   console.log(response);
+   
+if (response.trim() != "error") {
+
+ if (response.trim() != "0 result")
+ {
+
+  var obj = JSON.parse(response);
+var count =0 
+
+
+  obj.forEach(function (obj) {
+     count = count +1;
+
+     
+     $('#production_table_cal').append(" <tr data-opid ='"+obj.opid+"'   data-dated ='"+cal_date+"'  data-qty ='"+obj.aqty+"'  class='small'> <td  style='max-width: 50px;'>"+ count + "</td> <td style='max-width: 150px;'>"+obj.customer+"</td> <td>"+obj.product+"</td> </tr>")
+ if(parseInt(obj.modify_qty)>0)
+ {
+  $('#production_table_cal tr:last').find("td").eq(2).append(obj.date_info);
+
+ }
+
+ $("#report_date").text(
+  selected_date
+    ? new Date(selected_date).toLocaleDateString('en-GB')
+    : ""
+)
+ })
+
+}
+else{
+  $('#production_table_cal') .append("<tr class = 'small text-bg-secondary'><td colspan='5' scope='col'>No Data</td></tr>");
+
+}
+}
+
+
+
+
+    
+  },
+  error: function (xhr) {
+      //Do Something to handle error
+  }
+});
+
+   
 }
 
 function get_assign_report() {
@@ -580,4 +797,33 @@ function millis_to_date(millis) {
 
     return d.toLocaleString('en-GB');
 
+}
+
+
+function format_date_start(date)
+{
+ let date_temp = new Date(date);
+ let startOfDay = new Date(date_temp.getFullYear(), date_temp.getMonth(), date_temp.getDate(), 0, 0, 0);
+ return startOfDay
+}
+
+function format_date_end(date)
+{
+ let date_temp = new Date(date);
+ let endOfDay = new Date(date_temp.getFullYear(), date_temp.getMonth(), date_temp.getDate(), 23, 59, 59);
+ return endOfDay
+}
+
+function removeHighlightedDates() {
+  var highlightedDates = document.querySelectorAll('.fc-day-selected');
+  highlightedDates.forEach(function(dayEl) {
+    dayEl.classList.remove('fc-day-selected');
+  });
+}
+
+function highlightSelectedDate(dateStr) {
+  var selectedDateEl = document.querySelector('[data-date="' + dateStr + '"]');
+  if (selectedDateEl) {
+    selectedDateEl.classList.add('fc-day-selected');
+  }
 }
