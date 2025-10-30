@@ -1,6 +1,7 @@
 
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
+var narration = urlParams.get('narration') || '';
 var oid = urlParams.get('oid');
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
@@ -321,7 +322,8 @@ trans_mode :  $('#transport_mode').val(),
 trans_ref :  $('#transport_ref').val(),
 dcf_by : current_user_id,
 ass_arr : ass_id,
-dcf_report : $("#dcf_print").html()
+dcf_report : $("#dcf_print").html(),
+narration : narration
 
   },
   success: function (response) {

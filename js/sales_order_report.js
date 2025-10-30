@@ -44,13 +44,32 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
     }
     else if($(this).hasClass('dcf_btn'))
     {
+      var emp_id_dcf = $(this).data("emp_id")
+  
       get_dispatch_count(order_no, function(count) {
      if(count > 0)
    {
-   
-   
+  if(current_user_id == emp_id_dcf)
   window.open("dispatch_clearance_form.html?phone_id="+phone_id+"&oid=" + order_no, "_blank");
-        
+    else
+    {
+        var narration = prompt("Enter Reason for DCF Creation:");
+
+// Optional: handle if user cancels the prompt
+if (narration !== null) {
+  // Encode the narration to make it URL-safe
+  narration = encodeURIComponent(narration);
+  
+  // Open the new window with narration included
+  window.open(
+    "dispatch_clearance_form.html?phone_id=" + phone_id +
+    "&oid=" + order_no +
+    "&narration=" + narration,
+    "_blank"
+  );
+} 
+    }
+ 
    }
       else
 shw_toast("Machine","No Product ready to Dispatch","")
@@ -443,8 +462,8 @@ var count =0
 
   obj.forEach(function (obj) {
      count = count +1;
-     $('#order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
-     console.log(obj.pro);
+     $('#order_table').append("<tr class = ''><td>"+count+"</td><td class = 'small' style='max-width: 50px;'>"+obj.order_no+"</td>><td class = 'small' style='max-width: 100px;'>"+obj.dated+"</td> <td class = 'small'>"+obj.emp+"</td><td class = 'small ' style='max-width: 250px;'>"+obj.pay_details+"</td> <td class = 'small ' style='max-width: 100px;'>"+obj.cus+"</td><td style='max-width: 250px;'><div>"+obj.pro+"</div></td> <td style='max-width: 50px;'><button type ='button' value='"+obj.oid+"' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download'></i></button></td><td style='max-width: 50px;'><button data-emp_id = '"+obj.emp_id+"' type ='button' value='"+obj.oid+"' class='dcf_btn btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+     
   });
 
  
