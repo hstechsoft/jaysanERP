@@ -4,6 +4,8 @@ var phone_id = urlParams.get('phone_id');
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
  var physical_stock_array = [];
+ var sts = "all"
+ var cn_emp = "all"
 $(document).ready(function(){
  
 
@@ -32,12 +34,59 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
     check_login();
     
   $("#unamed").text(localStorage.getItem("ls_uname"))
+get_credit_note_report()
+
+get_credit_note_sts()
+
+   $('#sel_usr_in').change(function() {
+   cn_emp = $(this).val()
+   get_credit_note_report()
+     });
+
+ $('#sel_cn_sts').change(function() {
+   sts = $(this).val()
+   get_credit_note_report()
+     });
 
 
+     $("#credit_note_report").on("click", "tr td button", function(event) {
+       event.preventDefault();
+       var cn = $(this).closest("tr").find("td").eq(5).html()
+       // your logic here
+       var dcf_id = $(this).val()
+       if($(this).hasClass("accept"))
+         {
+         swal({
+           title: "Are you sure - accept? ",
+           text: "You will not be recover this  again!",
+           icon: "success",
+           buttons: [
+             'No, cancel it!',
+             'Yes, I am sure!'
+           ],
+           dangerMode: true,
+         }).then(function(isConfirm) {
+           if (isConfirm) {
+             swal({
+               title: 'Applied!',
+               text: 'successfully Deleted!',
+               icon: 'success'
+             }).then(function() {
+       
+               update_dcf_credit_note(dcf_id,"accepted",cn) // <--- submit form programmatically
+       
+       
+             });
+           } else {
+             swal("Cancelled", "This is safe :)", "error");
+           }
+         })
+         }
 
-
-
-
+         else{
+          update_dcf_credit_note(dcf_id,"created",cn) 
+         }
+     });
 
 
 });
@@ -89,11 +138,206 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 
 
 
+function update_dcf_credit_note(dcf_id,sts,cn)
+{
+ 
+
+
+
+$.ajax({
+  url: "php/update_dcf_credit_note.php",
+  type: "get", //send it through get method
+  data: {
+    dcf_id :  dcf_id,
+    cn_sts : sts,
+    credit_note_no :cn
+ 
+
+  },
+  success: function (response) {
+
+console.log(response);
+
+if (response.trim() == "ok") {
+
+  shw_toast("Success", " Updated", "success")
+get_credit_note_report()
+
+}
 
 
 
 
+    
+  },
+  error: function (xhr) {
+      //Do Something to handle error
+  }
+});
 
+
+
+   
+}
+
+
+ function get_employee()
+   {
+    
+   
+   $.ajax({
+     url: "php/get_all_emp_hi.php",
+     type: "get", //send it through get method
+     data: {
+      emp_id : current_user_id
+     
+   },
+     success: function (response) {
+   
+   
+   if (response.trim() != "error") {
+   
+     var obj = JSON.parse(response);
+   
+   
+   
+     obj.forEach(function (obj) {
+     
+       
+       $("#sel_usr_in").append(" <option value='" + obj.emp_id + "'>" + obj.emp_name + "</option>");
+   
+   
+   
+     });
+   
+    
+   }
+   
+   else {
+     salert("Error", "User ", "error");
+   }
+   
+   
+       
+     },
+     error: function (xhr) {
+         //Do Something to handle error
+     }
+   });
+   
+   
+   
+      
+   }
+
+
+function get_credit_note_report()
+{
+ 
+
+$.ajax({
+  url: "php/get_credit_note_report.php",
+  type: "get", //send it through get method
+  data: {
+    emp_id : cn_emp,
+    sts: sts
+    },
+  success: function (response) {
+
+    $('#credit_note_report').empty()
+   
+if (response.trim() != "error") {
+console.log(response);
+
+ if (response.trim() != "0 result")
+ {
+
+  var obj = JSON.parse(response);
+var count =0 
+
+
+  obj.forEach(function (obj) {
+     count = count +1;
+$('#credit_note_report').append("<tr> <td>"+count+"</td> <td>"+obj.cus_name+"</td> <td>"+obj.cus_phone+"</td> <td>"+obj.invoice_no+"</td> <td>"+obj.cn_amount+"</td> <td contenteditable=\"true\">"+obj.credit_note_no+"</td> <td>"+obj.credit_note_date+"</td> <td>"+obj.cn_sts+"</td> <td>"+obj.emp_name+"</td> <td class='d-flex  gap-2'> <button type='submit' value='"+obj.dcf_id+"' class='btn btn-primary btn-sm small Add' id=''>Add</button> <button type='submit' value='"+obj.dcf_id+"' class='btn btn-success btn-sm small accept' id=''>accept</button></td></tr>")
+  });
+
+ 
+}
+else{
+ $("#credit_note_report") .append("<tr><td colspan='10' scope='col'>No Data</td></tr>");
+
+}
+}
+
+
+
+
+    
+  },
+  error: function (xhr) {
+      //Do Something to handle error
+  }
+});
+
+
+
+   
+}
+
+function get_credit_note_sts()
+{
+ 
+
+$.ajax({
+  url: "php/get_credit_note_sts.php",
+  type: "get", //send it through get method
+  data: {
+  
+  },
+  success: function (response) {
+
+
+   
+if (response.trim() != "error") {
+console.log(response);
+
+ if (response.trim() != "0 result")
+ {
+
+  var obj = JSON.parse(response);
+var count =0 
+
+
+  obj.forEach(function (obj) {
+     count = count +1;
+ $("#sel_cn_sts").append(" <option value='" + obj.cn_sts + "'>" + obj.cn_sts + "</option>");
+   
+   
+
+  });
+
+ 
+}
+else{
+// $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+}
+}
+
+
+
+
+    
+  },
+  error: function (xhr) {
+      //Do Something to handle error
+  }
+});
+
+
+
+   
+}
 
   
 
@@ -115,7 +359,7 @@ $('#menu_bar').hide()
 
  else
  {
-   
+   get_employee()
  }
 }
 
@@ -145,7 +389,7 @@ function get_current_userid_byphoneid()
          current_user_name =  obj.emp_name;
        });
       
-    //    get_sales_order()
+   get_employee()
       }
       
       else {

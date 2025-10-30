@@ -78,7 +78,7 @@ transport_vno : $('#transport_vno').val(),
 
 
 if (response.trim() == "ok") {
-
+$("#approve_button").prop("disabled", true);
 get_dcf()
 shw_toast("Success", "DCF Approved", "success") 
 $('#invoice_no').val("")
@@ -133,7 +133,7 @@ if (response.trim() != "error") {
 
  if (response.trim() != "0 result")
  {
-
+$("#approve_button").prop("disabled", false);
   var obj = JSON.parse(response);
 var count =0 
 

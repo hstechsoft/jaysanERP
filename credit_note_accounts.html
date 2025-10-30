@@ -47,6 +47,54 @@
 
 <!-- content -->
 
+<div class="table-responsive">
+<table class="table caption-top table-bordered table-striped ">
+     <div class="d-flex   justify-content-between  align-content-center">
+    
+          <div class="mx-3">
+            <select class="form-select" id="sel_usr_in">
+                  
+              <option selected value="" disabled>Select Employee...</option>
+            
+          </select>
+          
+          </div>
+
+            <div class="mx-3">
+            <select class="form-select" id="sel_cn_sts">
+                  
+              <option selected value="" disabled>Select Status...</option>
+            
+          </select>
+          
+          </div>
+ </div>
+    <caption>Credit Note Tracker</caption>
+  <thead>
+
+    <tr>
+      <th scope="col">#</th>
+        <th scope="col">Customer</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Invoice</th>
+     
+        <th scope="col" >CN Amount </th>
+        <th scope="col">Credit Note </th>
+        <th scope="col">CN Dated</th>
+        <th scope="col">Status</th>
+        <th scope="col">Employee</th>
+           <th scope="col">Action</th>
+
+    </tr>
+  </thead>
+  <tbody id="credit_note_report">
+
+
+  </tbody>
+
+
+</table>
+</div>
 
 </div>
 
@@ -71,7 +119,7 @@
 
 
 <!-- external js -->
-<script src="js/reference_js.js" type="module"></script>
+<script src="js/credit_note_accounts.js" type="module"></script>
 <script src="js/menu.js" type="module"></script>
 <!-- <script src="js/get_all_id.js" type="module"></script> -->
 

@@ -415,7 +415,7 @@ else if($(this).hasClass('pay_btn'))
 
        $('#add_sale_product_btn').on('click', function()
        {
-       if($('#product').val() != "" && $('#pmodel').val() != "" && $('#ptype').val() != "" && $('#qty').val() != "")
+       if($('#product').val() != "" && $('#pmodel').val() != "" && $('#ptype').val() != "" && $('#qty').val() != ""  && $('#billing_price').val() != ""  && $('#machine_price').val() != "")
 
         {
           var count = 0
@@ -435,7 +435,7 @@ else if($(this).hasClass('pay_btn'))
         {
 
           var len = $('#sales_product tr').length +1
-          $('#sales_product').append(" <tr class='small'> <td>"+len + "</td> <td>"+$('#product :selected').text()+"</td> <td data-model_id='"+$('#pmodel').val()+"'>"+$('#pmodel :selected').text()+"</td> <td data-type_id='"+$('#ptype').val()+"'>"+$('#ptype :selected').text()+"</td> <td>"+sub_type+"</td> <td>"+$('#qty').val()+"</td><td>"+$('#machine_price').val()+"</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
+          $('#sales_product').append(" <tr class='small'> <td>"+len + "</td> <td>"+$('#product :selected').text()+"</td> <td data-model_id='"+$('#pmodel').val()+"'>"+$('#pmodel :selected').text()+"</td> <td data-type_id='"+$('#ptype').val()+"'>"+$('#ptype :selected').text()+"</td> <td>"+sub_type+"</td> <td>"+$('#qty').val()+"</td><td>"+$('#machine_price').val()+"</td><td>"+$('#billing_price').val()+"</td> <td> <button type = 'button' class='btn btn-outline-danger border-0 btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
           console.log("ok");
           console.log($('#product :selected').text());
  
@@ -640,7 +640,14 @@ $('#total_amount').text(total_amount)
           
                 
              });
-             
+
+
+           $('#billing_price').on('input',function(){
+  
+$("#credit_amount").text(Number($("#billing_price").val())-Number($("#machine_price").val()))  
+});
+
+
 $('#machine_price').on('input',function(){
   if ($(this).val().trim() !== "") {
     if(   $('#price_word_div').hasClass('d-none'))
@@ -1748,7 +1755,7 @@ var count =0
 
   obj.forEach(function (obj) {
      count = count +1;
-     $('#sales_product').append(" <tr class='small'> <td>"+count + "</td> <td>"+obj.produt+"</td> <td data-model_id='"+obj.model_id+"'>"+obj.model_name+"</td> <td data-type_id='"+obj.type_id+"'>"+obj.type_name+"</td> <td>"+obj.sub_type+"</td> <td contenteditable='true'  class='editable-qty'>"+obj.required_qty+"</td> <td td contenteditable='true' class='editable-price'>"+obj.price+"</td> <td> <button name='db_delete' value ='"+ obj.opid+"' type = 'button' class='btn btn-outline-danger border-0 btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
+     $('#sales_product').append(" <tr class='small'> <td>"+count + "</td> <td>"+obj.produt+"</td> <td data-model_id='"+obj.model_id+"'>"+obj.model_name+"</td> <td data-type_id='"+obj.type_id+"'>"+obj.type_name+"</td> <td>"+obj.sub_type+"</td> <td contenteditable='true'  class='editable-qty'>"+obj.required_qty+"</td> <td contenteditable='true' class='editable-price'>"+obj.price+"</td>   <td contenteditable='true' class='editable-price'>"+obj.billing_amount+"</td> <td> <button name='db_delete' value ='"+ obj.opid+"' type = 'button' class='btn btn-outline-danger border-0 btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
         
   // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
  })
@@ -1847,7 +1854,8 @@ $('#sales_product').find('tr').each(function() {
   var subtype = $(this).find('td:eq(4)').text();
   var qty = $(this).find('td:eq(5)').text();
   var price = $(this).find('td:eq(6)').text();
-  productDetails.push({ model: model, type: type, subtype: subtype , qty: qty,price : price });
+    var billing_amount = $(this).find('td:eq(7)').text();
+  productDetails.push({ model: model, type: type, subtype: subtype , qty: qty,price : price,billing_amount : billing_amount });
 });
 
 
@@ -1940,7 +1948,10 @@ $('#sales_product').find('tr').each(function() {
   var type = $(this).find('td:eq(3)').attr('data-type_id');
   var subtype = $(this).find('td:eq(4)').text();
   var qty = $(this).find('td:eq(5)').text();
-  productDetails.push({ model: model, type: type, subtype: subtype , qty: qty });
+  var price = $(this).find('td:eq(6)').text();
+   var billing_amount = $(this).find('td:eq(7)').text();
+  productDetails.push({ model: model, type: type, subtype: subtype , qty: qty,price : price,billing_amount : billing_amount });
+  
 });
 
 var paymentDetails = [];

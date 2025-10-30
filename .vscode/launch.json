@@ -27,7 +27,7 @@
       "type": "pwa-chrome",
       "request": "launch",
       "url": "http://localhost/jaysanERP/sales_order_form.html",
-      "webRoot": "E:/web/htdocs/jaysanERP",
+      "webRoot": "C:/xampp/htdocs/jaysanERP",
       "userDataDir": true,
       "skipFiles": ["**/jquery*.js", "**/node_modules/**"],
       "runtimeArgs": ["--disable-extensions"],

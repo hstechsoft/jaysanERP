@@ -74,7 +74,7 @@ if (response.trim() == "ok") {
   $('#dcf_report').html("")
 get_dcf()
 shw_toast("Success", "DCF Approved", "success") 
-
+$("#approve_button").prop("disabled", true);
 }
 
 
@@ -118,7 +118,7 @@ if (response.trim() != "error") {
 
  if (response.trim() != "0 result")
  {
-
+$("#approve_button").prop("disabled", false);
   var obj = JSON.parse(response);
 var count =0 
 

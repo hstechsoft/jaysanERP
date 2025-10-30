@@ -118,7 +118,7 @@ $("#ok_btn").on('click',function(){
 
     var count =0
   
-    
+    var billing_amount =  $(this).data("billing_amount")
 
     $(this).find("td").eq(4).find('li').each(function() {
 
@@ -139,6 +139,8 @@ ass_id.push($(this).find('input').val())
       var len = $("#sptable tr").length + 1;
       $("#sptable").append( "<tr>" + "<td>"+ len + "</td>"+"<td>"+ $(this).find("td").eq(1).html() + "</td>"+"<td>"+ $(this).find("td").eq(2).html() + "</td>"+"<td>"+ $(this).find("td").eq(3).html() + "</td>" +"<td>"+ count + "</td>"+"<td>"+ tamount + "</td>")
       oid_arr.push($(this).find("td").eq(2).html().trim())
+$("#sptable").find("tr:last").find("td").eq(1).append("<p class=\"text-bg-secondary rounded small\">Billing Amount/Machine - ₹"+billing_amount+"</p>")
+ 
     }
    
 
@@ -559,7 +561,7 @@ var count =0
 
   obj.forEach(function (obj) {
      count = count +1;
-$('#sales_pro_table').append("<tr><td>"+count+"</td><td>"+obj.product+"</td><td>"+obj.order_no+"</td><td>"+obj.delivered+"</td><td>"+obj.rtd+"</td></tr>")
+$('#sales_pro_table').append("<tr data-billing_amount='"+obj.billing_amount+"'><td>"+count+"</td><td>"+obj.product+"</td><td>"+obj.order_no+"</td><td>"+obj.delivered+"</td><td>"+obj.rtd+"</td></tr>")
 
   });
 
