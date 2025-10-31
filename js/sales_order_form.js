@@ -585,12 +585,13 @@ delete_sales_product(btn_val)
 
 
        $('#payment_add_btn').on('click', function(){
-        if($('#amount').val() != "" && $('#payment_date').val() != "" && $('#ref_no').val() != "")
+        if($('#amount').val() != "" && $('#payment_date').val() != "" && $('#ref_no').val() != "" && $('#utr_no').val() != "")
         {
           var len = $('#payment_table tr').length +1
-          $('#payment_table').append("<tr class='small'> <td>"+len+"</td> <td>"+$('#ref_no').val()+"</td> <td>"+$('#amount').val()+"</td> <td>"+$('#payment_date').val()+"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+          $('#payment_table').append("<tr class='small'> <td>"+len+"</td> <td>"+$('#ref_no').val()+"</td> <td>"+$('#utr_no').val()+"</td> <td>"+$('#amount').val()+"</td> <td>"+$('#payment_date').val()+"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 
           $('#ref_no').val("")
+          $('#utr_no').val("")
           $('#amount').val("")
           $('#payment_date').val("")
           var total_amount = 0
@@ -788,6 +789,7 @@ $.ajax({
   data: {
     oid :  oid,
     ref_no :  $('#ref_no_m').val(),
+      utr_no :  $('#utr_no_m').val(),
     amount :  $('#amount_m').val(),
     payment_date :  $('#payment_date_m').val()
 
@@ -1637,7 +1639,7 @@ var count =0
 var total_amount = 0
   obj.forEach(function (obj) {
      count = count +1;
-     $('#payment_table').append("<tr class='small'> <td>"+count+"</td> <td>"+obj.ref_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+     $('#payment_table').append("<tr class='small'> <td>"+count+"</td> <td  contenteditable=\"true\">"+obj.ref_no+"</td><td contenteditable=\"true\">"+obj.utr_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 total_amount = total_amount +   Number(obj.amount)
 
   // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
@@ -1700,7 +1702,7 @@ sts = "<i class='fa-solid fa-thumbs-up'></i>"
 
     $('#total_payment_m').val(obj.total_payment)
      count = count +1;
-     $('#payment_table_m').append("<tr class='small'> <td>"+count+"</td> <td>"+obj.ref_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td><td>"+sts + "</td><td><button value  = '"+obj.payment_id+"' class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+     $('#payment_table_m').append("<tr class='small'> <td>"+count+"</td> <td  contenteditable=\"true\">"+obj.ref_no+"</td> <td  contenteditable=\"true\">"+obj.utr_no+"</td> <td>"+obj.amount+"</td> <td>"+obj.formatted_datetime +"</td><td>"+sts + "</td><td><button value  = '"+obj.payment_id+"' class='btn btn-outline-danger btn-sm border-0' type='button'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
 total_amount = total_amount +   Number(obj.amount)
 
   // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
@@ -1862,11 +1864,13 @@ $('#sales_product').find('tr').each(function() {
 var paymentDetails = [];
 $('#payment_table').find('tr').each(function() {
   var ref_no = $(this).find('td:eq(1)').text();
-  var amount = $(this).find('td:eq(2)').text();
-  var payment_date = $(this).find('td:eq(3)').text();
-  paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date });
+   var utr_no = $(this).find('td:eq(2)').text();
+  var amount = $(this).find('td:eq(3)').text();
+  var payment_date = $(this).find('td:eq(4)').text();
+  paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date,utr_no : utr_no });
 
 });
+
 console.log(productDetails);
  var chasis_choice = "Custom"
  var color_choice = "Custom"
@@ -1957,9 +1961,10 @@ $('#sales_product').find('tr').each(function() {
 var paymentDetails = [];
 $('#payment_table').find('tr').each(function() {
   var ref_no = $(this).find('td:eq(1)').text();
-  var amount = $(this).find('td:eq(2)').text();
+     var utr_no = $(this).find('td:eq(2)').text();
+  var amount = $(this).find('td:eq(3)').text();
   var payment_date = $(this).find('td:eq(3)').text();
-  paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date });
+  paymentDetails.push({ ref_no: ref_no, amount: amount, payment_date: payment_date,utr_no: utr_no });
 
 });
 

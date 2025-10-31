@@ -128,14 +128,21 @@
                     <div class="col">
                         <div class='input-group mb-2'> 
                             <label class='input-group-text' for='ref_no'><span>
-                            UTR No
+                         Reference No
                             </span>
                             </label>
                             <input id='ref_no_m' type='text' class='form-control'  >
                             </div>
                     </div>
             
-                    <div class="col d-flex justify-content-center ">
+                    <div class="col d-flex justify-content-center gap-2">
+                         <div class='input-group mb-2'> 
+                <label class='input-group-text' for='utr_no_m'><span>
+                UTR No
+                </span>
+                </label>
+                <input id='utr_no_m' type='text' class='form-control'  >
+                </div>
                         <button class="btn btn-primary btn-sm" id="payment_add_btn_m" type="button"> Add</button>
                     </div>
                   
@@ -145,7 +152,7 @@
                     <thead class="small">
                     <tr class="small">
                     
-                    <th colspan='6' scope='col' class='bg-info bg-opacity-25'>Payment</th>
+                    <th colspan='8' scope='col' class='bg-info bg-opacity-25'>Payment</th>
                     
                     </tr>
                     
@@ -153,6 +160,7 @@
                     
                      <th scope='col'>#</th>
                    <th scope='col'>Ref No</th>
+                   <th scope='col'>UTR No</th>
                    <th scope='col'>Amount</th>
                    <th scope='col'>Dated</th>
                    <th scope='col'>Status</th>
@@ -529,7 +537,14 @@
                 </div>
         </div>
 
-        <div class="col d-flex justify-content-center d-sm-block mb-1 mb-sm-0">
+        <div class="col d-flex justify-content-center d-sm-block mb-1 mb-sm-0 gap-2">
+              <div class='input-group mb-2'> 
+                <label class='input-group-text' for='utr_no'><span>
+                UTR No
+                </span>
+                </label>
+                <input id='utr_no' type='text' class='form-control'  >
+                </div>
             <button class="btn btn-primary btn-sm" id="payment_add_btn" type="button"> Add</button>
         </div>
       
@@ -539,7 +554,7 @@
         <thead class="small">
         <tr class="small">
         
-        <th colspan='5' scope='col' class='bg-info bg-opacity-25'>Payment</th>
+        <th colspan='8' scope='col' class='bg-info bg-opacity-25'>Payment</th>
         
         </tr>
         
@@ -547,6 +562,7 @@
         
          <th scope='col'>#</th>
        <th scope='col'>Ref No</th>
+        <th scope='col'>UTR No</th>
        <th scope='col'>Amount</th>
        <th scope='col'>Dated</th>
        <th scope='col'>Delete</th>
