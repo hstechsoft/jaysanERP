@@ -64,6 +64,8 @@ $("#payment_table").on("click","button", function(event) {
 
   $("#payment_list").on("click","button", function(event) {
     var btn_val = $(this).val()
+    var oid = $(this).data("oid")
+ 
    var pay_sts = "approved"
     if($(this).hasClass("decline"))
   pay_sts = "decline"
@@ -91,18 +93,22 @@ $("#payment_table").on("click","button", function(event) {
   type: "get", //send it through get method
   data: {
 
-utr_no : utr_no
+utr_no : utr_no,
+oid: oid,
+payment_id : btn_val
   },
   success: function (response) {
 console.log(response);
 
 
 if (response.trim() != "error") {
+  
+     
 
- if (response.trim() == "not available"||response.trim() == "0 result" )
+ if (response.trim() == "ok"||response.trim() == "0 result" )
  {
 
-  update_jaysan_payment(btn_val,pay_date,pay_sts,utr_no);
+   update_jaysan_payment(btn_val,pay_date,pay_sts,utr_no);
  
 }
 else
@@ -183,7 +189,7 @@ if (obj.utr_no != null)
 
 
 
-$('#payment_list').append(" <li class=' list-group-item m-0 p-0'> <table class='table table-bordered table-sm m-0 p-0'> <tbody> <tr  class='small text-bg-light'> <td class = 'small'> <span class='me-2'><i class='fa fa-user' aria-hidden='true'></i></span>"+obj.cus_name+"</td> <td colspan='2' class='text-end small'> <span><i class='fa fa-phone me-2' aria-hidden='true'></i></span> "+obj.cus_phone+"</td> </tr> <tr> <td style='max-width: 120px;'class='small'><span><i class='fa fa-id-badge me-2' aria-hidden='true'></i></span>"+obj.emp_name+"</td> <td class='small' style='max-width: 120px;'>"+obj.order_no+"</td> <td class='small text-end'> "+obj.date_f+"</td> </tr> <tr> <td class='small text-bg-warning'> "+formattedPayment+"</td> <td colspan='2' class='small'> <span class='text-decoration-underline'> Ref :</span>"+obj.ref_no +" </td> </tr><tr class='small'> <td colspan='3'> <div class='form-floating small'> <input value = '"+utr_no+"' type='text' class='form-control rounded-3 utr_no'  placeholder='' > <label for='utr_no_txt'>UTR No </label> </div> </td> </tr> <tr><td colspan='2' class='text-center'><input type='datetime-local' class='form-control form-control-sm' value = '"+obj.payment_date+"' placeholder='Date' ></td><td class = 'd-flex align-content-center justify-content-between'><button value='"+obj.payment_id+"' class=' btn btn-danger btn-sm decline'>Decline</button><button value='"+obj.payment_id+"' class=' btn btn-primary btn-sm'>Approve</button></td></tr> </tbody> </table> </li>") 
+$('#payment_list').append(" <li class=' list-group-item m-0 p-0'> <table class='table table-bordered table-sm m-0 p-0'> <tbody> <tr  class='small text-bg-light'> <td class = 'small'> <span class='me-2'><i class='fa fa-user' aria-hidden='true'></i></span>"+obj.cus_name+"</td> <td colspan='2' class='text-end small'> <span><i class='fa fa-phone me-2' aria-hidden='true'></i></span> "+obj.cus_phone+"</td> </tr> <tr> <td style='max-width: 120px;'class='small'><span><i class='fa fa-id-badge me-2' aria-hidden='true'></i></span>"+obj.emp_name+"</td> <td class='small' style='max-width: 120px;'>"+obj.order_no+"</td> <td class='small text-end'> "+obj.date_f+"</td> </tr> <tr> <td class='small text-bg-warning'> "+formattedPayment+"</td> <td colspan='2' class='small'> <span class='text-decoration-underline'> Ref :</span>"+obj.ref_no +" </td> </tr><tr class='small'> <td colspan='3'> <div class='form-floating small'> <input value = '"+utr_no+"' type='text' class='form-control rounded-3 utr_no'  placeholder='' > <label for='utr_no_txt'>UTR No </label> </div> </td> </tr> <tr><td colspan='2' class='text-center'><input type='datetime-local' class='form-control form-control-sm' value = '"+obj.payment_date+"' placeholder='Date' ></td><td class = 'd-flex align-content-center justify-content-between'><button data-oid='"+obj.oid+"' value='"+obj.payment_id+"' class=' btn btn-danger btn-sm decline'>Decline</button><button data-oid='"+obj.oid+"' value='"+obj.payment_id+"' class=' btn btn-primary btn-sm'>Approve</button></td></tr> </tbody> </table> </li>") 
 });
 
  

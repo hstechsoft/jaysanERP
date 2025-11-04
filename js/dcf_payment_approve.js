@@ -57,7 +57,7 @@ function approve_dcf_pay()
  
   $("#print_payment_confirm_by").html(current_user_name + " ("+getIndianDateTime()+")")
    
-($("#dcf_report").find(".fa-thumbs-down").after("approved by - current_user_name"));
+$("#dcf_report").find(".fa-thumbs-down").after("approved by -"+ current_user_name);
 
 $.ajax({
   url: "php/approve_dcf_pay.php",
