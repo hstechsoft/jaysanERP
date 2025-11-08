@@ -1163,6 +1163,7 @@ batch_details : JSON.stringify(batch_details),
 
 
      },
+     
      success: function (response) {
    console.log(response);
    

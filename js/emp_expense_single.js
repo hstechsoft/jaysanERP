@@ -1,5 +1,3 @@
-
-
    const firebaseConfig = {
     apiKey: "AIzaSyArBOz33-zRE8lMCj7d8mlzytL4hH6OSNQ",
     authDomain: "jaysan-8fa8d.firebaseapp.com",
@@ -477,3 +475,5 @@ function millis_to_date( millis)
 return d.toLocaleString('en-GB');
 
 }
+
+

@@ -16,9 +16,9 @@ return $data;
 
 
 $sql = "SET time_zone = '+05:30';"; // First query to set the time zone
-$sql .= "SELECT hs1.order_no,hs1.sub_type,hs1.ass_date as date_f,hs1.ass_id,hs1.oid,(SELECT jaysan_final_product.product_name from  jaysan_final_product WHERE jaysan_final_product.product_id = jaysan_product_model.product_id) as product,employee.emp_name,jaysan_product_model.model_name as model,customer.cus_name,
+$sql .= "SELECT any_other_spec,hs1.order_no,hs1.sub_type,hs1.ass_date as date_f,hs1.ass_id,hs1.oid,(SELECT jaysan_final_product.product_name from  jaysan_final_product WHERE jaysan_final_product.product_id = jaysan_product_model.product_id) as product,employee.emp_name,jaysan_product_model.model_name as model,customer.cus_name,
 customer.cus_phone,jaysan_model_type.type_name as type FROM
-( SELECT sales_order_form.order_no,sales_order_form.oid,hs.type_id,hs.model_id,hs.sub_type,sales_order_form.customer_id,sales_order_form.emp_id,sales_order_form.dated,hs.ass_date,hs.ass_id
+( SELECT sales_order_form.any_other_spec,  sales_order_form.order_no,sales_order_form.oid,hs.type_id,hs.model_id,hs.sub_type,sales_order_form.customer_id,sales_order_form.emp_id,sales_order_form.dated,hs.ass_date,hs.ass_id
     FROM
         (
         SELECT

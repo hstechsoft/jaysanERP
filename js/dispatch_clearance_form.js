@@ -227,7 +227,7 @@ $("#dcf_submit_btn").on("click",function()
     
     console.log($("#print_company").html());
 
-
+  
     insert_dcf()
   }
  
