@@ -9,7 +9,7 @@ var current_user_name =  localStorage.getItem("ls_uname") ;
  var oid_arr = []
 
 $(document).ready(function(){
- 
+    $("#loader-overlay").hide();
   
   $("#menu_bar").load('menu.html',
     function() { 
@@ -200,8 +200,8 @@ $("#dcf_submit_btn").on("click",function()
   {$("#print_company").html($("#godown_des").val().replace(/\n/g, "<br>"));
     $("#print_consignee").html($("#consignee").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
     $("#print_buyer").html($("#buyer").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
-    $("#print_con_gst").text($("#buy_gst").val())
-    $("#print_buy_gst").text($("#con_gst").val())
+    $("#print_con_gst").text($("#con_gst").val())
+    $("#print_buy_gst").text($("#buy_gst").val())
     $("#print_con_contact").text($("#con_contact").val())
     $("#print_buy_contact").text($("#buy_contact").val())
     $("#print_transport").text($("#transport_mode").val())
@@ -310,7 +310,7 @@ function print()
 function insert_dcf()
 {
  
-
+   
 $.ajax({
   url: "php/insert_dcf.php",
   type: "POST", //send it through get method
@@ -326,8 +326,13 @@ dcf_report : $("#dcf_print").html(),
 narration : narration
 
   },
+   beforeSend: function() {
+   
+            // Show full-screen loader
+            $("#loader-overlay").show();
+        },
   success: function (response) {
-
+ $("#loader-overlay").hide();
 console.log(response);
 
 if (response.trim() == "ok") {
