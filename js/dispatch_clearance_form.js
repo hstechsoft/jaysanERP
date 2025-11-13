@@ -32,7 +32,7 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 
 
 
-    // check_login();
+     check_login();
     get_godown_name();
     if(oid !=null)
     {
