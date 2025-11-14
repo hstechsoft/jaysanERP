@@ -803,6 +803,12 @@ if (response.trim() == "ok") {
   
     shw_toast("Success", "Payment Added", "success")
     get_jaysan_sales_payment_m(oid)
+$('#amount_m').val("")
+$('#ref_no_m').val("")
+$('#utr_no_m').val("")
+$('#payment_date_m').val("")
+
+
 
 }
 
