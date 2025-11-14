@@ -27,7 +27,7 @@
       "name": "Launch Chrome for JS/jQuery Debugging",
       "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost/jaysanERP/dispatch_clearance_form.html",
+      "url": "http://localhost/jaysanERP/sales_order_report.html",
       "webRoot": "E:/web/htdocs/jaysanERP",
       "userDataDir": true,
       "skipFiles": ["**/jquery*.js", "**/node_modules/**"],
