@@ -195,7 +195,7 @@ var count =0
 
   obj.forEach(function (obj) {
      count = count +1;
-$('#dcf_list').append("<tr><td>"+count+"</td><td>"+obj.dcf_id+"</td><td>"+obj.dated+"</td><td>"+obj.emp_name+"</td><td>"+obj.consignee+"</td><td>"+obj.sts+"</td><td> <button class='btn btn-sm btn-primary' value='"+obj.dcf_id+"'>View</button></td></tr>")
+$('#dcf_list').append("<tr><td>"+count+"</td><td>"+obj.dcf_id+"</td><td>"+obj.dated+"</td><td>"+obj.emp_name+"</td><td>"+obj.oi+"</td><td>"+obj.consignee+"</td><td>"+obj.sts+"</td><td> <button class='btn btn-sm btn-primary' value='"+obj.dcf_id+"'>View</button></td></tr>")
 
   });
     
