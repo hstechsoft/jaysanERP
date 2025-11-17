@@ -4,6 +4,7 @@ var phone_id = urlParams.get('phone_id');
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
  var dcf_id1 = 0;
+ var cus_id ='';
 $(document).ready(function(){
  
   
@@ -34,7 +35,44 @@ console.log(getIndianDateTime());
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
-get_dcf()
+// get_dcf()
+
+$("#search_btn").on("click", function(event) {
+  event.preventDefault();
+  // TODO: handle click here
+
+  get_dcf()
+});
+
+$('#cus_name').on('input',function(){
+
+  //check the value not empty
+      if($('#cus_name').val() !="")
+      {
+        $('#cus_name').autocomplete({
+          //get data from databse return as array of object which contain label,value
+ 
+          source: function(request, response) {
+            get_customer_autocomplete(request, response, "pname");
+        },
+          minLength: 2,
+          cacheLength: 0,
+          select: function(event, ui) {
+           
+          cus_id = ui.item.cus_id;
+        
+          } ,
+          //display no result 
+          response: function(event, ui) {
+            // if (!ui.content.length) {
+            //     var noResult = { value:"",label:"No results found" };
+            //     ui.content.push(noResult);
+            // }
+        }
+        });
+      }
+     
+     });
 
 
 $('#dcf_list').on('click', 'button', function() {
@@ -53,6 +91,92 @@ $('#approve_button').on('click', function() {
 });
 
 });
+
+
+function get_customer_autocomplete(request,response)
+{
+  
+     var cusname =  $('#cus_name').val() + '%';
+ var customer = [];
+ var object = {};
+  $.ajax({
+    url: "php/get_customer_autocomplete.php",
+    type: "get", //send it through get method
+    data: {
+      cus_name:cusname,
+     
+  
+  },
+    success: function (data) {
+
+  
+  if (data.trim() != "0 result") {
+    var obj = JSON.parse(data);
+
+
+  
+
+    obj.forEach(function (obj) {
+
+       object = {
+     
+        label:obj.cus_name + " - " +  obj.cus_phone,
+        cus_id : obj.cus_id,
+     
+        value : obj.cus_name,
+      
+
+       
+        
+    };
+     customer.push(object);
+   
+      
+    });
+   
+    response(customer);
+  }
+  
+  // else {
+  //   customer = [];
+  //   var object = {
+    
+  //     value:"No data",
+  //     cus_id : "",
+  //     cus_addr : ""
+       
+  // };
+  //  customer.push(object);
+  
+ 
+  // }
+  
+  
+      
+    },
+    error: function (xhr) {
+        //Do Something to handle error
+
+        customer = [];
+        var object = {
+    
+          value:"No data",
+          cus_id : "",
+          cus_addr : ""
+           
+      };
+       customer.push(object);
+        
+    }
+  });
+
+ 
+  // console.log(customer)
+ 
+ 
+  // return customer;
+ 
+}
 function submit_dcf_invoice()
 {
  
@@ -171,15 +295,17 @@ else{
 function get_dcf()
 {
  
-
+alert($('#dcf_sts').val() || '')
 $.ajax({
   url: "php/get_dcf_report.php",
-  type: "get", //send it through get method
-  data: {
-sts : "invoice",
+  //send it through get method
+    data: {
+  dcf_sts : $('#dcf_sts').val() || '',
+  customer : cus_id || ''
 
-  },
-  success: function (response) {
+    },
+    success: function (response) {
+
 
 console.log(response);
 $('#dcf_list').empty();

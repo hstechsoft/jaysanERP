@@ -61,8 +61,42 @@
     </section>
 
     <!-- content -->
-   
+   <div class="d-flex   justify-content-start gap-2  ">
 
+    <div>
+   <div class="form-floating ">
+                                        <input type="text" class="form-control rounded-3" id="cus_name"
+                                            placeholder="Enter the customer" required>
+                                        <label for="cus_name">customer
+                                            <span class="text-danger">*</span> </label>
+
+                                        <div class="invalid-feedback">
+                                            Kindly Enter Vaild Data
+                                        </div>
+                                    </div>
+    </div>
+
+    <div class="form-floating mb-3">
+      <select class="form-select" id="dcf_sts" required>
+        <option selected disabled value="">Choose...</option>
+        <option value="create">Waiting For HOD Approval</option>
+        <option value="HOD">Waiting For Finance Approval</option>
+        <option value="invoice">Waiting For delivery</option>
+        <option value="delivery">Delivered</option>
+
+      </select>
+     <label for="dcf_sts">dcf_sts</label>
+       <div class="invalid-feedback">
+          Kindly Select  Vaild
+        </div>
+    </div>
+    
+<div class="mt-2">
+                                    <button type="button" class="btn btn-primary my-auto" id="search_btn">Search</button>
+
+</div>
+   </div>
+   
     <div class="accordion" id="accordionExample">
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
