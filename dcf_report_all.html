@@ -61,14 +61,14 @@
     </section>
 
     <!-- content -->
-   <div class="d-flex   justify-content-start gap-2  ">
+   <div class="d-flex   justify-content-center gap-2 small border border-1">
 
     <div>
    <div class="form-floating ">
                                         <input type="text" class="form-control rounded-3" id="cus_name"
                                             placeholder="Enter the customer" required>
                                         <label for="cus_name">customer
-                                            <span class="text-danger">*</span> </label>
+                                            </label>
 
                                         <div class="invalid-feedback">
                                             Kindly Enter Vaild Data
@@ -76,13 +76,13 @@
                                     </div>
     </div>
 
-    <div class="form-floating mb-3">
-      <select class="form-select" id="dcf_sts" required>
-        <option selected disabled value="">Choose...</option>
-        <option value="create">Waiting For HOD Approval</option>
-        <option value="HOD">Waiting For Finance Approval</option>
-        <option value="invoice">Waiting For delivery</option>
-        <option value="delivery">Delivered</option>
+    <div class="form-floating ">
+      <select class="form-select small" id="dcf_sts" required>
+        <option selected disabled value="" class="small">Choose...</option>
+        <option class="small" value="create">Waiting For HOD Approval</option>
+        <option class="small" value="HOD">Waiting For Finance Approval</option>
+        <option class="small" value="invoice">Waiting For delivery</option>
+        <option class="small" value="delivery">Delivered</option>
 
       </select>
      <label for="dcf_sts">dcf_sts</label>
@@ -90,6 +90,19 @@
           Kindly Select  Vaild
         </div>
     </div>
+
+
+<div>
+        <div class="form-floating">
+      <input type="text" class="form-control rounded-3" id="order_no_txt" placeholder="" required>
+      <label for="order_no_txt">Order No
+       </label>
+    
+      <div class="invalid-feedback">
+        Kindly Enter  Vaild Data
+      </div>
+    </div>
+</div>
     
 <div class="mt-2">
                                     <button type="button" class="btn btn-primary my-auto" id="search_btn">Search</button>
@@ -97,16 +110,25 @@
 </div>
    </div>
    
-    <div class="accordion" id="accordionExample">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+    <!-- <div class="accordion" id="accordionExample">
+        <div class="accordion-item m-0 p-0">
+          <p class="accordion-header m-0 p-0" id="headingOne">
+            <button class="accordion-button small" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               DCF-List
             </button>
-          </h2>
+          </p>
           <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-                <div class="card">
+           
+            </div>
+          </div>
+        </div>
+      
+     
+      </div> -->
+
+
+           <div class="card mt-2">
                     <div class="card-header small  text-center">
                         DCF List -  Approval
                     </div>
@@ -140,13 +162,6 @@
                             </table>
                     </div>
                 </div>
-            </div>
-          </div>
-        </div>
-      
-     
-      </div>
-
 
 
 
@@ -162,7 +177,7 @@
 
 
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center mt-1">
     <button class="btn btn-primary" id="print_button"  >
         <i class="bi bi-printer"></i> Print
       </button>
@@ -204,7 +219,7 @@
     <!-- external js -->
     <script src="js/dcf_report_all.js" type="module"></script>
     <script src="js/menu.js" type="module"></script>
-     <script src="js/get_all_id.js" type="module"></script>
+     <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
     </body>
     </html>

@@ -35,7 +35,7 @@ console.log(getIndianDateTime());
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
 
-// get_dcf()
+get_dcf()
 
 $("#search_btn").on("click", function(event) {
   event.preventDefault();
@@ -295,19 +295,20 @@ else{
 function get_dcf()
 {
  
-alert($('#dcf_sts').val() || '')
+
 $.ajax({
   url: "php/get_dcf_report.php",
   //send it through get method
     data: {
   dcf_sts : $('#dcf_sts').val() || '',
-  customer : cus_id || ''
+  customer : cus_id || '',
+  order_no : $('#order_no_txt').val() || ''
 
     },
     success: function (response) {
 
 
-console.log(response);
+
 $('#dcf_list').empty();
 $('#dcf_report').empty();
 if (response.trim() != "error") {
@@ -320,8 +321,19 @@ var count =0
 
 
   obj.forEach(function (obj) {
+    
+
+     var sale_order = JSON.parse(obj.sale_order);
+ 
+     
+     console.log(sale_order);
+     var li =""
+sale_order.forEach(function (so) {
+   li = li + "<li class='list-group-item small'>Order No : "+ so.order_no + " | Sales Person : " + so.emp +"</li>" + so.product;
+  
+});
      count = count +1;
-$('#dcf_list').append("<tr><td>"+count+"</td><td>"+obj.dcf_id+"</td><td>"+obj.dated+"</td><td>"+obj.emp_name+"</td><td>"+obj.oi+"</td><td>"+obj.consignee+"</td><td>"+obj.sts+"</td><td> <button class='btn btn-sm btn-primary' value='"+obj.dcf_id+"'>View</button></td></tr>")
+$('#dcf_list').append("<tr class = 'small'><td>"+count+"</td><td>"+obj.dcf_id+"</td><td>"+obj.dated+"</td><td>"+obj.emp_name+"</td><td style = 'min-width: 350px;'><ul class='list-group'>"+li+"</ul></td><td>"+obj.consignee+"</td><td>"+obj.sts+"</td><td> <button class='btn btn-sm btn-primary' value='"+obj.dcf_id+"'>View</button></td></tr>")
 
   });
     
