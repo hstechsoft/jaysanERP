@@ -42,6 +42,7 @@ SELECT
     sop.required_qty,
     sop.price,
     jpm.model_name,
+    jpm.product_id,
     (
     SELECT
         jaysan_final_product.product_name

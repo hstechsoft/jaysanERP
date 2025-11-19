@@ -132,3 +132,5 @@ FROM
         ap.chasis_no
 ) AS pr
 GROUP BY pr.opid) as details GROUP by opid order by opid asc)
+
+
