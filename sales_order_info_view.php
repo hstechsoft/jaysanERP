@@ -5,7 +5,8 @@
         sof.order_category,
         sof.customer_id,
         sof.order_type,
-     
+     sof.emp_id,
+     (select emp_name from employee where emp_id= sof.emp_id) as emp_name,
         sof.oe_supply,
         sof.commitment_date,
         sof.dated,
@@ -31,6 +32,7 @@
     FROM
         `sales_order_form` sof
     LEFT JOIN customer ON sof.customer_id = customer.cus_id
+    
 )
 SELECT
     sales_order_info.*,
