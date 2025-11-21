@@ -1,7 +1,3 @@
-@import url("css/all.min.css");
-
-/* your existing CSS continues below... */
-
 
 
 @media print
@@ -25,26 +21,6 @@
       left: 90%;
       top: 30%;
 	}
-
-  #loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(255, 255, 255, 0.9); /* light overlay */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999999; /* forces it above everything */
-}
-
-#loader-overlay img {
-  width: 200px;     /* adjust size */
-  height: 200px;
-  object-fit: contain;
-}
-
 
 /* btn-animate button animation styles */
 .btn-animate {
