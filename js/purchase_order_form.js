@@ -945,7 +945,7 @@ function get_mrf_po_details() {
         success: function (response) {
 
             console.log(response);
-alert()
+
             if (response.trim() != "error") {
                 var obj = JSON.parse(response);
                 var count = 0;
@@ -981,12 +981,11 @@ alert()
                         balance = '';
                     }
                     count = count + 1;
-                   $("#company_name").append(count);
-                     $("#po_report").append(count);
-                    // $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "' data-mrf_id='" + obj.mrf_id + "' ><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + " Batch: " + obj.batch_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
-                    //     "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
-                    //     "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
-                    //     "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty_with_uom + "<br>" + balance + "</td></tr>");
+                 
+                    $("#po_report").append("<tr data-po_order_to='" + obj.po_order_to + "' data-mrf_id='" + obj.mrf_id + "' ><td>" + count + "</td><td><ul class='list-group ' ><li class='list-group-item '> <div class='d-flex justify-content-between align-content-around'> <div class = 'small'><span class='text-bg-light fw-bold'>  " + obj.mrf_id + " Batch: " + obj.batch_id + ". </span>" + obj.part_name + order_type_badge + "<span class='ms-1 small  badge bg-primary'>" + obj.total_part_count + "</span></div> <div> <button class='btn btn-outline-danger btn-sm border-0 history_btn' " +
+                        "data-bs-toggle='popover' data-bs-html='true' data-bs-placement='left' " +
+                        "data-history=\"" + obj.form_history.replace(/"/g, '&quot;') + "\" title='History'>" +
+                        "<i class='fa fa-clock-o' aria-hidden='true'></i></button></div></div></li><li class='list-group-item '><div class='d-flex justify-content-between align-content-around'> <div class='small'>" + obj.req_date_format + " </div> <div class='small'>" + commitment_sts + "  </div></div></li></ul></td><td id='order_to'>" + obj.order_to + "</td><td>" + obj.raw_material_part_id + "</td><td>" + obj.batch_date + "</td><td>" + obj.batch_qty_with_uom + "<br>" + balance + "</td></tr>");
                 });
 
                 //    get_sales_order()
