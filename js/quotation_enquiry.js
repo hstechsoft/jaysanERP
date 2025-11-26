@@ -16,7 +16,7 @@ $(document).ready(function () {
 
 
 
-
+check_login();
   $("#menu_bar").load('menu.html',
     function () {
       var lo = (window.location.pathname.split("/").pop());
