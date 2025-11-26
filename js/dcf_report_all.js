@@ -1,13 +1,15 @@
 
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
+var dcf_id_para = urlParams.get('dcf_id_para');
+
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
  var dcf_id1 = 0;
  var cus_id ='';
 $(document).ready(function(){
  
-  
+
   $("#menu_bar").load('menu.html',
     function() { 
       var lo = (window.location.pathname.split("/").pop());
@@ -337,7 +339,13 @@ $('#dcf_list').append("<tr class = 'small'><td>"+count+"</td><td>"+obj.dcf_id+"<
 
   });
     
-
+  if (dcf_id_para != null)
+  {
+    get_dcf_details(dcf_id_para)
+    $('html, body').animate({
+      scrollTop: $('#dcf_report').offset().top
+    }, 500);
+  }
  
 }
 else{

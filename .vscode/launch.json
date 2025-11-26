@@ -27,7 +27,7 @@
       "name": "Launch Chrome for JS/jQuery Debugging",
       "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost/jaysanERP/sales_order_report.html",
+      "url": "http://localhost/jaysanERP/dcf_report_all.html",
       "webRoot": "E:/web/htdocs/jaysanERP",
       "userDataDir": true,
       "skipFiles": ["**/jquery*.js", "**/node_modules/**"],
