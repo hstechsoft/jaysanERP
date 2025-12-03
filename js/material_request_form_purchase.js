@@ -938,13 +938,15 @@ mrf_id_g = obj.mrf_id;
   function get_material_request_form_list(sts_array, emp_id, field_name)
    {
     
+   console.log(JSON.stringify(sts_array));
    
    $.ajax({
      url: "php/get_material_request_form_list.php",
      type: "POST", //send it through get method
      data: {
      status : JSON.stringify(sts_array),
-    emp_id : emp_id
+    emp_id : 'all',
+    mrf_purchase_by : current_user_id
 
      },
      success: function (response) {
