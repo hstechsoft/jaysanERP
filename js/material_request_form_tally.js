@@ -181,7 +181,7 @@ var sts_array = ["tally_stock_approved"];
 get_material_request_form_list(sts_array,current_user_id,"tally_stock_approved");
 
 var sts_array_tally = ["created"];
-get_material_request_form_list_tally(sts_array_tally,'all',"created");
+get_material_request_form_list_tally(sts_array_tally,'all');
 
 $("#material_requset_form_tally_table").on("click", "tr", function(event) {
     event.preventDefault();
@@ -451,7 +451,7 @@ $('#stock_table_body').append("<tr  data-godown-id='"+obj.godown_id+"'><td>"+obj
       
    }
 
- function get_material_request_form_list_tally(sts_array, emp_id, field_name)
+ function get_material_request_form_list_tally(sts_array, emp_id)
    {
     
    
