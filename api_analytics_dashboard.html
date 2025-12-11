@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript to PHP API Analytics Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .controls {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .js-file {
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+        }
+        
+        .js-file:hover {
+            text-decoration: underline;
+        }
+        
+        .php-list {
+            font-size: 0.9em;
+            color: #495057;
+        }
+        
+        .php-api {
+            display: inline-block;
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 4px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        
+        .count-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .filter-buttons {
+            margin-bottom: 15px;
+        }
+        
+        .filter-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .filter-btn:hover {
+            background: #764ba2;
+        }
+        
+        .filter-btn.active {
+            background: #28a745;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 JavaScript to PHP API Analytics</h1>
+            <p>JaysanERP Project - API Endpoint Mapping</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3 id="totalJsFiles">0</h3>
+                <p>JavaScript Files</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalPhpApis">0</h3>
+                <p>Unique PHP APIs</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalConnections">0</h3>
+                <p>Total API Calls</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="avgCalls">0</h3>
+                <p>Avg APIs per File</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterByCount('all')">All Files</button>
+                <button class="filter-btn" onclick="filterByCount('high')">High Usage (10+)</button>
+                <button class="filter-btn" onclick="filterByCount('medium')">Medium (5-9)</button>
+                <button class="filter-btn" onclick="filterByCount('low')">Low (1-4)</button>
+            </div>
+            <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search for JS file or PHP API..." onkeyup="filterTable()">
+        </div>
+        
+        <div class="table-container">
+            <table id="apiTable">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">#</th>
+                        <th style="width: 250px;">JS File Name</th>
+                        <th>PHP API Files</th>
+                        <th style="width: 100px; text-align: center;">Count</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+            <div id="noResults" class="no-results" style="display: none;">
+                No results found
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // API Mapping Data
+        const apiData = [
+            { js: 'add_candidate.js', apis: ['check_candidate_phone.php', 'insert_candidate.php', 'upload_canditate.php'] },
+            { js: 'add_company_master.js', apis: ['update_company.php', 'get_company.php', 'insert_company.php', 'get_product_autocomplete.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'add_process.js', apis: ['get_part_name_auto.php', 'get_process_auto.php', 'insert_new_process.php', 'get_titles.php', 'delete_implement.php', 'insert_nprocess.php', 'delete_process.php', 'insert_new_input.php', 'delete_input_part.php', 'update_output_part.php', 'update_process.php', 'update_input_part.php', 'insert_new_part.php', 'get_implement_process.php', 'get_implement_input.php', 'get_implement_output.php', 'get_part_sts.php', 'get_sel_imp.php', 'get_sel_process.php', 'get_all_work.php', 'delete_work_report.php', 'delete_work.php', 'delete_work_type.php', 'get_wstatus.php', 'insert_work_type.php', 'insert_rwork.php', 'insert_pwork.php', 'get_all_work_type.php', 'get_all_report_type.php', 'get_work_type.php'] },
+            { js: 'add_process_ref.js', apis: ['get_part_name_auto.php', 'get_process_auto.php', 'insert_new_process.php', 'insert_new_part.php', 'get_implement_process.php', 'get_implement_input.php', 'get_implement_output.php', 'get_part_sts.php', 'get_sel_imp.php', 'get_sel_process.php', 'get_all_work.php', 'delete_work_report.php', 'delete_work.php', 'delete_work_type.php', 'get_wstatus.php', 'insert_work_type.php', 'insert_rwork.php', 'insert_pwork.php', 'get_all_work_type.php', 'get_all_report_type.php', 'get_work_type.php'] },
+            { js: 'add_process_title.js', apis: ['add_process_title.php', 'fetch_title.php', 'delete_title.php'] },
+            { js: 'add_reminder_master.js', apis: ['delete_reminder.php', 'insert_reminder.php', 'get_all_reminder.php', 'get_work_type.php'] },
+            { js: 'add_work_master.js', apis: ['get_all_work.php', 'delete_work_report.php', 'delete_work.php', 'delete_work_type.php', 'get_wstatus.php', 'insert_work_type.php', 'insert_rwork.php', 'insert_pwork.php', 'get_all_work_type.php', 'get_all_report_type.php', 'get_work_type.php'] },
+            { js: 'admin_employee_report.js', apis: ['get_emp_att_report.php', 'lead_report.php', 'work_report_detailed.php', 'get_work_type.php', 'get_all_emp_hi.php'] },
+            { js: 'admin_employee_report_self.js', apis: ['get_emp_att_report.php', 'lead_report.php', 'work_report_detailed.php', 'get_work_type.php', 'get_all_emp_hi.php'] },
+            { js: 'admin_emp_single.js', apis: ['get_current_employee_id_byphoneid.php', 'get_employee_cur_sts.php'] },
+            { js: 'admin_emp_single_att.js', apis: ['get_admin_emp_att_report_cal.php', 'get_all_emp_hi.php', 'get_current_employee_id_byphoneid.php', 'get_employee_cur_sts.php', 'get_admin_emp_att_report.php'] },
+            { js: 'admin_emp_single_detail.js', apis: ['get_expense_summary_single.php', 'get_emp_tour_sum_phone.php', 'get_emp_task_sum_phone.php', 'get_emp_att_report.php', 'get_all_emp_hi.php', 'get_current_employee_id_byphoneid.php', 'get_employee_cur_sts.php'] },
+            { js: 'admin_emp_single_phone.js', apis: ['get_current_employee_id_byphoneid.php', 'get_employee_cur_sts.php'] },
+            { js: 'admin_emp_single_task.js', apis: ['get_emp_task_report_cal.php', 'get_all_emp_hi.php', 'get_current_employee_id_byphoneid.php', 'get_employee_cur_sts.php', 'get_emp_task_detail.php'] },
+            { js: 'admin_expense.js', apis: ['get_expense_all.php'] },
+            { js: 'admin_expense_single.js', apis: ['insert_expense_pay.php', 'update_expense.php', 'get_employee.php', 'get_expense_single.php'] },
+            { js: 'admin_expense_single_phone.js', apis: ['update_admin_emp_exp.php', 'get_admin_emp_exp_report_cal.php', 'insert_expense_pay.php', 'update_expense.php', 'get_all_emp_hi.php', 'get_current_employee_id_byphoneid.php', 'get_expense_single.php'] },
+            { js: 'admin_index.js', apis: ['get_customer_autocomplete.php', 'get_employee_cur_sts.php'] },
+            { js: 'admin_index_phone.js', apis: ['insert_attendance_verify.php', 'get_current_employee_id_byphoneid.php', 'get_employee_cur_sts_phone.php', 'get_employee_notification.php'] },
+            { js: 'admin_tour.js', apis: ['update_att_req.php', 'get_current_employee_id_byphoneid.php', 'get_emp_task_detail.php', 'get_all_emp_hi.php', 'get_admin_tour.php', 'get_admin_tour_requset.php'] },
+            { js: 'admin_upload.js', apis: ['get_employee.php', 'upload_cus.php'] },
+            { js: 'assembly.js', apis: ['get_android_id.php', 'get_current_employee_id_byphoneid.php', 'insert_listner.php', 'check_listner.php'] },
+            { js: 'attachment.js', apis: ['get_work_attachment.php'] },
+            { js: 'att_approval_chart.js', apis: ['store_att_rules.php', 'get_assigned_role_list.php', 'get_unassigned_parts.php', 'get_role_name.php', 'get_un_role_name.php', 'get_att_rules.php', 'get_assign_no.php'] },
+            { js: 'att_req.js', apis: ['insert_leave_req.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'bom_entry.js', apis: ['get_part_name_auto_wel.php', 'insert_bom.php', 'update_bom.php', 'get_bom_list.php', 'get_bom_recent.php', 'get_bom.php', 'get_titles.php', 'insert_new_part.php'] },
+            { js: 'candidate_report.js', apis: ['get_candidate_report.php'] },
+            { js: 'check_warranty.js', apis: ['get_delivery_report.php', 'get_dealer_report.php', 'get_warranty_chk.php'] },
+            { js: 'correction.js', apis: ['update_correction.php', 'delete_customer.php', 'get_all_correction.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'correction1.js', apis: ['update_correction1.php', 'delete_customer.php', 'get_all_policy_cat.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'coupen_entry.js', apis: ['insert_coupen.php', 'check_coupen.php', 'get_product_all.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'create_customer.js', apis: ['get_customer_edit.php', 'get_customer_autocomplete.php', 'get_phone_autocomplete.php', 'check_customer_phone.php'] },
+            { js: 'create_customer_p.js', apis: ['insert_customer.php', 'get_customer_autocomplete.php', 'check_customer_phone.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'create_dealer.js', apis: ['insert_dealer.php', 'get_dealer_autocomplete.php', 'check_dealer_phone.php'] },
+            { js: 'create_policy.js', apis: ['insert_policy.php', 'get_customer_autocomplete.php', 'get_vno_autocomplete.php', 'check_policy_no.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'create_work.js', apis: ['get_android_id.php', 'get_current_employee_id_byphoneid.php', 'get_employee.php', 'get_history.php', 'get_work.php', 'get_work_type_ac.php', 'insert_work.php'] },
+            { js: 'create_work_p.js', apis: ['get_android_id.php', 'get_current_employee_id_byphoneid.php', 'get_customer_autocomplete.php', 'get_employee.php', 'get_history.php', 'get_work.php', 'get_work_type_ac.php', 'insert_listner.php', 'insert_work.php'] },
+            { js: 'customer_list.js', apis: ['delete_customer.php', 'get_all_customer.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'dashboard.js', apis: ['get_all_emp_hi.php', 'get_call_log.php', 'get_summary.php', 'get_work_type.php', 'work_summary_chart.php', 'emp_lead_summary_chart.php', 'emp_lead_out_summary_chart.php'] },
+            { js: 'dashboard_p.js', apis: ['get_all_emp_hi.php', 'get_call_log.php', 'get_summary.php', 'get_work_type.php', 'work_summary_chart.php', 'emp_lead_summary_chart.php', 'emp_lead_out_summary_chart.php'] },
+            { js: 'dealer_login.js', apis: ['get_dealer_login.php'] },
+            { js: 'dealer_warranty.js', apis: ['insert_warranty.php', 'get_delivery_report.php'] },
+            { js: 'emp_expense_single.js', apis: ['get_expense_single.php', 'get_current_employee_id_byphoneid.php'] },
+            { js: 'emp_single_detail.js', apis: ['get_current_employee_id_byphoneid.php', 'get_emp_att_report.php', 'get_expense_summary_single.php', 'get_emp_tour_sum_phone.php', 'get_emp_task_sum_phone.php'] },
+            { js: 'emp_tour.js', apis: ['delete_tour_req.php', 'get_current_employee_id_byphoneid.php', 'get_emp_task_detail.php', 'get_emp_tour.php', 'get_tour_approval_sts.php'] },
+            { js: 'emp_work.js', apis: ['get_android_id.php', 'get_current_employee_id_byphoneid.php', 'get_employee.php', 'get_history.php', 'get_site_visit_work.php', 'get_today_call_incoming.php', 'get_work_mcall.php', 'insert_work.php'] },
+            { js: 'employee.js', apis: ['change_employee.php', 'get_all_role.php', 'get_emp_feature.php', 'get_employee.php', 'get_employee_single.php', 'insert_emp_fearture.php'] },
+            { js: 'employee_single.js', apis: ['get_employee_single.php', 'update_employee.php'] },
+            { js: 'estimation.js', apis: ['get_current_employee_id_byphoneid.php', 'get_customer_autocomplete.php', 'get_product.php', 'get_product_autocomplete.php', 'get_quotation_single.php', 'get_quote_details_single.php', 'insert_quotation.php'] },
+            { js: 'invoice.js', apis: ['get_current_employee_id_byphoneid.php', 'get_customer_autocomplete.php', 'get_invoice_details_single.php', 'get_invoice_single.php', 'get_product.php', 'get_product_autocomplete.php', 'insert_quotation.php'] },
+            { js: 'login.js', apis: ['get_employee_id.php'] },
+            { js: 'product.js', apis: ['get_current_employee_id_byphoneid.php', 'get_product.php', 'get_product_autocomplete.php', 'get_product_reminder.php', 'get_reminder.php', 'insert_product.php', 'insert_product_reminder.php'] },
+            { js: 'quotation.js', apis: ['get_cus_info_all.php', 'get_current_employee_id_byphoneid.php', 'get_customer_autocomplete.php', 'get_product.php', 'get_product_autocomplete.php', 'get_quote_details.php', 'insert_quotation.php'] }
+        ];
+        
+        let currentFilter = 'all';
+        
+        function initializeDashboard() {
+            calculateStats();
+            populateTable(apiData);
+        }
+        
+        function calculateStats() {
+            const totalJs = apiData.length;
+            const allApis = new Set();
+            let totalCalls = 0;
+            
+            apiData.forEach(item => {
+                item.apis.forEach(api => allApis.add(api));
+                totalCalls += item.apis.length;
+            });
+            
+            document.getElementById('totalJsFiles').textContent = totalJs;
+            document.getElementById('totalPhpApis').textContent = allApis.size;
+            document.getElementById('totalConnections').textContent = totalCalls;
+            document.getElementById('avgCalls').textContent = Math.round(totalCalls / totalJs);
+        }
+        
+        function populateTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                document.getElementById('noResults').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('noResults').style.display = 'none';
+            
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                const phpTags = item.apis.map(api => 
+                    `<span class="php-api">${api}</span>`
+                ).join(' ');
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><span class="js-file">${item.js}</span></td>
+                    <td class="php-list">${phpTags}</td>
+                    <td style="text-align: center;"><span class="count-badge">${item.apis.length}</span></td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+        
+        function filterTable() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            
+            let filtered = apiData;
+            
+            // Apply count filter
+            if (currentFilter === 'high') {
+                filtered = filtered.filter(item => item.apis.length >= 10);
+            } else if (currentFilter === 'medium') {
+                filtered = filtered.filter(item => item.apis.length >= 5 && item.apis.length <= 9);
+            } else if (currentFilter === 'low') {
+                filtered = filtered.filter(item => item.apis.length >= 1 && item.apis.length <= 4);
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                filtered = filtered.filter(item => {
+                    return item.js.toLowerCase().includes(searchTerm) ||
+                           item.apis.some(api => api.toLowerCase().includes(searchTerm));
+                });
+            }
+            
+            populateTable(filtered);
+        }
+        
+        function filterByCount(type) {
+            currentFilter = type;
+            
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            filterTable();
+        }
+        
+        // Initialize on page load
+        window.onload = initializeDashboard;
+    </script>
+</body>
+</html>
