@@ -15,6 +15,55 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
+            transition: background 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        body.dark-mode .container {
+            background: #0f3460;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .stat-card,
+        body.dark-mode .api-card,
+        body.dark-mode table,
+        body.dark-mode th {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode tr:hover {
+            background: #1a1a2e;
+        }
+        
+        body.dark-mode td {
+            border-bottom: 1px solid #2a2a3e;
+        }
+        
+        body.dark-mode .stats {
+            background: #0f3460;
+        }
+        
+        body.dark-mode .controls {
+            background: #16213e;
+            border-bottom: 2px solid #2a2a3e;
+        }
+        
+        body.dark-mode .search-box {
+            background: #0f3460;
+            color: #e0e0e0;
+            border-color: #667eea;
+        }
+        
+        body.dark-mode .top-apis {
+            background: #0f3460;
+        }
+        
+        body.dark-mode .category-header {
+            background: linear-gradient(90deg, #0f3460 0%, #16213e 100%);
         }
         
         .container {
@@ -120,10 +169,12 @@
             font-weight: 600;
             color: #667eea;
             cursor: pointer;
+            text-decoration: none;
         }
         
         .js-file:hover {
             text-decoration: underline;
+            color: #764ba2;
         }
         
         .php-list {
@@ -139,6 +190,30 @@
             margin: 2px;
             border-radius: 4px;
             font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .php-api:hover {
+            background: #0066cc;
+            color: white;
+            transform: translateY(-1px);        
+        .line-number {
+            background: #28a745;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+        
+        .api-with-line {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .count-badge {
@@ -180,13 +255,206 @@
             color: #999;
             font-size: 1.2em;
         }
+        
+        .sort-header {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-right: 20px;
+        }
+        
+        .sort-header:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .sort-header::after {
+            content: '⇅';
+            position: absolute;
+            right: 8px;
+            opacity: 0.5;
+        }
+        
+        .sort-header.asc::after {
+            content: '▲';
+            opacity: 1;
+        }
+        
+        .sort-header.desc::after {
+            content: '▼';
+            opacity: 1;
+        }
+        
+        .top-apis {
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .top-apis h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .api-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .api-name {
+            font-weight: 600;
+            color: #0066cc;
+        }
+        
+        .api-usage {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .export-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .export-btn:hover {
+            background: #218838;
+        }
+        
+        .category-section {
+            margin-bottom: 30px;
+        }
+        
+        .category-header {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 15px 0 10px 0;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .category-header:hover {
+            opacity: 0.9;
+        }
+        
+        .toggle-view {
+            margin-left: 10px;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .dark-mode-toggle:hover {
+            background: #764ba2;
+        }
+        
+        .reverse-lookup-section {
+            padding: 30px;
+            background: white;
+            border-top: 2px solid #e9ecef;
+        }
+        
+        .reverse-lookup-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .php-usage-card {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .php-usage-card.unused {
+            border-left-color: #dc3545;
+            background: #fff3f3;
+        }
+        
+        .unused-badge {
+            background: #dc3545;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        
+        .used-by-list {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button>
+    
     <div class="container">
         <div class="header">
             <h1>🔍 JavaScript to PHP API Analytics</h1>
             <p>JaysanERP Project - API Endpoint Mapping</p>
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                💡 Click on <span class="line-number" style="display: inline-block;">L##</span> to jump to exact line in JS file where API is called
+            </p>
         </div>
         
         <div class="stats">
@@ -209,41 +477,140 @@
         </div>
         
         <div class="controls">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('js-view')">📄 JS Files View</button>
+                <button class="tab-btn" onclick="switchTab('php-view')">🔧 PHP APIs View</button>
+                <button class="tab-btn" onclick="switchTab('category-view')">📁 Category View</button>
+            </div>
             <div class="filter-buttons">
                 <button class="filter-btn active" onclick="filterByCount('all')">All Files</button>
                 <button class="filter-btn" onclick="filterByCount('high')">High Usage (10+)</button>
                 <button class="filter-btn" onclick="filterByCount('medium')">Medium (5-9)</button>
                 <button class="filter-btn" onclick="filterByCount('low')">Low (1-4)</button>
+                <button class="export-btn" onclick="exportToCSV()">📥 Export CSV</button>
+                <button class="export-btn" onclick="exportToJSON()">📥 Export JSON</button>
+                <button class="filter-btn toggle-view" onclick="toggleTopAPIs()">📊 Toggle Top APIs</button>
             </div>
             <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search for JS file or PHP API..." onkeyup="filterTable()">
         </div>
         
-        <div class="table-container">
-            <table id="apiTable">
-                <thead>
-                    <tr>
-                        <th style="width: 50px;">#</th>
-                        <th style="width: 250px;">JS File Name</th>
-                        <th>PHP API Files</th>
-                        <th style="width: 100px; text-align: center;">Count</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Data will be populated by JavaScript -->
-                </tbody>
-            </table>
-            <div id="noResults" class="no-results" style="display: none;">
-                No results found
+        <div id="topAPIsSection" class="top-apis" style="display: none;">
+            <h2>🔥 Most Used PHP APIs</h2>
+            <div id="topAPIsList"></div>
+        </div>
+        
+        <div id="js-view" class="tab-content active">
+            <div class="table-container">
+                <table id="apiTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">#</th>
+                            <th style="width: 250px;" class="sort-header" onclick="sortTable('js')">JS File Name</th>
+                            <th>PHP API Files</th>
+                            <th style="width: 100px; text-align: center;" class="sort-header" onclick="sortTable('count')">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+                <div id="noResults" class="no-results" style="display: none;">
+                    No results found
+                </div>
+            </div>
+        </div>
+        
+        <div id="php-view" class="tab-content">
+            <div class="reverse-lookup-section">
+                <h2>🔧 PHP API Reverse Lookup</h2>
+                <input type="text" id="phpSearchBox" class="search-box" placeholder="🔍 Search PHP API..." onkeyup="filterPHPLookup()" style="margin-bottom: 20px;">
+                <div id="phpLookupContainer"></div>
+            </div>
+        </div>
+        
+        <div id="category-view" class="tab-content">
+            <div class="table-container">
+                <div id="categoryContainer"></div>
             </div>
         </div>
     </div>
     
     <script>
-        // API Mapping Data
+        // API Mapping Data (supports both formats: strings or objects with line numbers)
+        // Format with line numbers: { name: 'api.php', lines: [10, 25, 30] }
+        // Simple format: 'api.php' (for backward compatibility)
+        // To update: Replace this entire apiData array with generated JSON from js_php_line_scanner.html
         const apiData = [
+            { js: 'att_req.js', apis: [
+                { name: 'insert_leave_req.php', lines: [46] },
+                { name: 'get_current_employee_id_byphoneid.php', lines: [90] }
+            ]},
+            { js: 'login.js', apis: [
+                { name: 'get_employee_id.php', lines: [82] }
+            ]},
+            { js: 'admin_index_phone.js', apis: [
+                { name: 'insert_attendance_verify.php', lines: [96] },
+                { name: 'get_current_employee_id_byphoneid.php', lines: [151] },
+                { name: 'get_employee_cur_sts_phone.php', lines: [193] },
+                { name: 'get_employee_notification.php', lines: [268] }
+            ]},
+            { js: 'assembly.js', apis: [
+                { name: 'get_android_id.php', lines: [24] },
+                { name: 'get_current_employee_id_byphoneid.php', lines: [111] },
+                { name: 'insert_listner.php', lines: [289] },
+                { name: 'check_listner.php', lines: [318] }
+            ]},
+            { js: 'correction.js', apis: [
+                { name: 'update_correction.php', lines: [56] },
+                { name: 'delete_customer.php', lines: [96] },
+                { name: 'get_all_correction.php', lines: [140] },
+                { name: 'get_current_employee_id_byphoneid.php', lines: [206] }
+            ]},
+            { js: 'create_customer_p.js', apis: [
+                { name: 'get_customer_autocomplete.php', lines: [231] },
+                { name: 'get_phone_autocomplete.php', lines: [315] },
+                { name: 'check_customer_phone.php', lines: [396] },
+                { name: 'insert_customer.php', lines: [431] },
+                { name: 'insert_work.php', lines: [481] },
+                { name: 'get_employee.php', lines: [525, 568] },
+                { name: 'get_current_employee_id_byphoneid.php', lines: [615] },
+                { name: 'get_work_type.php', lines: [654] }
+            ]},
+            { js: 'admin_expense_single_phone.js', apis: [
+                { name: 'update_admin_emp_exp.php', lines: [372] },
+                { name: 'get_admin_emp_exp_report_cal.php', lines: [409] },
+                { name: 'insert_expense_pay.php', lines: [541] },
+                { name: 'update_expense.php', lines: [570] },
+                { name: 'get_all_emp_hi.php', lines: [599] },
+                { name: 'get_current_employee_id_byphoneid.php', lines: [666] },
+                { name: 'get_expense_single.php', lines: [710, 774] }
+            ]},
+            { js: 'emp_work.js', apis: [
+                { name: 'get_process_auto.php', lines: [181] },
+                { name: 'get_part_name_auto1.php', lines: [228, 283, 338, 392] },
+                { name: 'get_batch_parts.php', lines: [477] },
+                { name: 'update_emp_work.php', lines: [527] },
+                { name: 'update_emp_helper.php', lines: [567] },
+                { name: 'get_employee_autocomplete1.php', lines: [610] },
+                { name: 'get_emp_wel_work.php', lines: [709] },
+                { name: 'get_emp_break.php', lines: [780] },
+                { name: 'insert_helper_work.php', lines: [853] },
+                { name: 'insert_output_work.php', lines: [891] },
+                { name: 'insert_input_work.php', lines: [931] },
+                { name: 'get_input_work.php', lines: [972] },
+                { name: 'get_output_work.php', lines: [1022] },
+                { name: 'get_helper_emp.php', lines: [1071] },
+                { name: 'insert_emp_work.php', lines: [1121] },
+                { name: 'insert_break.php', lines: [1159] },
+                { name: 'insert_break_end.php', lines: [1199] },
+                { name: 'update_hold_work.php', lines: [1237, 1277] },
+                { name: 'get_current_employee_id_byphoneid.php', lines: [1332] },
+                { name: 'get_employee_cur_sts_phone.php', lines: [1377] },
+                { name: 'get_employee_notification.php', lines: [1445] }
+            ]},
+            // Add remaining files here (use js_php_line_scanner.html to generate complete data)
             { js: 'add_candidate.js', apis: ['check_candidate_phone.php', 'insert_candidate.php', 'upload_canditate.php'] },
             { js: 'add_company_master.js', apis: ['update_company.php', 'get_company.php', 'insert_company.php', 'get_product_autocomplete.php', 'get_current_employee_id_byphoneid.php'] },
-            { js: 'add_process.js', apis: ['get_part_name_auto.php', 'get_process_auto.php', 'insert_new_process.php', 'get_titles.php', 'delete_implement.php', 'insert_nprocess.php', 'delete_process.php', 'insert_new_input.php', 'delete_input_part.php', 'update_output_part.php', 'update_process.php', 'update_input_part.php', 'insert_new_part.php', 'get_implement_process.php', 'get_implement_input.php', 'get_implement_output.php', 'get_part_sts.php', 'get_sel_imp.php', 'get_sel_process.php', 'get_all_work.php', 'delete_work_report.php', 'delete_work.php', 'delete_work_type.php', 'get_wstatus.php', 'insert_work_type.php', 'insert_rwork.php', 'insert_pwork.php', 'get_all_work_type.php', 'get_all_report_type.php', 'get_work_type.php'] },
             { js: 'add_process_ref.js', apis: ['get_part_name_auto.php', 'get_process_auto.php', 'insert_new_process.php', 'insert_new_part.php', 'get_implement_process.php', 'get_implement_input.php', 'get_implement_output.php', 'get_part_sts.php', 'get_sel_imp.php', 'get_sel_process.php', 'get_all_work.php', 'delete_work_report.php', 'delete_work.php', 'delete_work_type.php', 'get_wstatus.php', 'insert_work_type.php', 'insert_rwork.php', 'insert_pwork.php', 'get_all_work_type.php', 'get_all_report_type.php', 'get_work_type.php'] },
             { js: 'add_process_title.js', apis: ['add_process_title.php', 'fetch_title.php', 'delete_title.php'] },
             { js: 'add_reminder_master.js', apis: ['delete_reminder.php', 'insert_reminder.php', 'get_all_reminder.php', 'get_work_type.php'] },
@@ -297,10 +664,44 @@
         ];
         
         let currentFilter = 'all';
+        let currentSort = { column: null, direction: 'asc' };
+        let displayData = [...apiData];
+        let phpLookupData = {};
+        let allPHPFiles = [];
+        
+        // Category definitions
+        const categories = {
+            'Admin': ['admin_', 'Admin'],
+            'Employee': ['emp_', 'employee_', 'Employee'],
+            'Customer': ['customer_', 'create_customer', 'cus_'],
+            'Work/Task': ['work_', 'create_work', 'assigned_work', 'pending_work'],
+            'Expense': ['expense_', 'Expense'],
+            'Reports': ['report_', 'Report', 'dashboard'],
+            'Process/Production': ['process_', 'bom_', 'assembly', 'welding'],
+            'Sales/Invoice': ['invoice', 'quotation', 'estimation'],
+            'Login/Auth': ['login', 'Login'],
+            'Attendance': ['att_', 'attendance_'],
+            'Tour': ['tour_'],
+            'Other': []
+        };
+        
+        // Helper function to get API name from either string or object format
+        function getAPIName(api) {
+            return typeof api === 'string' ? api : api.name;
+        }
+        
+        // Helper function to get API lines
+        function getAPILines(api) {
+            return typeof api === 'object' && api.lines ? api.lines : [];
+        }
         
         function initializeDashboard() {
             calculateStats();
-            populateTable(apiData);
+            calculateTopAPIs();
+            buildPHPLookup();
+            buildCategoryView();
+            populateTable(displayData);
+            loadDarkModePreference();
         }
         
         function calculateStats() {
@@ -333,13 +734,33 @@
             data.forEach((item, index) => {
                 const row = document.createElement('tr');
                 
-                const phpTags = item.apis.map(api => 
-                    `<span class="php-api">${api}</span>`
-                ).join(' ');
+                // Determine JS file path
+                const jsPath = item.js.startsWith('js/') ? item.js : 'js/' + item.js;
+                const jsFullPath = `e:/web/htdocs/jaysanERP/${jsPath}`;
+                
+                const phpTags = item.apis.map(api => {
+                    const apiName = getAPIName(api);
+                    const lines = getAPILines(api);
+                    const phpFullPath = `e:/web/htdocs/jaysanERP/php/${apiName}`;
+                    
+                    if (lines.length > 0) {
+                        const lineLinks = lines.map(lineNum => {
+                            const jsLineLink = `${jsFullPath}:${lineNum}`;
+                            return `<a href="vscode://file/${jsLineLink}" class="line-number" title="Jump to line ${lineNum} in ${item.js}">L${lineNum}</a>`;
+                        }).join(' ');
+                        
+                        return `<div class="api-with-line">
+                            <a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName} in VS Code">${apiName}</a>
+                            ${lineLinks}
+                        </div>`;
+                    } else {
+                        return `<a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName} in VS Code">${apiName}</a>`;
+                    }
+                }).join(' ');
                 
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td><span class="js-file">${item.js}</span></td>
+                    <td><a href="vscode://file/${jsFullPath}" class="js-file" title="Open ${item.js} in VS Code">${item.js}</a></td>
                     <td class="php-list">${phpTags}</td>
                     <td style="text-align: center;"><span class="count-badge">${item.apis.length}</span></td>
                 `;
@@ -370,7 +791,108 @@
                 });
             }
             
-            populateTable(filtered);
+            displayData = filtered;
+            applySorting();
+            populateTable(displayData);
+        }
+        
+        function sortTable(column) {
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            
+            // Update UI
+            document.querySelectorAll('.sort-header').forEach(th => {
+                th.classList.remove('asc', 'desc');
+            });
+            event.target.classList.add(currentSort.direction);
+            
+            applySorting();
+            populateTable(displayData);
+        }
+        
+        function applySorting() {
+            if (!currentSort.column) return;
+            
+            displayData.sort((a, b) => {
+                let valA, valB;
+                
+                if (currentSort.column === 'js') {
+                    valA = a.js.toLowerCase();
+                    valB = b.js.toLowerCase();
+                } else if (currentSort.column === 'count') {
+                    valA = a.apis.length;
+                    valB = b.apis.length;
+                }
+                
+                if (currentSort.direction === 'asc') {
+                    return valA > valB ? 1 : -1;
+                } else {
+                    return valA < valB ? 1 : -1;
+                }
+            });
+        }
+        
+        function calculateTopAPIs() {
+            const apiCount = {};
+            
+            apiData.forEach(item => {
+                item.apis.forEach(api => {
+                    const apiName = getAPIName(api);
+                    apiCount[apiName] = (apiCount[apiName] || 0) + 1;
+                });
+            });
+            
+            const sortedAPIs = Object.entries(apiCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+            
+            const container = document.getElementById('topAPIsList');
+            container.innerHTML = sortedAPIs.map(([api, count]) => {
+                const phpFullPath = `e:/web/htdocs/jaysanERP/php/${api}`;
+                return `
+                    <div class="api-card">
+                        <a href="vscode://file/${phpFullPath}" class="api-name" title="Open in VS Code">${api}</a>
+                        <span class="api-usage">Used by ${count} file${count > 1 ? 's' : ''}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleTopAPIs() {
+            const section = document.getElementById('topAPIsSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function exportToCSV() {
+            let csv = 'JavaScript File,PHP APIs,Count\n';
+            
+            displayData.forEach(item => {
+                const apis = item.apis.map(api => getAPIName(api)).join('; ');
+                csv += `"${item.js}","${apis}",${item.apis.length}\n`;
+            });
+            
+            downloadFile(csv, 'js_php_api_mapping.csv', 'text/csv');
+        }
+        
+        function exportToJSON() {
+            const json = JSON.stringify(displayData, null, 2);
+            downloadFile(json, 'js_php_api_mapping.json', 'application/json');
+        }
+        
+        function downloadFile(content, filename, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
         
         function filterByCount(type) {
@@ -383,6 +905,183 @@
             event.target.classList.add('active');
             
             filterTable();
+        }
+        
+        function buildPHPLookup() {
+            // Build reverse lookup: PHP API -> JS files that use it with line numbers
+            phpLookupData = {};
+            const allPHPSet = new Set();
+            
+            apiData.forEach(item => {
+                item.apis.forEach(api => {
+                    const apiName = getAPIName(api);
+                    const lines = getAPILines(api);
+                    
+                    allPHPSet.add(apiName);
+                    if (!phpLookupData[apiName]) {
+                        phpLookupData[apiName] = [];
+                    }
+                    phpLookupData[apiName].push({ js: item.js, lines: lines });
+                });
+            });
+            
+            allPHPFiles = Array.from(allPHPSet).sort();
+            displayPHPLookup(allPHPFiles);
+        }
+        
+        function displayPHPLookup(phpFiles) {
+            const container = document.getElementById('phpLookupContainer');
+            
+            container.innerHTML = phpFiles.map(api => {
+                const usedBy = phpLookupData[api] || [];
+                const isUnused = usedBy.length === 0;
+                const phpFullPath = `e:/web/htdocs/jaysanERP/php/${api}`;
+                
+                return `
+                    <div class="php-usage-card ${isUnused ? 'unused' : ''}">
+                        <div>
+                            <a href="vscode://file/${phpFullPath}" class="api-name" style="text-decoration: none; color: #667eea; font-weight: 600;">
+                                ${api}
+                            </a>
+                            ${isUnused ? '<span class="unused-badge">⚠️ Unused</span>' : `<span class="api-usage">Used by ${usedBy.length} file${usedBy.length > 1 ? 's' : ''}</span>`}
+                        </div>
+                        ${usedBy.length > 0 ? `
+                            <div class="used-by-list">
+                                ${usedBy.map(usage => {
+                                    const jsPath = usage.js.startsWith('js/') ? usage.js : 'js/' + usage.js;
+                                    const jsFullPath = `e:/web/htdocs/jaysanERP/${jsPath}`;
+                                    
+                                    if (usage.lines && usage.lines.length > 0) {
+                                        const lineLinks = usage.lines.map(lineNum => {
+                                            const lineLink = `${jsFullPath}:${lineNum}`;
+                                            return `<a href="vscode://file/${lineLink}" class="line-number" title="Jump to line ${lineNum}">L${lineNum}</a>`;
+                                        }).join(' ');
+                                        return `<div style="display: inline-flex; align-items: center; margin-right: 15px; margin-bottom: 5px;">
+                                            <a href="vscode://file/${jsFullPath}" style="color: #0066cc; text-decoration: none; margin-right: 5px;">📄 ${usage.js}</a>
+                                            ${lineLinks}
+                                        </div>`;
+                                    } else {
+                                        return `<a href="vscode://file/${jsFullPath}" style="color: #0066cc; text-decoration: none; margin-right: 10px;">📄 ${usage.js}</a>`;
+                                    }
+                                }).join(' ')}
+                            </div>
+                        ` : '<div class="used-by-list" style="color: #dc3545;">Not referenced by any JavaScript file</div>'}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function filterPHPLookup() {
+            const searchTerm = document.getElementById('phpSearchBox').value.toLowerCase();
+            const filtered = allPHPFiles.filter(api => api.toLowerCase().includes(searchTerm));
+            displayPHPLookup(filtered);
+        }
+        
+        function categorizeFile(filename) {
+            for (const [category, patterns] of Object.entries(categories)) {
+                if (category === 'Other') continue;
+                for (const pattern of patterns) {
+                    if (filename.includes(pattern)) {
+                        return category;
+                    }
+                }
+            }
+            return 'Other';
+        }
+        
+        function buildCategoryView() {
+            const categorized = {};
+            
+            apiData.forEach(item => {
+                const category = categorizeFile(item.js);
+                if (!categorized[category]) {
+                    categorized[category] = [];
+                }
+                categorized[category].push(item);
+            });
+            
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = Object.keys(categorized).sort().map(category => {
+                const files = categorized[category];
+                return `
+                    <div class="category-section">
+                        <div class="category-header" onclick="toggleCategory('${category}')">
+                            📁 ${category} (${files.length} files)
+                        </div>
+                        <div id="cat-${category}" style="display: block;">
+                            ${files.map((item, index) => {
+                                const jsPath = item.js.startsWith('js/') ? item.js : 'js/' + item.js;
+                                const jsFullPath = `e:/web/htdocs/jaysanERP/${jsPath}`;
+                                const phpTags = item.apis.map(api => {
+                                    const apiName = getAPIName(api);
+                                    const lines = getAPILines(api);
+                                    const phpFullPath = `e:/web/htdocs/jaysanERP/php/${apiName}`;
+                                    
+                                    if (lines.length > 0) {
+                                        const lineLinks = lines.map(lineNum => {
+                                            const jsLineLink = `${jsFullPath}:${lineNum}`;
+                                            return `<a href="vscode://file/${jsLineLink}" class="line-number" title="Jump to line ${lineNum}">L${lineNum}</a>`;
+                                        }).join(' ');
+                                        return `<div class="api-with-line">
+                                            <a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName}">${apiName}</a>
+                                            ${lineLinks}
+                                        </div>`;
+                                    } else {
+                                        return `<a href="vscode://file/${phpFullPath}" class="php-api" title="Open ${apiName} in VS Code">${apiName}</a>`;
+                                    }
+                                }).join(' ');
+                                
+                                return `
+                                    <div style="padding: 15px; border-bottom: 1px solid #e9ecef;">
+                                        <a href="vscode://file/${jsFullPath}" class="js-file" style="text-decoration: none;">${item.js}</a>
+                                        <span class="count-badge">${item.apis.length}</span>
+                                        <div class="php-list" style="margin-top: 8px;">${phpTags}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleCategory(category) {
+            const element = document.getElementById(`cat-${category}`);
+            element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Update button states
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+            
+            // Update toggle button
+            const btn = document.querySelector('.dark-mode-toggle');
+            btn.textContent = isDark ? '☀️' : '🌙';
+        }
+        
+        function loadDarkModePreference() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.dark-mode-toggle').textContent = '☀️';
+            }
         }
         
         // Initialize on page load
