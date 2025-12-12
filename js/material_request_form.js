@@ -1,6 +1,11 @@
 
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
+let part_id_para = JSON.parse(decodeURIComponent(urlParams.get("part_id_para")));
+
+var req_para = urlParams.get('req_para');
+var qty_para = urlParams.get('qty_para');
+
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
  var physical_stock_array = [];
@@ -48,6 +53,9 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
     check_login();
     get_all_internal_godown()
     
+
+
+
     
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -280,6 +288,9 @@ $("#clear_btn").on("click", function(event) {
   var sts_array = [];
 get_material_request_form_list(sts_array,'all');
 });
+
+
+
 
 });
 
@@ -736,7 +747,46 @@ $('#material_requset_form_table').append(
    }
   }
    
-  
+      if(part_id_para != null)
+    {
+      $("#requirement_quantity").val(qty_para);
+       $.ajax({
+    url: "php/get_part.php",
+    type: "get", //send it through get method
+
+    data: {
+      part_id: part_id_para
+
+    },
+    success: function (response) {
+console.log(response);
+
+      if (response.trim() != "0 result" ) {
+        var obj = JSON.parse(response);
+
+        obj.forEach(function (obj) {
+          $("#part_no").val(obj.part_name);
+          $("#part_no").data("selected-part_id", obj.part_id);
+          $("#minimum_order_qty").val(obj.min_order_qty);
+          $("#reorder_quantity").val(obj.reorder_qty);
+
+           
+// get part details
+var sts_array = [];
+get_material_request_form_parts_search(obj.part_id,'all',"created");
+        });
+      } else {
+        salert("Error", "Failed to update material request form", "error");
+      }
+    },
+    error: function (xhr) {
+      //Do Something to handle error
+      salert("Error", "An error occurred while updating material request form", "error");
+    }
+  });
+
+
+    }
    
    
        
