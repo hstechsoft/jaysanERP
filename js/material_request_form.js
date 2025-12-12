@@ -6,7 +6,7 @@ let req_id_para = JSON.parse(decodeURIComponent(urlParams.get("req_id_para")));
 var req_para = urlParams.get('req_para');
 var qty_para = urlParams.get('qty_para');
 var part_id_para = urlParams.get('part_id_para');
-console.log(req_id_para);
+
 
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
@@ -14,7 +14,10 @@ var current_user_name =  localStorage.getItem("ls_uname") ;
  var mrf_id_g = 0;
 $(document).ready(function(){
 
-  
+
+console.log(encoded);
+
+
   $("#menu_bar").load('menu.html',
     function() { 
       var lo = (window.location.pathname.split("/").pop());
@@ -908,11 +911,13 @@ req_id : JSON.stringify(req_id_para),
 
      },
      success: function (response) {
+   console.log(response);
    
    
    if (response.trim() == "ok") {
     
- location.reload();
+window.open("material_request_form.html", "_self");
+
    
   }
 
