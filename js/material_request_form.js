@@ -1,10 +1,12 @@
 
 var urlParams = new URLSearchParams(window.location.search);
 var phone_id = urlParams.get('phone_id');
-let part_id_para = JSON.parse(decodeURIComponent(urlParams.get("part_id_para")));
+let req_id_para = JSON.parse(decodeURIComponent(urlParams.get("req_id_para")));
 
 var req_para = urlParams.get('req_para');
 var qty_para = urlParams.get('qty_para');
+var part_id_para = urlParams.get('part_id_para');
+console.log(req_id_para);
 
   var current_user_id =  localStorage.getItem("ls_uid") ;
 var current_user_name =  localStorage.getItem("ls_uname") ; 
@@ -902,6 +904,7 @@ prepared_by: current_user_id,
 physical_stock_approved_by :  current_user_id,
 physical_stock_array : JSON.stringify(physical_stock_array),
 uom :  $('#uom').val(),
+req_id : JSON.stringify(req_id_para),
 
      },
      success: function (response) {
