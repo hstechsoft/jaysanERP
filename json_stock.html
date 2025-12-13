@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        #purchase_order_table tr {
+            font-size: 12px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid " style="height: 100%; overflow-y: auto;">
+        <!-- top bar -->
+
+<!-- 
+
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
+
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div> -->
+
+        <section id="menu_bar" >
+
+
+        </section>
+
+
+
+
+
+        <div class="page-wrapper">
+
+            <!-- content -->
+
+            <div class="row g-2">
+
+                <!-- LEFT PANEL -->
+                <div class="col-md-2">
+
+                    <!-- Toggle -->
+                    <!-- <div class="d-flex align-items-center mb-1">
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input" type="checkbox" id="toggel_stock">
+                        </div>
+                        <label class="ms-1 small fw-semibold" for="toggel_stock">
+                            <i class="bi bi-sliders"></i> Mode
+                        </label>
+                    </div> -->
+
+                    <!-- INSERT CARD -->
+                    <div class="card shadow-sm" id="stock_insert_card">
+                        <div class="card-header bg-primary text-white py-1 small">
+                            <i class="bi bi-plus-circle"></i> Add Stock
+                        </div>
+
+                        <form class="p-2 bg-light small" onsubmit="return false">
+
+                            <label class="form-label mb-0 small">
+                                <i class="bi bi-box"></i> Part Name
+                            </label>
+                            <input type="text" class="form-control form-control-sm mb-1" id="stock_part">
+
+                            <label class="form-label mb-0 small">
+                                <i class="bi bi-warehouse"></i> Unit
+                            </label>
+                            <input type="text" class="form-control form-control-sm mb-1" id="stock_godown">
+
+                            <div class="row g-2 d-none" id="u_min_max">
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-dash"></i> Min Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm" id="stock_unit_min_qty">
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-plus"></i> Max Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm" id="stock_unit_max_qty">
+                                </div>
+
+                            </div>
+
+                            <label class="form-label mb-0 small">
+                                <i class="bi bi-building"></i> Department
+                            </label>
+                            <input type="text" class="form-control form-control-sm mb-1" id="stock_department">
+
+                            <div class="row g-2 d-none" id="d_min_max">
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-dash"></i> Min Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        id="stock_department_min_qty">
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-plus"></i> Max Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        id="stock_department_max_qty">
+                                </div>
+
+                            </div>
+
+                            <label class="form-label mb-0 small">
+                                <i class="bi bi-diagram-3"></i> Section
+                            </label>
+                            <input type="text" class="form-control form-control-sm mb-1" id="stock_section">
+
+                            <div class="row g-2 d-none" id="s_min_max">
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-dash"></i> Min Qty
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        id="stock_section_min_qty">
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="form-label mb-1 small">
+                                        <i class="bi bi-plus"></i> Max Qty
+                                    </label>
+                                    <input type="number " class="form-control form-control-sm"
+                                        id="stock_section_max_qty">
+                                </div>
+
+                            </div>
+
+                            <label class="form-label mb-0 small">
+                                <i class="bi bi-123"></i> Quantity
+                            </label>
+                            <input type="number" class="form-control form-control-sm mb-2" id="stock_qty">
+
+                            <button type="submit" class="btn btn-primary btn-sm w-100" id="stock_insert_btn">
+                                <i class="bi bi-check2-circle"></i> Submit
+                            </button>
+                            <button type="submit" class="btn btn-warning btn-sm w-100 d-none" id="stock_update_btn">
+                                <i class="fa fa-edit    "></i> Update
+                            </button>
+
+                        </form>
+                    </div>
+
+
+                </div>
+
+                <!-- RIGHT PANEL -->
+                <div class="col-md-10">
+
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-secondary text-white py-1 small d-flex justify-content-between">
+                            <div class="d-flex  align-items-center gap-3">
+                                <i class="bi bi-table"></i> Stock Records
+
+                                <div class="form-check form-switch m-0" style="font-size: 20px;">
+                                    <input class="form-check-input" type="checkbox" id="toggel_stock_part_group">
+                                    <label for="toggel_stock_part_group" class="cursor-pointer">
+                                        <i class="fa-solid fa-triangle-exclamation text-danger"></i>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="d-flex ms-5 ps-5 gap-3">
+
+                                <button type="submit" class="btn btn-primary " id="reqest_btn_top"><span
+                                        id="text_span">Requested</span> <span class="badge bg-danger blink"
+                                        id="span_req_count"></span></button>
+
+                                <button type="button" class="btn btn-light " id="printExcel"><i
+                                        class="fa fa-print text-success"></i></button>
+
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered " id="stock_table">
+                                <thead class="align-middle small">
+
+                                    <tr>
+                                        <th>#</th>
+
+                                        <!-- PART -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2 "
+                                                    id="search_stock_part" placeholder="Part">
+                                            </div>
+                                        </th>
+
+                                        <!-- UNIT -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-box-seam position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2"
+                                                    id="search_stock_unit" placeholder="Unit">
+                                            </div>
+                                        </th>
+
+                                        <!-- DEPARTMENT -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-building position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2"
+                                                    id="search_stock_dep" placeholder="Department">
+                                            </div>
+                                        </th>
+
+                                        <!-- SECTION -->
+                                        <th>
+                                            <div class="position-relative">
+                                                <i
+                                                    class="bi bi-diagram-3 position-absolute top-50 start-0 translate-middle-y ms-2 text-muted small"></i>
+                                                <input type="text" class="form-control form-control-sm ps-4 rounded-2"
+                                                    id="search_stock_sec" placeholder="Section">
+                                            </div>
+                                        </th>
+
+                                        <!-- QTY -->
+                                        <th class="text-center">Qty</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="stock_tbady"></tbody>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="requestModalLabel">Request Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group" id="request_modal_body"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="req_detai">Request</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+        <!-- jQuery UI CSS -->
+
+        <!-- bootstrap include -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"></script>
+
+        <!-- font awesome -->
+        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+        <!-- excel -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+
+        <!-- Sweet alert -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+        <!-- external js -->
+        <script src="js/json_stock.js" type="module"></script>
+        <script src="js/menu.js" type="module"></script>
+        <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>

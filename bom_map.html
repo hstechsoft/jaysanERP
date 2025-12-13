@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
+
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+        /* MAIN CONTAINER */
+        .flow-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 60px;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        /* --- PREMIUM STEP CARD --- */
+        .flow-step {
+            position: relative;
+            width: 200px;
+            padding: 10px 0px;
+            text-align: center;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+            transition: 0.25s ease;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .flow-step:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .flow-step.active {
+            background: #eef3ff;
+        }
+
+        .flow-step.active:hover {
+            transform: none;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+        }
+
+
+        /* Header */
+        .flow-step-header {
+            cursor: pointer;
+            width: 100%;
+            font-size: 12px;
+        }
+
+        /* ICON */
+        .flow-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 3px auto;
+            background: linear-gradient(145deg, #ffffff, #eef1ff);
+            border: 3px solid #7281ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #5f6dff;
+        }
+
+        /* MATERIALS CARD */
+
+        .flow-materials {
+            margin-top: 5px;
+            background: #f6f7ff;
+            border: 1px solid #e2e4ff;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 10px;
+            color: #333;
+            text-align: left;
+            line-height: 1.4;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            max-height: 25vh;
+            overflow-y: auto;
+        }
+
+        .flow-materials ul {
+            padding-left: 0px;
+            margin: 0;
+            list-style: none;
+        }
+
+        /* Accordion collapsed */
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+
+        /* When open, max-height will be set in JS */
+        .accordion-body.open {
+            /* nothing needed here */
+        }
+
+
+        /* ARROW BETWEEN STEPS */
+        .flow-step::after {
+            content: "➜";
+            font-size: 26px;
+            color: #5062ff;
+            position: absolute;
+            top: 50%;
+            right: -45px;
+            transform: translateY(-50%);
+            opacity: 0.7;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        /* Container holding badge + clock */
+        .top-right-wrapper {
+            position: absolute;
+            top: -5px;
+            /*right: -5px;*/
+            display: flex;
+            align-items: center;
+            gap: 102px;
+        }
+
+        /* Small red badge showing process_extra_count */
+        .extra-count {
+            font-size: 11px;
+            padding: 4px 7px;
+            z-index: 2;
+        }
+
+        /* Clock icon styling */
+        .clock-icon {
+            background: #ffffff;
+            border-radius: 50%;
+            padding: 6px;
+            font-size: 13px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            z-index: 2;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .clock-icon:hover {
+            background: #f3f3f3;
+        }
+
+        .process-card {
+            background: #ffffff;
+            border: 1px solid #e6e8f2;
+            border-left: 4px solid #4c6fff;
+            transition: 0.25s ease;
+            font-size: 12px;
+            max-height: 300vh;
+            overflow-y: auto;
+        }
+
+        .process-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+        }
+
+        .process-title {
+            font-weight: 700;
+            color: #3246d3;
+            font-size: 12px;
+        }
+
+        .step-index {
+            color: #6c7bff;
+            font-weight: 900;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .value {
+            font-weight: 600;
+        }
+
+        .toggle-details {
+            font-size: 11px;
+        }
+
+        .details-box {
+            background: #f8f9ff;
+            border: 1px solid #dfe3ff;
+        }
+
+        .detail-item {
+            font-size: 13px;
+            padding: 3px 0;
+        }
+
+        .extra-item {
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        .total-summary-card {
+            background: linear-gradient(135deg, #f7f9ff, #eef2ff);
+            border: 1px solid #d4dbff;
+            border-left: 5px solid #4c6fff;
+            transition: 0.3s ease;
+        }
+
+        .total-summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.10);
+        }
+
+        .summary-label {
+            font-size: 14px;
+        }
+
+        .summary-value {
+            font-size: 15px;
+        }
+
+        .summary-row {
+            border-bottom: 1px dashed #d5d8ef;
+            padding-bottom: 4px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <section>
+
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid " style="height: 100%; overflow-y: auto;">
+        <!-- top bar -->
+
+
+<!-- 
+        <div class="d-flex align-items-center mx-5" id="page_start">
+            <button id="fa-bars" class="btn btn-light">
+                <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
+            </button>
+
+            <h4 class="m-0">
+                <span class="fw-bold">Jasyan App</span>
+            </h4>
+        </div> -->
+
+        <section id="menu_bar" ></section>
+
+
+
+
+
+        <div class="page-wrapper">
+
+            <!-- content -->
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="form-floating my-3">
+                        <input type="text" class="form-control rounded-3" id="bom_part_search" placeholder="">
+                        <label for="bom_part_search">Part Name</label>
+
+                    </div>
+
+                    <div class="accordion mt-3 shadow-sm rounded" id="accordionExample">
+
+                        <div class="accordion-item d-none" id="bom_list_table">
+
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
+                                    aria-controls="collapseOne">
+                                    <i class="bi bi-list-check me-2"></i> BOM List
+                                </button>
+                            </h2>
+
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+
+                                <div class="accordion-bodyy bg-light">
+                                    <ul class="list-group list-group-flush" id="bom_list_table_body"></ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div style="max-height: 65vh; overflow-y: auto;" class="position-relative">
+
+                        <table class="table table-bordered mt-4 d-none" id="bom_material_table">
+                            <thead class="table-primary" style="position: sticky; top: 0; z-index: 1; font-size: 13px;">
+                                <tr>
+                                    <th class="d-flex justify-content-between">Material Name <b
+                                            class="badge bg-secondary" id="m_count"></b></th>
+                                    <th>Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bom_material_table_body" style="font-size: 13px;"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="col-md-7 d-none" id="bom_process_table">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb" id="back">
+                            </ol>
+                        </nav>
+                    <div class="card " id="">
+                        <div class="card-header text-center" id="bom_process_table_cardHeader">
+
+                        </div>
+                        <div class="card-body">
+
+                            <div class="flow-container" id="processFlow"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 d-none" id="bom_process_summary_table">
+
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+        <div class="modal" id="inputPopup">
+            <div class="modal-content" id="modalBox">
+                <span class="close-btn" id="closeBtn">&times;</span>
+                <h3 id="popupTitle"></h3>
+                <div id="popupBody"></div>
+            </div>
+        </div>
+
+
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+        <!-- jQuery UI CSS -->
+
+        <!-- bootstrap include -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"></script>
+
+        <!-- font awesome -->
+        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+        <!-- Sweet alert -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+        <!-- external js -->
+        <script src="js/bom_map.js" type="module"></script>
+        <script src="js/menu.js" type="module"></script>
+        <!-- <script src="js/get_all_id.js" type="module"></script> -->
+
+</body>
+
+</html>
