@@ -15,7 +15,7 @@ var current_user_name =  localStorage.getItem("ls_uname") ;
 $(document).ready(function(){
 
 
-console.log(encoded);
+
 
 
   $("#menu_bar").load('menu.html',
