@@ -6,6 +6,7 @@ var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 var top_req_count = 0;
 var clicked = 0
+let stockData = [];
 // console.log(current_user_name);
 
 $(document).ready(function () {
@@ -47,6 +48,7 @@ $(document).ready(function () {
 
     $('#stock_part').on('input', function () {
         //check the value not empty
+        $("#unit_add_btn").addClass('d-none');
         $('#stock_godown').val('').data('godown_id', '');
         $('#stock_department').val('').data('dept_id', '');
         $('#stock_section').val('').data("sec_id", '');
@@ -94,6 +96,7 @@ $(document).ready(function () {
                     //   $('#part_name_out').data("selected-part_id", ui.item.id);
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
+                    $("#unit_add_btn").removeClass('d-none');
 
 
                 },
@@ -181,6 +184,15 @@ $(document).ready(function () {
         }
 
     });
+
+    $("#unit_add_btn").on("click", function () {
+        var unit = $("#stock_godown").val();
+        alert(unit)
+        if (unit !== '') {
+            alert("F")
+            insert_creditors(unit);
+        }
+    })
 
     $("#dep_add_btn").on("click", function () {
         var go_id = $('#stock_godown').data("godown_id");
@@ -412,6 +424,7 @@ $(document).ready(function () {
 
     $('#search_stock_part').on('input', function () {
         //check the value not empty
+
         if ($('#search_stock_part').val() != "") {
             $('#search_stock_part').autocomplete({
                 //get data from databse return as array of object which contain label,value
@@ -664,10 +677,16 @@ $(document).ready(function () {
 
     })
 
-    $("#stock_tbady").on("keydown", "span", function (e) {
+    let enterPressed = false;
 
+    $("#stock_tbady").on("focus", "span[contenteditable]", function () {
+        // Store original value on focus
+        $(this).data("original", $(this).text().trim());
+        enterPressed = false;
+    }).on("keydown", "span[contenteditable]", function (e) {
         if (e.key === "Enter") {
             e.preventDefault();
+            enterPressed = true;
 
             var part = $(this).data("part_id") || '';
             var godown = $(this).data("unit_id") || '';
@@ -679,82 +698,83 @@ $(document).ready(function () {
             console.log("part", part, "godown", godown, "department", department, "section", section, "qty", qty);
 
             insert_jaysan_stock(part, godown, department, section, qty, stock_master_json);
+
+            // remove focus after save
+            $(this).blur();
         }
-    });
-
-
-
-
-    $("#printExcel").click(function () {
-
-        let table = document.querySelector("#stock_table");
-        let rows = table.querySelectorAll("tr");
-
-        // Create temporary table for export
-        let tempTable = document.createElement("table");
-
-        rows.forEach(row => {
-            let cells = row.children;
-
-            if (cells.length < 3) return;
-
-            let newRow = document.createElement("tr");
-
-            // Keep only middle columns (remove first & last)
-            for (let i = 1; i < cells.length - 1; i++) {
-                newRow.appendChild(cells[i].cloneNode(true));
+    })
+        .on("blur", "span[contenteditable]", function () {
+            // If Enter not pressed, restore original value
+            if (!enterPressed) {
+                $(this).text($(this).data("original"));
             }
-
-            tempTable.appendChild(newRow);
         });
 
-        // Convert to workbook
-        let workbook = XLSX.utils.table_to_book(tempTable, { sheet: "Stock Data" });
 
-        // ---------- ADD CURRENT DATE TO FILE NAME ----------
-        let today = new Date();
-        let yyyy = today.getFullYear();
-        let mm = String(today.getMonth() + 1).padStart(2, '0'); // month
-        let dd = String(today.getDate()).padStart(2, '0');      // day
 
-        let fileName = `StockData_${yyyy}-${mm}-${dd}.xlsx`;
-        // ----------------------------------------------------
 
-        XLSX.writeFile(workbook, fileName);
+
+    $("#printExcel").on("click", function () {
+
+        if (!stockData || stockData.length === 0) {
+            alert("No data to export");
+            return;
+        }
+
+        let excelData = [];
+
+        stockData.forEach(item => {
+            let unitTotals = [];
+
+            try {
+                unitTotals = JSON.parse(item.unit_total || "[]");
+            } catch {
+                unitTotals = [];
+            }
+
+            if (unitTotals.length === 0) {
+                excelData.push({
+                    Part: item.part_name,
+                    Unit: "",
+                    Department: "",
+                    Section: "",
+                    Qty: item.total_stock
+                });
+                return;
+            }
+
+            unitTotals.forEach(unit => {
+                (unit.department_details || []).forEach(dep => {
+                    (dep.section_details || []).forEach(sec => {
+                        excelData.push({
+                            Part: item.part_name,
+                            Unit: unit.unit,
+                            Department: dep.department,
+                            Section: sec.section,
+                            Qty: sec.Section_qty ?? ""
+                        });
+                    });
+                });
+            });
+        });
+
+        let ws = XLSX.utils.json_to_sheet(excelData);
+
+        ws["!cols"] = Object.keys(excelData[0]).map(k => ({
+            wch: Math.max(k.length, ...excelData.map(r => (r[k] || "").toString().length)) + 2
+        }));
+
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Stock Data");
+
+        let today = new Date().toISOString().split("T")[0];
+        XLSX.writeFile(wb, `StockData_${today}.xlsx`);
     });
 
-    $("#toggel_stock_part_group").on("change", function () {
-        if ($(this).is(":checked")) {
-
-            var min_order_query = 1;
-            get_jaysan_stock(min_order_query)
-        }
-        else {
-            get_jaysan_stock()
-        }
-    })
 
 
-    $("#reqest_btn_top").on("click", function () {
-        // top_req_count = 0;
 
-        console.log(top_req_count);
 
-        if (clicked == 0) {
-            var request_query = 1;
-            get_jaysan_stock('', '', '', '', '', '', '', '', request_query)
-            clicked = 1;
-            $("#text_span").text("All");
-            $("#span_req_count").addClass("d-none");
-
-        }
-        else {
-            get_jaysan_stock();
-            clicked = 0;
-            $("#text_span").text("Requested");
-            $("#span_req_count").removeClass("d-none");
-        }
-    })
 
     let reqIdArray = [];
     let totalQty = 0;
@@ -762,36 +782,46 @@ $(document).ready(function () {
 
     $("#stock_tbady").on("click", "#req_details_btn", function () {
 
-        var requested_detail = $(this).attr("data-req_details");
-        requested_detail = JSON.parse(requested_detail);
-
-
         $("#request_modal_body").empty();
         reqIdArray = [];
         totalQty = 0;
+        part_idddd = '';
+
+        var requested_detail = $(this).attr("data-req_details");
+        // console.log(requested_detail);
+
         part_idddd = $(this).data('part_id');
 
-        requested_detail.forEach(group => {
+        if (requested_detail !== '') {
+            requested_detail = JSON.parse(requested_detail);
 
-            group.req_details.forEach(item => {
 
-                reqIdArray.push(item.req_id);
-                totalQty += Number(item.qty);
+            reqIdArray = [];
+            totalQty = 0;
 
-                $("#request_modal_body").append(`
-                <li class="list-group-item d-flex justify-content-between">
-                    <span> ${item.emp} - ${item.store_type} - ${item.store}</span>
+            requested_detail.forEach(group => {
+
+                group.req_details.forEach(item => {
+
+                    reqIdArray.push(item.req_id);
+                    totalQty += Number(item.qty);
+
+                    $("#request_modal_body").append(`
+                <li class="list-group-item d-flex justify-content-between" style='font-size: 12px'>
+                    <span> ${item.emp} - ${item.store_type} - ${item.store} - ${item.dated}</span>
                     <strong class='text-success'> ${item.qty}</strong>
                 </li>
             `);
-            });
+                });
 
-        });
+            });
+        }
+
 
         // Total Qty at bottom
         $("#request_modal_body").append(`
-        <li class="list-group-item list-group-item-info text-end  d-flex justify-content-between">
-            <strong>Total Qty:</strong><strong contenteditable id='mrf_req_qty'> ${totalQty}</strong>
+        <li class="list-group-item list-group-item-info text-end  d-flex justify-content-between"  style='font-size: 12px'>
+            <strong>Total Qty:</strong><strong contenteditable id='mrf_req_qty' class='px-3 py-1'> ${totalQty}</strong>
         </li>
     `);
 
@@ -802,7 +832,16 @@ $(document).ready(function () {
     $("#req_detai").on("click", function () {
         $("#requestModal").modal("hide");
         var q = $("#mrf_req_qty").text().trim();
-        var r_arr = encodeURIComponent(JSON.stringify(reqIdArray));
+        var r_arr = '';
+        console.log(reqIdArray);
+
+        if (reqIdArray !== '') {
+            r_arr = encodeURIComponent(JSON.stringify(reqIdArray))
+        }
+        else {
+            r_arr = '';
+        }
+
 
         window.location.href =
             'material_request_form.html'
@@ -811,12 +850,136 @@ $(document).ready(function () {
             + '&req_id_para=' + r_arr;
     });
 
+
+    //     $("#toggel_stock_part_group").on("change", function () {
+    //     var min_order_query = '';
+    //     var request_query = '';
+    //     var creditor_query = '';
+    //     var dep_query = '';
+    //     var sec_query = '';
+    //     var part_query = '';
+
+    //     if ($(this).is(":checked")) {
+    //         min_order_query = 1;
+    //     }
+    //     if (clicked == 0) {
+    //         request_query = 1;
+    //     }
+    //     if($("#search_stock_unit").data("godown_id") !== undefined){
+    //         creditor_query = $("#search_stock_unit").data("godown_id");
+    //     }
+    //     if($("#search_stock_dep").data("dept_id") !== undefined){
+    //         creditor_query = $("#search_stock_dep").data("dept_id");
+    //     }
+    //     if($("#search_stock_sec").data("sec_id") !== undefined){
+    //         creditor_query = $("#search_stock_sec").data("sec_id");
+    //     }
+    //     if($("#search_stock_part").data("process_id") !== undefined){
+    //         creditor_query = $("#search_stock_part").data("process_id");
+    //     }
+    //     get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
+    // })
+
+
+
+    // $("#reqest_btn_top").on("click", function () {
+    //     // top_req_count = 0;
+
+    //     var min_order_query = '';
+    //     var request_query = '';
+    //     var creditor_query = '';
+    //     var dep_query = '';
+    //     var sec_query = '';
+    //     var part_query = '';
+
+    //     if ($("#toggel_stock_part_group").is(":checked")) {
+    //         min_order_query = 1;
+    //     }
+    //     if ($("#search_stock_unit").data("godown_id") !== undefined) {
+    //         creditor_query = $("#search_stock_unit").data("godown_id");
+    //     }
+    //     if ($("#search_stock_dep").data("dept_id") !== undefined) {
+    //         creditor_query = $("#search_stock_dep").data("dept_id");
+    //     }
+    //     if ($("#search_stock_sec").data("sec_id") !== undefined) {
+    //         creditor_query = $("#search_stock_sec").data("sec_id");
+    //     }
+    //     if ($("#search_stock_part").data("process_id") !== undefined) {
+    //         creditor_query = $("#search_stock_part").data("process_id");
+    //     }
+    //     console.log(top_req_count);
+
+    //     if (clicked == 0) {
+    //         var request_query = 1;
+    //         get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
+    //         clicked = 1;
+    //         $("#text_span").text("All");
+    //         $("#span_req_count").addClass("d-none");
+
+    //     }
+    //     else {
+    //         get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
+    //         clicked = 0;
+    //         $("#text_span").text("Requested");
+    //         $("#span_req_count").removeClass("d-none");
+    //     }
+    // })
+
+
+    // $("#toggel_stock_part_reduce").on("change", function () {
+    //     var min_order_query = '';
+    //     var request_query = '';
+    //     var creditor_query = '';
+    //     var dep_query = '';
+    //     var sec_query = '';
+    //     var part_query = '';
+
+    //     if ($("#toggel_stock_part_group").is(":checked")) {
+    //         min_order_query = 1;
+    //     }
+    //     if (clicked == 0) {
+    //         request_query = 1;
+    //     }
+    //     if ($("#search_stock_unit").data("godown_id") !== undefined) {
+    //         creditor_query = $("#search_stock_unit").data("godown_id");
+    //     }
+    //     if ($("#search_stock_dep").data("dept_id") !== undefined) {
+    //         creditor_query = $("#search_stock_dep").data("dept_id");
+    //     }
+    //     if ($("#search_stock_sec").data("sec_id") !== undefined) {
+    //         creditor_query = $("#search_stock_sec").data("sec_id");
+    //     }
+    //     if ($("#search_stock_part").data("process_id") !== undefined) {
+    //         creditor_query = $("#search_stock_part").data("process_id");
+    //     }
+    //     get_jaysan_stock(min_order_query, '', '', creditor_query, dep_query, sec_query, part_query, '', request_query);
+    //     console.log($(this).is(":checked"));
+
+    // })
+
+
+    $("#toggel_stock_part_group").on("change", function () {
+        fetchStock();
+    });
+
+    $("#reqest_btn_top").on("click", function () {
+
+        if (clicked === 0) {
+            clicked = 1;
+            $("#text_span").text("All");
+            $("#span_req_count").addClass("d-none");
+        } else {
+            clicked = 0;
+            $("#text_span").text("Requested");
+            $("#span_req_count").removeClass("d-none");
+        }
+
+        fetchStock();
+    });
+
     $("#toggel_stock_part_reduce").on("change", function () {
-        get_jaysan_stock();
-        console.log($(this).is(":checked"));
-
-    })
-
+        fetchStock();
+    });
 
 
 
@@ -824,6 +987,33 @@ $(document).ready(function () {
 
 
 });
+
+function buildStockFilters() {
+    return {
+        min_order_query: $("#toggel_stock_part_group").is(":checked") ? 1 : '',
+        request_query: clicked === 1 ? 1 : '',
+        creditor_query: $("#search_stock_unit").data("godown_id") || '',
+        dep_query: $("#search_stock_dep").data("dept_id") || '',
+        sec_query: $("#search_stock_sec").data("sec_id") || '',
+        part_query: $("#search_stock_part").data("process_id") || ''
+    };
+}
+function fetchStock() {
+    const f = buildStockFilters();
+
+    get_jaysan_stock(
+        f.min_order_query,
+        '',
+        '',
+        f.creditor_query,
+        f.dep_query,
+        f.sec_query,
+        f.part_query,
+        '',
+        f.request_query
+    );
+}
+
 
 
 
@@ -850,6 +1040,7 @@ function insert_jaysan_stock(part, godown, department, section, qty, stock_maste
             finished_godown: '',
             remark: '',
             stock_master: stock_master_json,
+            emp_id: current_user_id,
         },
         success: function (response) {
             console.log(response);
@@ -877,6 +1068,7 @@ function insert_jaysan_stock(part, godown, department, section, qty, stock_maste
                 $("#d_min_max").addClass("d-none");
                 $("#s_min_max").addClass("d-none");
                 $("#u_min_max").addClass("d-none");
+                $("#unit_add_btn").addClass("d-none");
 
                 $("#stock_insert_btn").prop("disabled", false);
             }
@@ -926,7 +1118,8 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                 if (response.trim() != '0 result') {
 
                     // assume `response` is the JSON string you showed
-                    var obj = JSON.parse(response);
+                    stockData = JSON.parse(response);
+                    var obj = stockData;
                     var count = 0;
 
                     obj.forEach(function (item) {
@@ -988,20 +1181,25 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var blink = '';
                                         var p_req = '';
                                         var p_min_max = '';
+                                        var re = '';
                                         var total_stock = item.total_stock ?? 0;
                                         if (item.req_details !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             // var req_d = JSON.parse(item.req_details);
                                             // console.log(req_d);
 
-                                            p_req = `<button type="button" id='req_details_btn' data-req_details='${item.req_details}' data-part_id='${item.part_id}' class="btn p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell text-success"></i></button>`
+                                            p_req = `data-req_details='${item.req_details}'`;
+                                        }
+                                        else if (item.req_details == null) {
+                                            p_req = `data-req_details='' data-part_id=''`;
                                         }
                                         if (item.total_stock <= item.min_order_qty) { blink = `blink`; }
-                                        if ($("#toggel_stock_part_reduce").is(":checked")) {
+                                        if ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0) {
                                             // alert()
                                             p_min_max = `<span class='badge bg-danger ${blink}'>${item.min_order_qty}</span>`;
+                                            re = `<button type="button" id='req_details_btn'  data-part_id='${item.part_id}' ${p_req} class="btn p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell text-success"></i></button>`
                                         }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
-                                        tr += `<td rowspan="${itemRowSpan}">${p_req} ${item.part_name || ""} - <span class="border border-primary px-3 py-1 me-2 border-2 rounded-3" contenteditable    data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>${p_min_max}</td>`;
+                                        tr += `<td rowspan="${itemRowSpan}">${re} ${item.part_name || ""} - <span class="border border-primary px-3 py-1 me-2 border-2 rounded-3" contenteditable    data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>${p_min_max}</td>`;
                                     }
 
                                     // Unit cell: only for first department/first section inside this unit
@@ -1095,7 +1293,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         s_min_max = `<span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
                                     }
                                     tr += `<td>${ss_req} ${secObj.section || ""} ${s_min_max}</td>`;
-                                    tr += `<td class="border border-primary  border-2 rounded-3"><span contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span></td>`;
+                                    tr += `<td class="border border-primary  border-2 rounded-3"><span contenteditable class='px-3 py-1' data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span></td>`;
 
                                     tr += "</tr>";
                                     $("#stock_tbady").append(tr);
@@ -1132,7 +1330,49 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 }
 
 
+
+
+function insert_creditors(unit) {
+    alert()
+
+    $.ajax({
+        url: "php/insert_creditors.php",
+        type: "get", //send it through get method
+        data: {
+            creditor_name: unit,
+            creditor_phone: "",
+            creditor_gst: "",
+            creditors_email: "",
+
+        },
+        success: function (response) {
+
+
+            if (response.trim() > 0) {
+                alert()
+                $("#stock_godown").data("godown_id", response);
+                $("#unit_add_btn").addClass("d-none");
+                $("#dep_add_btn").removeClass("d-none")
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
 function insert_department(go_id, dept_name) {
+    console.log(go_id);
+
     $.ajax({
         url: "php/insert_department.php",
         type: "get", //send it through get method
@@ -1150,6 +1390,7 @@ function insert_department(go_id, dept_name) {
                 shw_toast("success", "Department Added")
                 $("#dep_add_btn").addClass("d-none")
                 $("#sec_add_btn").removeClass("d-none")
+
             }
 
 

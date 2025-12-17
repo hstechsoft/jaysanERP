@@ -14,7 +14,7 @@
     <title>Document</title>
 
     <!-- external css -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style1.css">
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
@@ -47,7 +47,7 @@
         <!-- top bar -->
 
 
-<!-- 
+
         <div class="d-flex align-items-center mx-5" id="page_start">
             <button id="fa-bars" class="btn btn-light">
                 <i class="fa fa-bars fs-4" style="font-size: 15px !important"></i>
@@ -56,9 +56,9 @@
             <h4 class="m-0">
                 <span class="fw-bold">Jasyan App</span>
             </h4>
-        </div> -->
+        </div>
 
-        <section id="menu_bar" ></section>
+        <section id="menu_bar" class="d-none"></section>
 
 
 
@@ -91,15 +91,21 @@
 
                         <form class="p-2 bg-light small" onsubmit="return false">
 
+
                             <label class="form-label mb-0 small">
                                 <i class="bi bi-box"></i> Part Name
                             </label>
                             <input type="text" class="form-control form-control-sm mb-1" id="stock_part">
 
-                            <label class="form-label mb-0 small">
-                                <i class="bi bi-warehouse"></i> Unit
-                            </label>
-                            <input type="text" class="form-control form-control-sm mb-1" id="stock_godown">
+                            <div class="d-flex align-items-end gap-1">
+                                <span>
+                                    <label class="form-label mb-0 small">
+                                        <i class="bi bi-warehouse"></i> Unit
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm mb-1"
+                                        id="stock_godown"></span>
+                                <button type="button" class="btn btn-primary btn-sm d-none" id="unit_add_btn">+</button>
+                            </div>
 
 
                             <div class="row g-2 d-none" id="u_min_max">
@@ -126,8 +132,7 @@
                                     </label>
                                     <input type="text" class="form-control form-control-sm mb-1"
                                         id="stock_department"></span>
-                                <button type="button" class="btn btn-primary btn-sm d-none"
-                                        id="dep_add_btn">+</button>
+                                <button type="button" class="btn btn-primary btn-sm d-none" id="dep_add_btn">+</button>
                             </div>
 
                             <div class="row g-2 d-none" id="d_min_max">
