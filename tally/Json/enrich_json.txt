@@ -1,0 +1,33 @@
+enrich_json.php - this create original json into unique part id 
+details : 
+
+$inputFile  = 'JAStkItem.json';
+$outputFile = 'stock_enriched.json';
+
+after running this script we will get enriched json with unique part id
+
+
+parts_import_runner.php
+fix_gstrate_lib.php
+
+
+parts_import_runner.php - this will import parts from enriched json to parts table
+details :
+$inputFile  = 'stock_enriched.json';
+
+ALTER TABLE bom_output
+ADD COLUMN bom_source ENUM('TALLY','MANUAL') NOT NULL DEFAULT 'MANUAL';
+ALTER TABLE bom_output
+ADD UNIQUE KEY uq_bom_out (part_id, component_cat);
+
+
+
+
+ALTER TABLE bom_input
+ADD COLUMN bom_source ENUM('TALLY','MANUAL') NOT NULL DEFAULT 'MANUAL';
+ALTER TABLE bom_input
+ADD UNIQUE KEY uq_bom_in (bom_id, part_id);
+
+
+
+bom_import_tally_convert_or_insert.php 
