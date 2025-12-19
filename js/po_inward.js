@@ -606,7 +606,7 @@ $(document).ready(function () {
         FINAL SUBMIT
     ------------------------------ */
     $("#po_report_btn").on("click", function () {
-
+$("#po_report_btn").prop("disabled", true);
         let details_po = [];
 
         $("#poreport_item_table tr").each(function () {
@@ -632,9 +632,10 @@ $(document).ready(function () {
 
         if (!dc_no || !dc_date || details_po.length === 0) {
             shw_toast("Warning", "Please fill all required fields");
+            $("#po_report_btn").prop("disabled", false);
             return;
         }
-$("#po_report_btn").prop("disabled", true);
+
         insert_grn(dc_no, dc_date, details_po, dc_type);
     });
 
