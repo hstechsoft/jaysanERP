@@ -176,13 +176,20 @@ get_material_request_form_parts_search(ui.item.id,'all',"created");
 
         $('#material_request_form').on('submit', function (event) {
         event.preventDefault();
-      
+ 
+
+
+
         if (!this.checkValidity()) {
           salert("Error", "Please fill all required fields", "error");
           event.stopPropagation();
           $(this).addClass('was-validated');
           return;
         }
+
+             $("#material_request_form_btn").prop("disabled", true);
+
+$("#material_request_form_update_btn").prop("disabled", true);
       
         $(this).addClass('was-validated');
 

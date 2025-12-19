@@ -120,6 +120,7 @@ $('#part_no').on('input',function(){
 $("#tally_stock_update_btn").on("click", function(event) {
   event.preventDefault();
   // TODO: handle click here
+      $("#tally_stock_update_btn").prop("disabled", true);
 update_material_request_form_tally();
   $("#tally_stock_update_btn").addClass("d-none");
 });
@@ -270,7 +271,12 @@ $("#tally_stock_add_btn").on("click", function(event) {
   event.preventDefault();
   // TODO: handle click here
   if(tally_mrf_id_g > 0 && $("#stock_table_body tr").length > 0)
+  {
+    $("#tally_stock_add_btn").prop("disabled", true);
 insert_internal_godown_stock_tally();
+
+  }
+
   else
   {
     shw_toast("Invalid","Select Material Request Form and Add Stock","")
