@@ -1,0 +1,18 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "srv1002.hstgr.io",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "hstech db",
+            "database": "u333142350_jaysan",
+            "username": "u333142350_db_user"
+        }
+    ]
+}
