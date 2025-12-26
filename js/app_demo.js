@@ -7,6 +7,7 @@ var current_user_name =  localStorage.getItem("ls_uname") ;
  var physical_stock_array = [];
 $(document).ready(function(){
  
+console.log(app_phone_id);
 
 
   $("#menu_bar").load('menu.html',
@@ -37,11 +38,23 @@ $(web_addr).parent().parent().find("a").eq(0).toggleClass('active')
 
 $("#phone_code").text("app phone id: " + app_phone_id)
 
+$("#sec_stock").on("click", function(event) {
+  event.preventDefault();
+  // TODO: handle click here
 
+window.open("marketing_lead.html?phone_id="+app_phone_id, '_blank');
+});
+
+$("#camera_btn").on("click", function(event) {
+  event.preventDefault();
+  // TODO: handle click here
+    Android.openCamera();
+});
 
 
 
 });
+
 
 
 

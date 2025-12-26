@@ -26,12 +26,21 @@ $to_place_type = test_input($allocate['to_place_type']);
 $qty = test_input($allocate['qty']);
 $req_no = test_input($allocate['req_no']);
 $allocation_cat = test_input($allocate['allocation_cat']);
+$created_by = test_input($allocate['created_by']);
 
-
- $sql = "INSERT INTO stock_allocation ( part_id,from_place_id,from_place_type,to_palce_id,to_place_type,qty,req_no,allocation_cat) VALUES ($part_id,$from_place_id,$from_place_type,$to_palce_id,$to_place_type,$qty,$req_no,$allocation_cat)";
+$req_no = sql_nullable($req_no);
+ $sql = "INSERT INTO stock_allocation ( part_id,from_place_id,from_place_type,to_palce_id,to_place_type,qty,req_no,allocation_cat,created_by) VALUES ($part_id,$from_place_id,$from_place_type,$to_palce_id,$to_place_type,$qty,$req_no,$allocation_cat,$created_by)";
 
   if ($conn->query($sql) === TRUE) {
-  
+  if($req_no != 'NULL')
+  {
+    $sql_update_req = "UPDATE emp_material_request SET allocation_status = 'allocated' WHERE emp_material_request_id = $req_no";
+    if ($conn->query($sql_update_req) === TRUE) {
+    }
+    else {
+    echo "Error: " . $sql_update_req . "<br>" . $conn->error;
+    }
+
   } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
   }
@@ -40,7 +49,8 @@ $allocation_cat = test_input($allocate['allocation_cat']);
  
 echo "ok";
 
-
+}
+ 
 
 
 $conn->close();
