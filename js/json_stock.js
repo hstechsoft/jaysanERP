@@ -48,6 +48,7 @@ $(document).ready(function () {
 
     $('#stock_part').on('input', function () {
         //check the value not empty
+        $("#search_stock_part").data('process_id', "");
         $("#unit_add_btn").addClass('d-none');
         $('#stock_godown').val('').data('godown_id', '');
         $('#stock_department').val('').data('dept_id', '');
@@ -97,6 +98,15 @@ $(document).ready(function () {
                     //   $('#part_name_out').val(ui.item.part_name)
                     //  get_bom(ui.item.id)
                     $("#unit_add_btn").removeClass('d-none');
+                    $("#search_stock_part").data('process_id', ui.item.id);
+                    $("#stock_table input").first().trigger(
+                        $.Event("keydown", {
+                            key: "Enter",
+                            keyCode: 13,
+                            which: 13
+                        })
+                    );
+
 
 
                 },
@@ -187,9 +197,7 @@ $(document).ready(function () {
 
     $("#unit_add_btn").on("click", function () {
         var unit = $("#stock_godown").val();
-        alert(unit)
         if (unit !== '') {
-            alert("F")
             insert_creditors(unit);
         }
     })
@@ -367,6 +375,7 @@ $(document).ready(function () {
         var department = $("#stock_department").data('dept_id') || '';
         var section = $("#stock_section").data('sec_id') || '';
         var qty = $("#stock_qty").val() || 0;
+        var material_type = $("#material_type").val();
 
         var u_min = $("#stock_unit_min_qty").val() || 0;
         var u_max = $("#stock_unit_max_qty").val() || 0;
@@ -410,7 +419,7 @@ $(document).ready(function () {
 
         console.log("Sending:", stock_master_json);
 
-        if (!part || !godown || qty == '') {
+        if (!part || !godown || qty == '' || material_type == "null") {
             salert('Warning', "Please fill all fields", 'warning');
             return;
         }
@@ -424,7 +433,7 @@ $(document).ready(function () {
 
     $('#search_stock_part').on('input', function () {
         //check the value not empty
-
+        $('#search_stock_part').data("process_id", '');
         if ($('#search_stock_part').val() != "") {
             $('#search_stock_part').autocomplete({
                 //get data from databse return as array of object which contain label,value
@@ -481,7 +490,7 @@ $(document).ready(function () {
 
 
     $('#search_stock_unit').on('input', function () {
-
+        $('#search_stock_unit').data("godown_id", '');
         //check the value not empty
         if ($('#search_stock_unit').val() != "") {
             $('#search_stock_unit').autocomplete({
@@ -535,7 +544,7 @@ $(document).ready(function () {
 
 
     $('#search_stock_dep').on('input', function () {
-
+        $('#search_stock_dep').data("dept_id", "");
         //check the value not empty
         if ($('#search_stock_dep').val() != "") {
             $('#search_stock_dep').autocomplete({
@@ -584,7 +593,7 @@ $(document).ready(function () {
     });
 
     $('#search_stock_sec').on('input', function () {
-
+        $('#search_stock_sec').data("sec_id", '');
         //check the value not empty
         if ($('#search_stock_sec').val() != "") {
             $('#search_stock_sec').autocomplete({
@@ -644,7 +653,7 @@ $(document).ready(function () {
 
             console.log("Enter pressed in:", this.id);
 
-            var part_query = $("#search_stock_part").data('process_id') || $("#search_stock_part").attr('data-process_id') || '';
+            var part_query = $("#search_stock_part").data('process_id') || $("#search_stock_part").attr('data-process_id') || $("#stock_part").data('process_id') || $("#stock_part").attr('data-process_id') || '';
             var creditor_query = $("#search_stock_unit").data('godown_id') || $("#search_stock_unit").attr('data-godown_id') || '';
             var dep_query = $("#search_stock_dep").data('dept_id') || $("#search_stock_dep").attr('data-dept_id') || '';
             var sec_query = $("#search_stock_sec").data('sec_id') || $("#search_stock_sec").attr('data-sec_id') || '';
@@ -653,11 +662,11 @@ $(document).ready(function () {
             var to_date = $("#search_stock_e_date").val() || '';
 
             console.log({ part_query, creditor_query, dep_query, sec_query, qty_query, from_date, to_date });
-
-            get_jaysan_stock('', from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query);
+            fetchStock();
+            // get_jaysan_stock('', from_date, to_date, creditor_query, dep_query, sec_query, part_query, qty_query);
         }
         else {
-            get_jaysan_stock();
+            // get_jaysan_stock();
 
         }
     });
@@ -828,19 +837,23 @@ $(document).ready(function () {
         $("#requestModal").modal("show");
     });
 
+    $("#stock_allocate_btn").on("click", function () {
+        $("#requestModal").modal("hide");
+
+        window.open(
+            'http://localhost/jaysan/store_stock_allocate.html?part_id=' + part_idddd + '&req=1',
+            '_blank'
+        );
+    });
+
 
     $("#req_detai").on("click", function () {
+
         $("#requestModal").modal("hide");
         var q = $("#mrf_req_qty").text().trim();
-        var r_arr = '';
         console.log(reqIdArray);
+        var r_arr = reqIdArray.length > 0 ? encodeURIComponent(JSON.stringify(reqIdArray)) : '';
 
-        if (reqIdArray !== '') {
-            r_arr = encodeURIComponent(JSON.stringify(reqIdArray))
-        }
-        else {
-            r_arr = '';
-        }
 
 
         window.location.href =
@@ -1022,8 +1035,8 @@ function fetchStock() {
 
 
 
-function insert_jaysan_stock(part, godown, department, section, qty, stock_master_json) {
-    console.log("part" + part, "godown" + godown, "department" + department, "section" + section, qty, "stock_master " + stock_master_json);
+function insert_jaysan_stock(part, godown, department, section, qty, stock_master_json, material_type) {
+    console.log("part" + part, "godown" + godown, "department" + department, "section" + section, qty, "stock_master " + stock_master_json, "material_type" + material_type);
 
 
     $.ajax({
@@ -1151,7 +1164,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                         if (itemRowSpan === 0) {
                             var trEmpty = "<tr>";
                             trEmpty += `<td>${count}</td>`;
-                            trEmpty += `<td>${item.part_name || ""} - ${item.total_stock} <span class='badge bg-danger'>${item.total_stock}</span> </td>`;
+                            trEmpty += `<td>${item.part_name || ""} - ${item.total_stock} <span class='badge bg-danger'>${item.total_stock}</span>`;
                             trEmpty += `<td colspan="4">No unit/department/section data</td>`;
                             trEmpty += "</tr>";
                             $("#stock_tbady").append(trEmpty);
@@ -1172,6 +1185,8 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                             (unitObj.department_details || []).forEach(function (depObj, depIndex) {
                                 var depName = depObj.department || "";
                                 var sections = depObj.section_details || [];
+                                var unit_stock_qty = 0;
+                                var dep_stock_qty = 0;
 
                                 sections.forEach(function (secObj, secIndex) {
                                     var tr = `<tr class='text-center align-middle' style='font-size: 12px'>`;
@@ -1194,12 +1209,12 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         }
                                         if (item.total_stock <= item.min_order_qty) { blink = `blink`; }
                                         if ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0) {
-                                            // alert()
                                             p_min_max = `<span class='badge bg-danger ${blink}'>${item.min_order_qty}</span>`;
                                             re = `<button type="button" id='req_details_btn'  data-part_id='${item.part_id}' ${p_req} class="btn p-1" data-bs-toggle="modal" data-bs-target="#requestModal"><i class="fa-regular fa-bell text-success"></i></button>`
                                         }
                                         tr += `<td rowspan="${itemRowSpan}">${count}</td>`;
                                         tr += `<td rowspan="${itemRowSpan}">${re} ${item.part_name || ""} - <span class="border border-primary px-3 py-1 me-2 border-2 rounded-3" contenteditable    data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' >${total_stock}</span>${p_min_max}</td>`;
+                                        
                                     }
 
                                     // Unit cell: only for first department/first section inside this unit
@@ -1209,14 +1224,32 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var g_min_max = '';
                                         let godown_min = unitObj.godown_min ?? 0;
                                         let godown_max = unitObj.godown_max ?? 0;
+                                        let final_unit_qty = 0;
+
+                                        // if no-department exists, override
+                                        unitObj.department_details.forEach(depObj => {
+                                            if (depObj.department === 'no-department') {
+                                                final_unit_qty = depObj.department_qty;
+                                            }
+                                        });
                                         if (unitObj.godown_req !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             var g_req_count = 0;
                                             unitObj.godown_req.forEach(function (greq) {
                                                 g_req_count++;
+                                                if (greq.status === 'create') {
+                                                    req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${g_req_count}</span>`
+                                                }
+                                                else if (greq.status === 'allocated') {
+                                                    req = `<span class='badge bg-secondary'>Allocated</span>`
+                                                }
+                                                else if (greq.status === 'delivered') {
+                                                    req = `<span class='badge bg-success'>Delivered</span>`
+                                                }
+                                                else {
+                                                }
                                             })
                                             top_req_count += g_req_count;
                                             console.log(top_req_count);
-                                            req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${g_req_count}</span>`
                                         } else if (unitObj.godown_req !== null) {
                                             var g_req_count = 0;
                                             unitObj.godown_req.forEach(function (greq) {
@@ -1230,7 +1263,7 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
                                             g_min_max = `<span class='badge bg-danger ${blink}'>${godown_min}</span><span class='badge bg-success ms-1'>${godown_max}</span>`;
                                         }
-                                        tr += `<td rowspan="${unitRowSpan}">${req} ${unitName} - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"   data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}'>${unitObj.godown_qty}</span>${g_min_max} </td>`;
+                                        tr += `<td rowspan="${unitRowSpan}">${req} ${unitName} (${unitObj.godown_qty}) - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"   data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}'>${final_unit_qty}</span>${g_min_max} </td>`;
                                     }
 
                                     // Department cell: only for first section of this department
@@ -1238,16 +1271,35 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var blink = '';
                                         var dd_req = '';
                                         var d_min_max = '';
+                                        var editt_span = '';
                                         let dep_min = depObj.dep_min ?? 0;
                                         let dep_max = depObj.dep_max ?? 0;
+                                        let final_dep_qty = 0;
+
+                                        // if no-section exists, override
+                                        depObj.section_details.forEach(secObj => {
+                                            if (secObj.section === 'no-section') {
+                                                final_dep_qty = secObj.Section_qty;
+                                            }
+                                        });
                                         if (depObj.dep_req !== null && ($("#toggel_stock_part_reduce").is(":checked") || clicked != 0)) {
                                             var d_req_count = 0;
                                             depObj.dep_req.forEach(function (greq) {
                                                 d_req_count++;
+                                                if (greq.status === 'create') {
+                                                    dd_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${d_req_count}</span>`
+                                                }
+                                                else if (greq.status === 'allocated') {
+                                                    dd_req = `<span class='badge bg-secondary'>Allocated</span>`
+                                                }
+                                                else if (greq.status === 'delivered') {
+                                                    dd_req = `<span class='badge bg-success'>Delivered</span>`
+                                                }
+                                                else {
+                                                }
 
                                             })
                                             top_req_count += d_req_count;
-                                            dd_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${d_req_count}</span>`
                                         }
                                         else if (depObj.dep_req !== null) {
                                             var d_req_count = 0;
@@ -1258,12 +1310,16 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                             top_req_count += d_req_count;
                                         }
                                         console.log(top_req_count);
-
+                                        if (depObj.department_qty <= depObj.dep_min) { blink = `blink`; }
                                         if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
                                             d_min_max = ` <span class='badge bg-danger ${blink}'>${dep_min}</span><span class='badge bg-success ms-1'>${dep_max}</span>`;
                                         }
-                                        if (depObj.department_qty <= depObj.dep_min) { blink = `blink`; }
-                                        tr += `<td rowspan="${sections.length}">${dd_req} ${depName} - <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${depObj.department_qty}</span>${d_min_max} </td>`;
+                                        if (depName != 'no-department') {
+                                            editt_span = `(${depObj.department_qty}) -  <span contenteditable class="border border-primary px-3 py-1 me-2 border-2 rounded-3"  data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}'>${final_dep_qty}</span>`
+                                        } else {
+                                            unit_stock_qty = depObj.department_qty;
+                                        }
+                                        tr += `<td rowspan="${sections.length}">${dd_req}  ${depName != 'no-department' ? depName : ""}${editt_span}${d_min_max}</td>`;
                                     }
 
                                     // Section and Section_qty
@@ -1276,9 +1332,19 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                         var s_req_count = 0;
                                         secObj.sec_req.forEach(function (greq) {
                                             s_req_count++;
+                                            if (greq.status === 'create') {
+                                                ss_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${s_req_count}</span>`;
+                                            }
+                                            else if (greq.status === 'allocated') {
+                                                ss_req = `<span class='badge bg-secondary'>Allocated</span>`
+                                            }
+                                            else if (greq.status === 'delivered') {
+                                                ss_req = `<span class='badge bg-success'>Delivered</span>`
+                                            }
+                                            else {
+                                            }
                                         })
                                         top_req_count += s_req_count;
-                                        ss_req = `<span class='badge blink bg-warning me-2'><i class="fa-regular fa-bell"></i> ${s_req_count}</span>`
                                     } else if (secObj.sec_req !== null) {
                                         var s_req_count = 0;
                                         secObj.sec_req.forEach(function (greq) {
@@ -1292,7 +1358,8 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                                     if ($("#toggel_stock_part_reduce").is(":checked") || $("#toggel_stock_part_group").is(":checked")) {
                                         s_min_max = `<span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
                                     }
-                                    tr += `<td>${ss_req} ${secObj.section || ""} ${s_min_max}</td>`;
+                                    if (secObj.section == 'no-section') { dep_stock_qty = secObj.Section_qty };
+                                    tr += `<td>${ss_req} ${secObj.section != 'no-section' ? `${secObj.section || ""} ${s_min_max}` : ''}</td>`;
                                     tr += `<td class="border border-primary  border-2 rounded-3"><span contenteditable class='px-3 py-1' data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span></td>`;
 
                                     tr += "</tr>";
@@ -1302,6 +1369,9 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
                         });
                     });
 
+                    if (top_req_count > 0) {
+                        $("#span_req_count").addClass("blink")
+                    }
                     $("#span_req_count").text(top_req_count)
 
                 }
@@ -1332,8 +1402,9 @@ function get_jaysan_stock(min_order_query, from_date, to_date, creditor_query, d
 
 
 
+
+
 function insert_creditors(unit) {
-    alert()
 
     $.ajax({
         url: "php/insert_creditors.php",
@@ -1349,7 +1420,6 @@ function insert_creditors(unit) {
 
 
             if (response.trim() > 0) {
-                alert()
                 $("#stock_godown").data("godown_id", response);
                 $("#unit_add_btn").addClass("d-none");
                 $("#dep_add_btn").removeClass("d-none")
