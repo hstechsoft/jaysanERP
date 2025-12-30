@@ -1,559 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-   
-   <!-- Bootstrap CSS -->
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
- 
-   <!-- bootsttrap icons -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-  <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- bootsttrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Document</title>
 
-<!-- external css -->
-<link rel="stylesheet" type="text/css" href="/swen/style.css">
+    <!-- external css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
- 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
+
+    <style>
+        /* Reduce overall spacing */
+        .compact-form .form-floating {
+            margin-bottom: 0.4rem !important;
+        }
+
+        /* Reduce input height */
+        .compact-form .form-control,
+        .compact-form .form-select {
+            height: 2.2rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Adjust floating labels */
+        .compact-form .form-floating>label {
+            padding: 0.3rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Accordion padding reduction */
+        .accordion-body {
+            padding: 0.6rem;
+        }
+
+        /* Button size */
+        .compact-form .btn {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+        }
+    </style>
 
 
 </head>
-<body >
- 
 
-<div class="container-fluid p-0 m-0">
-    <!-- top bar -->
-  
+<body>
+    <section>
 
-
-<!-- navbar -->
-    
-<section id="menu_bar">
-  
-</section>
-
-
-<!-- content -->
-<div class=' visually-hidden' >
-  <textarea id='mysql_plain_txt' rows='2' ></textarea>
-  <div id="mysql_conv_txt"></div>
-</div>
-<form  id="quotation_form">
-<div class="container-fluid mt-3 " >
-    <div class="card mt-3 ">
-        <div class="card-header d-flex justify-content-center">
-           
-           <h6>Quotation</h6> 
-    
+    </section>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header ">
+                <strong class="me-auto toast-title">Toast Title</strong>
+                <small class="text-muted">Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body toast-description">
+                Hello, this is a Bootstrap toast message!
+            </div>
         </div>
-           <div class="card-body ">
+    </div>
+        <section id="menu_bar"></section>
+    <div class="container-fluid " style="height: 100%; overflow-y: auto;">
+        <!-- top bar -->
 
 
-            <div class="card mb-2">
-              <div class="card-header text-bg-warning ">
-                  Details
-              </div>
-              <div class="card-body row row-cols-2">
-                  <div>
-                      <div class="input-group mt-3 ">
-                          <label class="input-group-text mrequired" for="cur_no"><span>
-                            Quotation No 
-                          </span></label>
-                          <label class="input-group-text " for="cur_no"><span id="scur_no">
-                           
-                          </span></label>
-                          <input type="text" id="cur_no"   class="form-control " placeholder=" quotation No" aria-label="Username"    >
-                        </div>
 
-                        <div class='input-group mt-2 ' >
-                          <div class='input-group-prepend '>
-                          <span class='input-group-text ' >
-                          valid_upto </span>
-                          
-                          </div> 
-                          <input type='text' id='valid_upto' class='form-control' placeholder='Date' >
-                          
-                          </div>
-              
-                          
-        
-                          <div class='input-group mt-2'> 
-                            <label class='input-group-text' for='pos'><span>
-                              pos
-                            </span>
-                            </label>
-                            <input id='pos' type='text' class='form-control' placeholder='pos' >
+
+
+
+
+
+
+        <div class="page-wrapper">
+
+            <!-- content -->
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <form class="p-4 border rounded-4 shadow-sm bg-light  compact-form needs-validation" id="agroForm"
+                        novalidate onsubmit="return false">
+
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Agro Traders
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="voucher_no"
+                                                placeholder="">
+                                            <label for="voucher_no">Voucher No </label>
+                                        </div>
+
+                                        <div class="d-flex">
+                                            <div class="form-floating mb-2">
+                                                <input type="text" class="form-control rounded-3" id="party"
+                                                    placeholder="">
+                                                <label for="party">Party
+                                                </label>
+                                            </div>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <button type="button" class="btn btn-primary " id="">+</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="cus_address"
+                                                placeholder="">
+                                            <label for="cus_address">Address
+                                            </label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="cus_gst_no"
+                                                placeholder="">
+                                            <label for="cus_gst_no">GST No
+                                            </label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="mode_of_payment"
+                                                placeholder="">
+                                            <label for="mode_of_payment">Mode Of payment
+                                            </label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="other_reference"
+                                                placeholder="">
+                                            <label for="other_reference">Other Reference</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="teams_of_delivery"
+                                                placeholder="">
+                                            <label for="teams_of_delivery">Team Of Delivery </label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="number" class="form-control rounded-3" id="order_no"
+                                                placeholder="">
+                                            <label for="order_no">Order No</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="extra_details"
+                                                placeholder="">
+                                            <label for="extra_details">Extra Details </label>
+                                        </div>
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="delar_customer"
+                                                placeholder="">
+                                            <label for="delar_customer">Delar/Customer</label>
+                                        </div>
+
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control rounded-3" id="from_godown"
+                                                placeholder="">
+                                            <label for="from_godown">Godown</label>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class='input-group mt-2'> 
-                              <label class='input-group-text' for='enq_no'><span>
-                                enq_no
-                              </span>
-                              </label>
-                              <input id='enq_no' type='text' class='form-control' placeholder='enq_no' >
-                              </div>
-                  </div>
-          
-                  <div>
-                      <div class="input-group mt-3 ">
-                          <textarea class="form-control" rows="6" id="cur_company_terms" placeholder="company Terms" ></textarea>
-                           </div>
-                  </div>
-
-                
-                  
-                  
-              </div>
-             
-              
-             
-      
-              
-          
-             
-          </div>
-         
-<div class="card">
-    <div class="card-header text-bg-danger">
-        Customer
-    </div>
-    <div class="card-body row row-cols-2">
-      <div>
-        <div class="input-group mt-3">
-            <label class="input-group-text mrequired" for="cus_name_txt"><span>
-              Name
-            </span></label>
-            <input type="text" id="cus_name_txt"   class="form-control" placeholder="Customer Name" aria-label="Username" aria-describedby="basic-addon1" required  >
-          </div>
-
-          <div class="input-group mt-3">
-            <label class="input-group-text" for="cus_gst_txt"><span>
-             Gst
-            </span></label>
-            <input type="text" id="cus_gst_txt"   class="form-control" placeholder="Customer GST" aria-label="Username" aria-describedby="basic-addon1"   >
-          </div>
-    </div>
-
-    <div>
-      <div class="input-group mt-3">
-          <label class="input-group-text mrequired" for="cus_addr_txt"><span>
-           Address
-          </span></label>
-          <textarea class="form-control" rows="3" id="cus_addr_txt" placeholder="company Address"  required></textarea>
-      </div>
-          
-        </div>
-
-        
-        
-    </div>
-   
-
-   
-</div>
-   
-          <div class="card" id="pro_table_conv_card">
-            <table id="pro_table_conv1" class="table  mt-2 table-bordered border-dark border-opacity-50 text-center " >
-              <thead >
-                <tr>
-                
-                  <th  colspan="8" scope="col" class="bg-info bg-opacity-25">
-                      <div class="d-flex justify-content-between gap-3">
-                         <h6>Estimation - Products</h6>
-                         
-                      </div>
-                  </th>
-                
-                </tr>
-          
-                <tr>
-                
-                  
-                  <th scope="col">Name</th>
-                  <th scope="col">Hsn Code</th>
-                  <th scope="col">Tax Rate</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Qty</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Delete</th>
-                
-                </tr>
-              </thead>
-              <tbody class="align-middle " id="pro_table_conv">
-             
-            
-             
-               
-              </tbody>
-            </table>
-            <div class="d-flex justify-content-center">
-              <button type="button" class="btn btn-secondary text-center" id="add_conv_btn">Add</button>
-            </div>
-          </div>
-         
-<div class="card mt-3">
-    <div class="card-header text-bg-info">
-        Product
-    </div>
-    <div class="card-body">
-        <form action="" id="add_pro_form">
-          <div class="row row-cols-2">
-            <div>
-                <div class="input-group mt-3">
-                    <label class="input-group-text mrequired" for="pname_txt"><span>
-                         Name
-                    </span></label>
-                    <input type="text" id="pname_txt"   class="form-control" placeholder="Product Name" aria-label="Username" aria-describedby="basic-addon1" required  >
-                  </div>
-            </div>
-            
-    
-            <div>
-                <div class="input-group mt-3 ">
-                    <label class="input-group-text" for="hsn_txt"><span>
-                      <i class="fa-solid fa-edit h6"></i>
-                    </span></label>
-                    <input type="number" id="hsn_txt"  name="sdate_in" class="form-control" placeholder="HSN Code" aria-label="Username" aria-describedby="basic-addon1"   >
-                  </div>
-            </div>
-    
-    
-            <div>
-                <div class="input-group mt-3">
-           
-                    <label class="input-group-text" for="tax_rate_txt"><span>
-                      <i class="fa-solid fa-briefcase h6"></i>
-                    </span></label>
-                 
-                  <select class="form-select" id="tax_rate_txt">
-                    <option selected>Tax Rate...</option>
-                    <option val="">0%</option>
-                    <option val="5">5%</option>
-                    <option val="12">12%</option>
-                    <option val="18">18%</option>
-                    <option val="28">28%</option>
-                  </select>
-                </div>
-            </div>
-            
-            <div>
-                <div class="input-group mt-3 ">
-                    <label class="input-group-text mrequired" for="price_txt"><span>
-                       price
-                    </span></label>
-                    <input type="number" id="price_txt"  name="sdate_in" class="form-control" placeholder="Price" aria-label="Username" aria-describedby="basic-addon1" required  >
-                  </div>
-            </div>
-    
-            <div>
-                <div class="input-group mt-3 ">
-                    <label class="input-group-text mrequired" for="qty_txt"><span>
-                       Qty
-                    </span></label>
-                    <input type="number" id="qty_txt"   class="form-control" placeholder="Qty" aria-label="Username" aria-describedby="basic-addon1" required  >
-                  </div>
-            </div>
-    
-           
-        </div>
-        <div class="input-group mt-3 ">
-            <textarea class="form-control" rows="6" id="des_txt" placeholder="Product Description" ></textarea>
-             </div>
-        </form>
-    </div>
-</div>
-              
-
-             
-           </div>
-           <div class="card-footer">
-<div class="d-flex justify-content-center">
-
- 
-    <button type="button" id= "add_product_btn" class="btn btn-primary" type="submit"><span><i class="fa-solid fa-plus"></i></span> Add</button>
-</div>
-           </div>
-               </div>
-
-               <table id="pro_table1" class="table  mt-2 table-bordered border-dark border-opacity-50 text-center " >
-                <thead >
-                  <tr>
-                  
-                    <th  colspan="8" scope="col" class="bg-info bg-opacity-25">
-                        <div class="d-flex justify-content-between gap-3">
-                           <h6>Products</h6>
-                           <h6>Total : &#x20B9 <span id="total_amt">0</span></h6>
                         </div>
-                    </th>
-                  
-                  </tr>
-            
-                  <tr>
-                  
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Hsn Code</th>
-                    <th scope="col">Tax Rate</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Qty</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Delete</th>
-                  
-                  </tr>
-                </thead>
-                <tbody class="align-middle " id="pro_table">
-                  
-              
-               
-                 
-                </tbody>
-              </table>
-              <section id="submit_block">
-              <div class="d-flex justify-content-around mt-2">
-                <div class='form-check'>
-                  <label class='form-check-label' for='print_preview'>
-                  Preview
-                  </label>
-                  <input class='form-check-input' checked type='checkbox' value='' id='print_preview'>
-                  
-                  </div>
-                <div>
-                  <div class="input-group ">
-                    <label class="input-group-text" for="shipping_txt"><span>
-                        <i class="fa-solid fa-edit h6"></i>
-                    </span></label>
-                    <input type="number" id="shipping_txt"   class="form-control" placeholder="Shipping Charges" aria-label="Username" aria-describedby="basic-addon1"   >
-                  </div>
+
+
+                        <button type="submit" class="btn btn-primary " id="add_quotation">ADD</button>
+
+                    </form>
                 </div>
-             
-                
-              <div>
-                <button type="button" class="btn btn-danger text-center" id="print_btn">print</button>
-              </div>
+                <div class="col-md-9">
 
-              <div>
-                <button type="button" class="btn btn-danger text-center" id="submit_btn">Submit</button>
-              </div>
-               
-              </div> 
-              </section>
-</div>
+                    <h6 class="">Materials Details</h6>
+                    <div class="table-responsive">
+                        <table class="table caption-top table-bordered table-striped" id="quotation_table">
+                            <thead>
 
-</form>
-<div class=" container border border-3 border-danger mt-3" id="print_area" >
-
-        
-    <div class="card-body print_font"  id="print">
-       
-        <table class="table  table-responsive m-0 table-bordered">
-          <tbody class=" ">
-              <tr>
-                  <td colspan="2" >
-                      <div class="d-flex justify-content-between" >
-                         
-                        <div class="d-flex justify-content-start gap-4 col-2"> 
-                          <div>
-                              <img id="print_logo_preview" class="img-fluid"  style="width: 70px;" src="" alt>
-                          </div>
-                      
-                          <div>
-                              <img id="print_logo_preview1" class="img-fluid"  style="width: 70px;" src="" alt>
-                          </div>
-
-                       
-                      </div>
-                          <div>
-                              <p class="text-center fw-bold">Quotation</p>
-                          </div>
-
-                          <div>
-                               <p>  Quotation No :  <span id="print_qno"></span></p>
-                          </div>
-                           <!-- <div class="text-end">
-                              <strong> <span id="print_company_name"></span>  </strong> <br>
-                              <span id="print_company_addr">
-
-                              </span>
-                             
-                            </div> -->
-                      </div>
-                  </td>
-        
-
-              </tr>
-            <tr>
-              <td class="col-7">
-                  <div class="d-flex justify-content-between ">
-                      <p><strong> <span id="print_company_name"></span>  </strong> <br>
-                          <span id="print_company_addr">
-      
-                          </span>
-                      </p>
-                  
-                      
-                      
-                  </div>
-                  
-
-                 
-                 
-                  
-              </td>
-              <td class="text-end align-middle ">
-                <div class="d-flex justify-content-between text-bg-info mb-3">
-                  <p class="h4">
-                    Amount due :  
-                </p><p class="h4" id="amount_due">
-                 1500  
-              </p>
-                </div>
-                
-
-                <div class="d-flex justify-content-end gap-5 ">
-                  <div class="col">
-                    <p class="p-0 m-0">
-                      issue Date :
-                    </p>
-                    <p class="p-0 m-0" >
-                      Valid Until:
-                     </p>
-                     <p class="p-0 m-0">
-                      Enquiry Number:
-                     </p>
-                     <p class="p-0 m-0">
-                      Place of Supply:
-                     </p>
-                  </div>
-                  <div class="col">
-                    <p class="p-0 m-0" id="print_date">
-                      09-may-2023
-                    </p>
-                    <p class="p-0 m-0" id="print_valid_upto">
-                      09-may-2023
-                    </p>
-                    <p class="p-0 m-0" id="print_enq_no">
-                      0
-                      </p>
-                      <p class="p-0 m-0" id="print_pos">
-                        TN(33)
-                       </p>
-                  </div>
-                 
-                  
-
-                </div>
-               
-                  
-              </td>
-            </tr>
-            <tr>
-<td colspan="2">
-<strong> <span>Quote To</span>  </strong> <br>
-<strong> <span id="print_cus_name"></span>  </strong> <br>
-<span id="print_cus_addr">
-
-</span>
-</td>
-            </tr>
-          </tbody>
-                      </table>
-                        <table class="table table-bordered m-0 ">
-                            <thead >
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Item Description</th>
-                                    <th scope="col">HSN/SAC</th>
-                                    <th scope="col">GST Rate</th>
-                                    <th scope="col">Price/Unit</th>
-                                    <th scope="col">QTY</th>
+                                    <th scope="col">Part Name</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">UOM</th>
+                                    <th scope="col">GST %</th>
+                                    <th scope="col">Discount</th>
+                                    <th scope="col">Rate</th>
                                     <th scope="col">Total</th>
+
                                 </tr>
                             </thead>
-                            <tbody id="print_pro_table"  class="align-middle">
-                           
-
-                              
+                            <tbody id="quotation_body">
+                            </tbody>
 
 
-                                
+                        </table>
+                    </div>
+                    <button type="submit" class="btn btn-primary " id="">Preview</button>
+
+                    <div class="table-responsive mt-3">
+                        <table class="table caption-top table-bordered table-striped " style="font-size: 12px;"
+                            id="purchase_order_table">
+                            <thead>
+
+                                <tr>
+                                    <th scope="col" rowspan="3" colspan="2" id="invoice_to">Invoice To</th>
+                                    <th scope="col" colspan="3" id="voucher_no">Voucher No</th>
+                                    <th scope="col" colspan="3">Dated</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" colspan="3"></th>
+                                    <th scope="col" colspan="3">Mode/Terms of payment</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" colspan="3">Reference No. & Date</th>
+                                    <th scope="col" colspan="3">Other References</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" colspan="2" id="consignee">Consignee</th>
+                                    <th scope="col" colspan="3" id="dsa">Dispatched through</th>
+                                    <th scope="col" colspan="3" id="dsa">Destination</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" colspan="2" id="supplier">Supplier</th>
+                                    <th scope="col" colspan="6" id="terms_of_delivery" class="text-start align-top">
+                                        Terms of Delivery</th>
+                                </tr>
+                                <tr>
+
+                                    <td id="sno">S/No</td>
+                                    <td>Description of Goods</td>
+                                    <td>Due on</td>
+                                    <td>Quantity</td>
+                                    <td>Rate</td>
+                                    <td>Per</td>
+                                    <td>Disc.%</td>
+                                    <td>Amount</td>
+
+                                </tr>
+                            </thead>
+                            <tbody id="purchase_order_details">
 
 
-                            
+                                <!-- <tr>
 
-                                
+                            <td></td>
+                            <td>Total</td>
+                            <td></td>
+                            <td>5555</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Rs</td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Amount chargeable (in words)</td>
+                            <th colspan="7"></th>
+                        </tr>
+                        <tr>
+                            <td>Remark</td>
+                            <th colspan="7"></th>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">PO against by proforma</td>
+                            <th colspan="2"></th>
+                            <td colspan="2">for JAYSAN AGRI INDUSTRIAL Signatory</td>
+                            <th colspan="2"></th>
+                        </tr> -->
 
                             </tbody>
+
+
                         </table>
-        
-                        <table class="table table-bordered m-0 ">
-                           <tbody>
-                            <tr>
-                                <td class="m-0 p-0">
-                                    <div class="card border-0">
-                                        <div class="card-header text-center fw-bold">
-                                            Amount in Words
-                                        </div>
-                                        <div class="card-body">
-                        <span class="text-capitalize" id="print_amount_word"></span>
-                                        </div>
-                                    </div>
-                                </td>
+                    </div>
 
-                                <td  rowspan="2" class="m-0 p-0">
-                                    <div class="card border-0">
-                                        <div class="card-header   text-center fw-bold">
-                                         Bank Details
-                                        </div>
-                                        <div class="card-body text-end">
-                                           <span id="print_bank"> </span>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-7"> Terms <br> <span id="print_terms">
+                    <button type="submit" class="btn btn-primary " id="">Submit / Print</button>
 
-                                </span></td>
-                            </tr>
-                            <tr>
-                                <td >Customer Signature</td>
-                                <td class=" text-end">for <span id="print_com_name"></span> <br><br><br></td>
-                            </tr>
-                           </tbody>
-                        </table>
+                </div>
+
+            </div>
 
 
+        </div>
 
-    </div>
-</div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            part
+        </button>
 
-</div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">BR 1052 Main Roller30 Dia 3F</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group" id="godownList">
+                            <li class="list-group-item" tabindex="0">Store - 200 Qty</li>
+                            <li class="list-group-item" tabindex="0">Roller - 20 Qty</li>
+                            <li class="list-group-item" tabindex="0">Jaysan Fabrication - 460 Qty</li>
+                            <li class="list-group-item" tabindex="0">Assembly - 100 Qty</li>
+                            <li class="list-group-item" tabindex="0">Door - 6070 Qty</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- jQuery UI -->
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+
+        <!-- jQuery UI CSS -->
+
+        <!-- bootstrap include -->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+            integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+            integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+            crossorigin="anonymous"></script>
+
+        <!-- font awesome -->
+        <script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
+
+        <!-- Sweet alert -->
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
+        <!-- external js -->
+        <script src="js/quotation.js" type="module"></script>
+        <script src="js/menu.js" type="module"></script>
+        <!-- <script src="js/get_all_id.js" type="module"></script> -->
 
-   
-<!-- jquery -->
-<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    
-    <!-- bootstrap include -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
-
-<!-- font awesome -->
-<script src="https://kit.fontawesome.com/86b62f3d3e.js" crossorigin="anonymous"></script>
-
-<!-- Sweet alert -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-<script src="js/printThis.js" type="module"></script>
-<!-- external js -->
-<script src="js/quotation.js" type="module"></script>
-<script src="js/menu.js" type="module"></script>
 </body>
+
 </html>

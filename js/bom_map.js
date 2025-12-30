@@ -7,6 +7,11 @@ var physical_stock_array = [];
 $(document).ready(function () {
 
 
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
 
 
     $("#menu_bar").load('menu.html',

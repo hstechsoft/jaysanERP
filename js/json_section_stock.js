@@ -19,6 +19,14 @@ $(document).ready(function () {
         });
     });
 
+    $("#section_stock_receive_entry_tabel_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#section_stock_receive_entry_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
 
 
     $("#menu_bar").load('menu.html',
@@ -245,6 +253,8 @@ $(document).ready(function () {
 
         if (section_id) {
             get_jaysan_stock(section_id, dept_id, '1166');
+            get_requset_report(section_id, 'sec');
+
 
             sec_id = section_id;
             dep_id = dept_id;
@@ -280,48 +290,48 @@ $(document).ready(function () {
 
 
 
-$("#section_stock_tbody").on("focus", ".part", function () {
+    $("#section_stock_tbody").on("focus", ".part", function () {
 
-    let $partCell = $(this);
+        let $partCell = $(this);
 
-    if ($partCell.data("autocomplete")) return;
+        if ($partCell.data("autocomplete")) return;
 
-    $partCell.autocomplete({
-        minLength: 2,
-        source: function (request, response) {
-            $.ajax({
-                url: "php/get_part_name_auto1.php",
-                type: "get",
-                dataType: "json",
-                data: {
-                    part: request.term,
-                    term: "part"
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.part_name,
-                            value: item.part_name,
-                            id: item.part_id
-                        };
-                    }));
-                }
-            });
-        },
-        select: function (event, ui) {
-            event.preventDefault();
+        $partCell.autocomplete({
+            minLength: 2,
+            source: function (request, response) {
+                $.ajax({
+                    url: "php/get_part_name_auto1.php",
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        part: request.term,
+                        term: "part"
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.part_name,
+                                value: item.part_name,
+                                id: item.part_id
+                            };
+                        }));
+                    }
+                });
+            },
+            select: function (event, ui) {
+                event.preventDefault();
 
-            // set part
-            $partCell.text(ui.item.label);
-            $partCell.data("part_id", ui.item.id);
+                // set part
+                $partCell.text(ui.item.label);
+                $partCell.data("part_id", ui.item.id);
 
-            // 👉 MOVE TO QTY
-            $partCell.closest("tr").find(".qty").focus();
-        }
+                // 👉 MOVE TO QTY
+                $partCell.closest("tr").find(".qty").focus();
+            }
+        });
+
+        $partCell.data("autocomplete", true);
     });
-
-    $partCell.data("autocomplete", true);
-});
 
 
     $("#section_stock_tbody").on("keydown", ".qty", function (e) {
@@ -347,12 +357,155 @@ $("#section_stock_tbody").on("focus", ".part", function () {
         }
     });
 
+    $("#success_btn").on("click", function () {
+        $("#successModal").modal("show");
+    })
 
+    $("#correction_btn").on("click", function () {
+        $("#correctionModal").modal("show");
+    })
 
+    $("#allocation_confirmation_tbody").on("click", "button.fa_check_circle", function () {
+        // var emp_id = $(this).data("created_by");
+        $("#sec_confirm_btn").prop("disabled", false);
+        var allocated_id = $(this).data("allocation_id");
+        var qty = $(this).data("qty");
+
+        $("#sec_qty").val(qty);
+        $("#sec_qty").data("allocated_id", allocated_id);
+        // $("#sec_qty").data("emp_id", emp_id);
+
+        $("#sectionConfirmationModal").modal("show");
+
+    })
+
+    $("#sec_confirm_btn").on("click", function () {
+        $(this).prop("disabled", true);
+        // var emp_id = $("sec_qty").data("emp_id");
+        var allocated_id = $("#sec_qty").data("allocated_id");
+        var qty = $("#sec_qty").val();
+        var remark = $("#sec_remark").val() || "";
+        console.log("allocation_id" + allocated_id, "received_qty" + qty)
+        if (allocated_id == '' || allocated_id === undefined || qty == '' || qty == undefined) {
+            salert("Warning", "Data missing", 'warning');
+            return;
+        }
+        update_stock_allocation_section(allocated_id, qty, current_user_id, remark);
+    })
 
 });
 
 
+
+
+
+
+function update_stock_allocation_section(allocation_id, received_qty, received_by, receive_remark) {
+    console.log("allocation_id" + allocation_id, "received_qty" + received_qty, "received_by" + received_by, "receive_remark" + receive_remark);
+
+
+    $.ajax({
+        url: "php/update_stock_allocation_section.php",
+        type: "get", //send it through get method
+        data: {
+
+            allocation_id: allocation_id,
+            received_qty: received_qty,
+            received_by: received_by,
+            receive_remark: receive_remark,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == "ok") {
+                $("#sectionConfirmationModal").modal("hide");
+                get_jaysan_stock(sec_id, dep_id, godown_id);
+                get_requset_report(sec_id, 'sec');
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_requset_report(store_id, store_type) {
+    console.log(store_id, store_type)
+
+    $.ajax({
+        url: "php/get_requset_report.php",
+        type: "get", //send it through get method
+        data: {
+            store_id: store_id,
+            store_type: store_type,
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+            if (response.trim() != "error") {
+                $("#allocation_confirmation_tbody").empty();
+
+                if (response.trim() != "0 result") {
+
+                    $("#allocation_confirmation_table").removeClass("d-none");
+
+
+
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+
+                        var allocated_del = JSON.parse(obj.allocation_details);
+                        var allocated_qty = '';
+                        var allocated_id = '';
+                        allocated_del.forEach(function (item) {
+                            allocated_qty = item.receive_qty
+                            allocated_id = item.allocation_id
+                        })
+
+                        $("#allocation_confirmation_tbody").append(`<tr><td>${count}</td><td>${obj.part_name}</td><td>${obj.qty}</td><td>${allocated_qty}</td><td><button type='button' data-qty='${allocated_qty}' data-allocation_id='${allocated_id}' data-created_by='${obj.emp_id}' class='btn btn-success fa_check_circle'><i class='fa fa-check-circle'></i></button></td></tr>`)
+
+
+
+                    });
+
+
+                }
+                else {
+                    $("#allocation_confirmation_table").addClass("d-none")
+                    // $("#allocation_confirmation_tbody").append("<li disabled><a class='dropdown-item' >NO DATA</a></li>")
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+}
 
 
 function insert_jaysan_stock(part, godown_id, dep_id, sec_id, qty, stock_master_json) {
@@ -538,6 +691,7 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                     // Section and Section_qty
                                     var blink = '';
                                     var s_min_max = '';
+                                    var req_btn_ctrl = '<td></td>';
                                     var remaining_qut = 0;
                                     let sec_min = secObj.sec_min ?? 0;
                                     let sec_max = secObj.sec_max ?? 0;
@@ -548,11 +702,58 @@ function get_jaysan_stock(sec_query, dep_query, creditor_query) {
                                     if ($("#section_min_max_view").is(":checked")) {
                                         s_min_max = `<span class=' ms-2 badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span>`;
                                     }
-                                    // tr += `<td>${ss_req} ${secObj.section || ""} <span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td>`;
-                                    tr += `<td><span class="border border-primary px-3 py-1  border-2 rounded-1" contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span>${s_min_max}</td>
-                                    
-                                    <td><button class='btn' data-bs-toggle="modal" data-bs-target="#requestModal" data-part_id='${item.part_id}' data-qty='${isNaN(remaining_qut) ? 0 : remaining_qut}'  id='fa-bell'><i class="fa-regular fa-bell text-success"></i> </button></td>`;
 
+                                    if ((secObj.Section_qty <= secObj.sec_min || secObj.Section_qty <= secObj.sec_max)) {
+
+                                        if (Array.isArray(secObj.sec_req) && secObj.sec_req.length > 0) {
+
+                                            secObj.sec_req.forEach(function (sts) {
+
+                                                if (sts.status === 'create') {
+                                                    req_btn_ctrl = `<td><span class='badge bg-secondary' >Requested</span></td>`;
+                                                }
+                                                else if (sts.status === 'allocated') {
+                                                    req_btn_ctrl = `<td><span class='badge bg-secondary'>Allocated</span></td>`;
+                                                }
+                                                else if (sts.status === 'delivered') {
+                                                    req_btn_ctrl = `<td><span class='badge bg-success'>Delivered</span></td>`;
+                                                }
+                                                else {
+                                                    req_btn_ctrl = `
+                                                                    <td>
+                                                                        <button class='btn'
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#requestModal"
+                                                                            data-part_id='${item.part_id}'
+                                                                            data-qty='${isNaN(remaining_qut) ? 0 : remaining_qut}'
+                                                                            id='fa-bell'>
+                                                                            <i class="fa-regular fa-bell text-success"></i>
+                                                                        </button>
+                                                                    </td>`;
+                                                }
+
+                                            });
+
+                                        } else {
+                                            req_btn_ctrl = `
+                                                            <td>
+                                                                <button class='btn'
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#requestModal"
+                                                                    data-part_id='${item.part_id}'
+                                                                    data-qty='${isNaN(remaining_qut) ? 0 : remaining_qut}'
+                                                                    id='fa-bell'>
+                                                                    <i class="fa-regular fa-bell text-success"></i>
+                                                                </button>
+                                                            </td>`;
+                                        }
+                                    }
+
+                                    // tr += `<td>${ss_req} ${secObj.section || ""} <span class='badge bg-danger ${blink}'>${sec_min}</span><span class='badge bg-success ms-1'>${sec_max}</span></td>`;
+                                    tr += `<td style='width: 40%'><span class="border border-primary px-3 py-1  border-2 rounded-1" contenteditable data-stock_id='${item.stock_id}' data-part_id='${item.part_id}' data-unit_id='${unitObj.godown_id}' data-dep_id='${depObj.dep_id}' data-sec_id='${secObj.sec_id}'>${secObj.Section_qty != null ? secObj.Section_qty : ""}</span>${s_min_max}</td>
+                                    <td>15932</td>${req_btn_ctrl}`;
+
+                                    tr += `<td rowspan="${itemRowSpan}"> Purchase</td>`;
                                     tr += "</tr>";
                                     $("#section_stock_tbody").append(tr);
                                 });
@@ -699,7 +900,6 @@ function get_dep_section() {
 
 
                         $("#section_select_stock").append("<option class='' value=" + obj.dep_sec_id + " data-sec_name='" + obj.sec_name + "' data-dep_id='" + obj.dep_id + "'>" + obj.sec_name + "</option>")
-
 
 
                     });

@@ -60,6 +60,7 @@ $(document).ready(function(){
        console.log(user.uid);
        localStorage.setItem("logemail", email);
        load_emp_id(email);
+       login_session(email);
       
      })
      .catch((error) => {
@@ -74,6 +75,22 @@ $(document).ready(function(){
      });
    
    }
+   function login_session(email)
+   {
+     $.ajax({ 
+      url: "php/login.php",
+      type: "post", //send it through get method
+      data: {
+        email: email,
+      },
+      success: function (response) {
+   console.log(response)  
+      },
+      error: function (xhr) {
+          //Do Something to handle error
+      }
+  });
+    }
 
 
    function load_emp_id(email)
