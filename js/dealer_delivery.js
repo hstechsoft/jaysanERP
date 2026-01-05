@@ -47,9 +47,32 @@ $('#delivery_photo_preview').click(function () {
 var property =this.files[0];
 
 
-delivery_photo_addr = upload_sv(property,"delivery_photo","#delivery_photo_preview"); 
+upload_sv(property, "delivery_photo", "#delivery_photo_preview")
+    .then(function (path) {
+
+        delivery_photo_addr = path;   // ✅ assigned AFTER success
+        console.log("Saved path:", delivery_photo_addr);
+     var timestamp = new Date().getTime();
+     
+        
+       
+        var pn = delivery_photo_addr.replace(/#@#/g, '%23@%23')
+ 
+      $("#delivery_photo_preview").attr("src", pn);
+      //$("#delivery_photo_preview").attr("src", delivery_photo_addr);
+       console.log($("#delivery_photo_preview").attr("src"));
+    })
+    .catch(function (err) {
+        console.error("Upload failed", err);
+    });
+
 
 });
+
+
+
+
+
 
 
 
@@ -213,55 +236,114 @@ did : did
    });
 
 
-   function upload_sv(property,fname,preview)
-  {
-    if (!property) {
-      return; // No file selected
-  }
-    var file_name = property.name;
-    var file_extension = file_name.split('.').pop().toLowerCase();
-  {
-   var form_data = new FormData();
-   form_data.append("file",property);
-   form_data.append("did",did);
-   form_data.append("dname",dname);
-   form_data.append("chasis_no",$("#chasis_no").val());
-   form_data.append("file_name",$("#chasis_no").val().replace(/\//g, '#@#') + "." + file_extension);
+  //  function upload_sv(property,fname,preview)
+  // {
+  //   var attach = ""
+  //   if (!property) {
+  //     return; // No file selected
+  // }
+  //   var file_name = property.name;
+  //   var file_extension = file_name.split('.').pop().toLowerCase();
+  // {
+  //  var form_data = new FormData();
+  //  form_data.append("file",property);
+  //  form_data.append("did",did);
+  //  form_data.append("dname",dname);
+  //  form_data.append("chasis_no",$("#chasis_no").val());
+  //  form_data.append("file_name",$("#chasis_no").val().replace(/\//g, '#@#') + "." + file_extension);
 
      
-       // Show the overlay and reset progress bar
+  //      // Show the overlay and reset progress bar
       
    
-        $.ajax({
-            url:'upload_delivery.php',
-            method:'POST',
-            data:form_data,
-            contentType:false,
-            cache:false,
-            processData:false,
-            beforeSend:function(){
-            //  $('#msg').html('Loading......');
-            console.log('Loading......');
+  //       $.ajax({
+  //           url:'upload_delivery.php',
+  //           method:'POST',
+  //           data:form_data,
+  //           contentType:false,
+  //           cache:false,
+  //           processData:false,
+  //           beforeSend:function(){
+  //           //  $('#msg').html('Loading......');
+  //           console.log('Loading......');
            
-            },
+  //           },
            
-            success:function(data){
+  //           success:function(data){
             
            
-             console.log(data);
-             // $('#msg').html(data);
-             var timestamp = new Date().getTime(); // Get current timestamp
+  //            console.log(data);
+  //            // $('#msg').html(data);
+  //            var timestamp = new Date().getTime(); // Get current timestamp
             
-             $(preview).attr("src", "attachment/delivery/" + did + "/" + $("#chasis_no").val() + "." + file_extension + "?" + timestamp);
-             $("#dsubmit").show()
+  //           //  $(preview).attr("src", "attachment/delivery/" + did + "/" + $("#chasis_no").val() + "." + file_extension + "?" + timestamp);
+  //             $(preview).attr("src", data.trim() + "?" + timestamp);
+  //            $("#dsubmit").show()
          
-          
-            }
-          });
+  //         attach = data.trim();
+  //           }
+  //         });
         
-    }
-  return  "attachment/delivery/"+ did + "/" + $("#chasis_no").val() + "." + file_extension
-  }
+  //   }
+  // // return  "attachment/delivery/"+ did + "/" + $("#chasis_no").val() + "." + file_extension
+  // console.log(attach);
+  
+  // return attach;
+  // }
+
+
+  function upload_sv(property, fname, preview) {
+
+    return new Promise(function (resolve, reject) {
+
+        if (!property) {
+            reject("No file selected");
+            return;
+        }
+
+        var file_name = property.name;
+        var file_extension = file_name.split('.').pop().toLowerCase();
+
+        var form_data = new FormData();
+        form_data.append("file", property);
+        form_data.append("did", did);
+        form_data.append("dname", dname);
+        form_data.append("chasis_no", $("#chasis_no").val());
+        form_data.append(
+            "file_name",
+            $("#chasis_no").val().replace(/\//g, '#@#') + "." + file_extension
+        );
+
+        $.ajax({
+            url: 'upload_delivery.php',
+            method: 'POST',
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+
+            beforeSend: function () {
+                console.log("Loading...");
+            },
+
+            success: function (data) {
+                data = data.trim();
+
+           
+              
+                $("#dsubmit").show();
+
+                resolve(data); // ✅ RETURN AFTER SUCCESS
+            },
+
+            error: function (xhr, status, error) {
+                reject(error);
+            }
+        });
+
+    });
+}
+
 
    function check_chasis_no(chasis_no_p)
    {  

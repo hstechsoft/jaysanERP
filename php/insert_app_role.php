@@ -2,8 +2,8 @@
 <?php
  include 'db_head.php';
 
- $role =test_input($_GET['role']);
- $app_menu_id =test_input($_GET['app_menu_id']);
+ $role =test_input($_POST['role']);
+ $app_menu_id =test_input($_POST['app_menu_id']);
 
  
   

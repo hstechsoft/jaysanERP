@@ -1,0 +1,465 @@
+{
+    "StockItem": [
+        {
+            "Name": "A Cherry AA Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Apr-25", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "A Cherry PB Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "demo mobile part", 
+            "Part No": "dm1", 
+            "Parent": "demo parent", 
+            "CATEGORY": "demo category", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "demo mobile part2", 
+            "Part No": "dm2", 
+            "Parent": "demo parent", 
+            "CATEGORY": "demo category", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "(F) Jubilee Seeds Blending", 
+            "Parent": "Finished Goods", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0", 
+            "MULTICOMPONENTLIST": [
+                {
+                    "COMPONENTLISTNAME": "(F) Jubilee Seeds Blending", 
+                    "COMPONENTBASICQTY": "75.00 Kgs", 
+                    "MULTICOMPONENTITEMLIST": [
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "PL B Roasting", 
+                            "ACTUALQTY": "10.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "PL C Roasting", 
+                            "ACTUALQTY": "10.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "RCA Bulk Roasting (PST)", 
+                            "ACTUALQTY": "80.00 Kgs"
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "JA", 
+            "Parent": "\u0004 Primary", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "Kgs", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "10", 
+            "CLOSINGBALANCE": "(-)150.00 Nos", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Apr-25", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "JUBILEE COFFEE SEEDS", 
+            "Parent": "\u0004 Primary", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Apr-23", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "PB COFFEE POWDER 250GM", 
+            "Parent": "\u0004 Primary", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Apr-23", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "PL A Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "PL B Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "PL C Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "PL PB Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "RCA & AA Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "RCA Bulk Roasting (PST)", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "Robusta PB Roasting", 
+            "Parent": "Raw Material", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Name": "R/T PB Blending", 
+            "Parent": "Finished Goods", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0", 
+            "MULTICOMPONENTLIST": [
+                {
+                    "COMPONENTLISTNAME": "R/T PB Blending", 
+                    "COMPONENTBASICQTY": "100.00 Kgs", 
+                    "MULTICOMPONENTITEMLIST": [
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "PL PB Roasting", 
+                            "ACTUALQTY": "20.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "PL A Roasting", 
+                            "ACTUALQTY": "5.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "PL C Roasting", 
+                            "ACTUALQTY": "25.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "RCA & AA Roasting", 
+                            "ACTUALQTY": "25.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "Robusta PB Roasting", 
+                            "ACTUALQTY": "25.00 Kgs"
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "Test", 
+            "Parent": "\u0004 Primary", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Nos", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "(-)5.00 Nos", 
+            "GSTDETAILS": [
+                {
+                    "APPLICABLEFROM": "1-Apr-25", 
+                    "STATEWISEDETAILS": [
+                        {
+                            "STATENAME": "\u0004 Any", 
+                            "RATEDETAILS": [
+                                {
+                                    "GSTRATEDUTYHEAD": "CGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "SGST/UTGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "2.50"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "IGST", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "5"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "Cess", 
+                                    "GSTRATEVALUATIONTYPE": "\u0004 Not Applicable", 
+                                    "GSTRATE": "0"
+                                }, 
+                                {
+                                    "GSTRATEDUTYHEAD": "State Cess", 
+                                    "GSTRATEVALUATIONTYPE": "Based on Value", 
+                                    "GSTRATE": "0"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "Name": "W/S PB Blending", 
+            "Parent": "Finished Goods", 
+            "CATEGORY": "\u0004 Not Applicable", 
+            "BASEUNITS": "Kgs", 
+            "ADDITIONALUNITS": "\u0004 Not Applicable", 
+            "DENOMINATOR": "1", 
+            "CONVERSION": "0", 
+            "CLOSINGBALANCE": "0", 
+            "MULTICOMPONENTLIST": [
+                {
+                    "COMPONENTLISTNAME": "W/S PB Blending", 
+                    "COMPONENTBASICQTY": "50.00 Kgs", 
+                    "MULTICOMPONENTITEMLIST": [
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "PL B Roasting", 
+                            "ACTUALQTY": "15.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "PL C Roasting", 
+                            "ACTUALQTY": "25.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "A Cherry PB Roasting", 
+                            "ACTUALQTY": "12.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "A Cherry AA Roasting", 
+                            "ACTUALQTY": "12.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "Robusta PB Roasting", 
+                            "ACTUALQTY": "12.00 Kgs"
+                        }, 
+                        {
+                            "NATUREOFITEM": "Component", 
+                            "StockItemName": "RCA Bulk Roasting (PST)", 
+                            "ACTUALQTY": "12.00 Kgs"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -24,6 +24,8 @@ if ($result->num_rows > 0) {
     $rows = array();
     while($r = mysqli_fetch_assoc($result)) {
         $rows[] = $r;
+           $_SESSION['user_id'] = $r['did'];
+$_SESSION['role']    = 'dealer';
     }
     print json_encode($rows);
 } else {

@@ -259,6 +259,8 @@ console.log(response)
    {
     var extension = obj.dimage.split('.').pop()
     var pn = (obj.chasis_no).replace(/\//g, '%23@%23')
+    console.log(dealer_id);
+    
      attach = "attachment/delivery/"+ dealer_id + "/" +  pn+      "." + extension
     
   

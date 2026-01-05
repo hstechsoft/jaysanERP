@@ -14,7 +14,7 @@ if($_FILES['file']['name'] != ''){
     if (file_exists($target_path)) {
        
     } else {
-        mkdir($target_path, 0777, true);
+        mkdir($target_path, 0755, true);
       
        
     }

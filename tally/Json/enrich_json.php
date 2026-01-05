@@ -10,7 +10,7 @@ include __DIR__ . '/../../php/db_head.php';
 ini_set('memory_limit', '1024M');
 set_time_limit(0);
 
-$inputFile  = 'JAStkItem.json';
+$inputFile  = 'JAStkItem.JSON';
 $outputFile = 'stock_enriched.json';
 
 /* --------------------------------------------------

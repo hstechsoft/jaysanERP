@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'php/db_head.php';
 $emp_name = $_POST['emp_name'];
 $sql ="SELECT max(lead_id) as insert_key FROM marketing_lead";
@@ -17,7 +20,7 @@ if ($_FILES['file']['name'] != '') {
     $target_path = "attachment/mlead/" . $dirname . "/";
   
     if (!file_exists($target_path)) {
-        mkdir($target_path, 0777, true);
+        mkdir($target_path, 0755, true);
     }
 
     $FileType = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));    

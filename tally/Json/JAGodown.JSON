@@ -1,0 +1,876 @@
+{
+    "StockItem": [
+        {
+            "Godown": "Abi B.Mettur", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Abilash T N", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Abirami Ecoplast Private Limited", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Ace Tools", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Agri Intex 2018", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "AgriMechX Solutions", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Ajantha Aqua Pumpset", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "AJANTHA ENGINEERING", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Alfa Technologies", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Alif Traders", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "AL Lakshmanan&Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Amana Shearing", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "ANNAI THAVAM INDUSTRIES", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "ARIHANT AGENCY", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Arihant Udyog", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "ARK Enterrprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "A.R.K. Induction", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Arrkay Power Transmission", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Arun Engineering Works", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "AS ENGINEERING WORKS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Assambly", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Astute Heat Treatment", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "A.V. BERNARD & Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "A - Z Agro Service Centre", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Babji Trading Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "BALU AGENCIES", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Bearing Chain Centre", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Bernard & Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Bhasin Company", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Boss Hydralics", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Brilliant Traders", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Chethan", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Coimbatore  Aeration Accessories", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "COLLECTIVE TRADE LINKS PVT.LTD", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Coral Coatingz", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Covai Abi Dynamics", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "COVAI AIR PRODUCTS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Covai Tyres", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Craftsman Corporation", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Deepak Ind Hydraulics", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Devindra Roltech", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Dew Machine Works", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Drops Chemicals", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Engex Power Private Limited", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Engineering Tools and Equipments", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Esskay Steels", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Eswaran Steels", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "FABTOOL INDIA PVT LTD", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Frontrunner", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "GCM LED Lites", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Genner Industries", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "GNA GEARS LIMITED", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Godown 3 Fabrication", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Godown 3 Fabrication Old", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Heritage Engineering Company", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Hi Tech Oil Seals and Rubber Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Industrial Equipments Company", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Industrial Trade Links", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Innovative Systems", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Isha Bearings", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "JAGDEO AGRICULTURE INDUSTRY", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Jayachadra Bearings India Pvt Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "JAYSAN", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Jaysan Agri Industrial", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Jaysanagri Industrial Unit 1", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "JAYSAN FABRICATION", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "JAYSAN TRADER", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Jaysan Trader KA", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "J.D.S.IRON & STEELS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Jothi Cutting and Bending", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Kanpower Hoses India Pvt Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Kantech Polyrub Industries", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Kantech Rubber Industries", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Kavin Engineering Enterprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "KRS Coating", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "KRS Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Kumaran Engineerind (Thadagam)", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "KV  Enterprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "L G Balakrishnan & Bros Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "MAHA SHAKTHI ENGINEERING", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Main Location", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Mari Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Matha Steels Private Limited", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Megalai Steels", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Meghalai Steels", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Metz Heat Treaters Pvt Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "MISHKAT ENTERPRISES", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "M.J Engineers", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "M.M. OIL SEAL & RUBBER ENGINEERING CO", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "MM Oil Seal& Rubber Enginering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "M M Udyog", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "M.R.Enterprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "M.R.Fabricators", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "MRG Packaging", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "MURUGAA METAL COATING", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "MURUGAN CUTTING", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "MURUGAN METAL COATINGS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Narayanappa.H", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Navi Enterprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "NEW TIRUPPUR TRADERS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Ok Enterprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Om Shakthi Hydraulics", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "PANDIAN AND COMPANY", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Pandian & Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Pandian Hardware", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Parameswaran", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Parameter Press & Forge Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Pavan Puthra Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "PEGAVANS ENGINEERING WORKS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Pioneer Welding Equipments", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Prestigee Engineering Works", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Purchase", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Rai Auto Impex", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Rajasthan Acrylices", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "RAJENDRAN BROTHERS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Ramamoorthi Agro Spares", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Ram Coats", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Ram Enterprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "RAMPRASAD TUBES AND BARS (P) LTD", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Ramprasad Tubes & Bars P Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Rathina Tools & Hardwares", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "RC Auto Centre", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Reliance Syndicate", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Renold Chain India Private Limited", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Rishi Plus Point", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Rithish Gears", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Rubber Allied Product", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sagath Chemicals", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SAHASRIKA AUTOMOBILES", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sairam Tube Corporation", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sakthi Suppliers", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SAKTHY ENGINEERING WORK", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Samy", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sana", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SANA INDUSTRIES", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sathyanarayan & Sons", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "S.Chinnadurrai Traders", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Scripts&Marks", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Selekt Marketing Associates", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Senior Industries", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SGS MACHINE WORK", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Shanthi Tea Company", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sharp Tools", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SHARPTRAX TECHNOLGIES", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Shri Anjaneya Traders", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SHRI KUMARAN ENGINEERING", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Shri Kumaran Engineering (Natarajan)", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Siva Metal Coating", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Siva Metal Cutting", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SKF India Limited", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "S.M.Diesel Spares & Electrical Spares", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SOUTH MILL STORES", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SOUTH MILL STORES CO", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Span and Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Spirent Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Spring Steel India", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sree Ganesh  Cottoage Industries", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sree Lakshmi Motors", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sree Srinivasa & Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Bhavani Amman Automobiles", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SRI DURGA METAL COATS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SRIJI GOPALJI INDUSTRIES PRIVATE LIMITED", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Karpaga Vinayagar Agro Implements", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SRI KRISHNA ENGINEEING WORKS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Kumaran Engineering (Karattumedu)", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Kumaran Hardwares", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Lakshmi Industries", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Lakshmi Narasimha Traders", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Maha Vishnu Heat Treaters", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Maruthi Traders", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Meenachi Castings", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Meenakshi Metals", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Murugan Agency", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Murugan Maligai", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Narayana Gears", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Paviksha Engineering Works", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Rama Agri Agencies", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Sabari Engineering & Rubber Products", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Sai Lubricants", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SRI SIVA DURGA AGRO TRADERS", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Siva Ganapathy Tools", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Suriya Agro Tech", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Thulasi Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Thulasi Enginering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Vignesh Heat Tratment", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sri Vishnu Heat Treaters", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "SS Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Store", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "STP Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Subramani Vellakoil", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Sudarshan Gears", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Switchgear Spares (India)", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Taher Steel Tube Co", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "TE Advanced Hydraulics India Pvt Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Teena Engineering Works", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Teutonic Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Third Party Godown", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "THM Huade Hydraulics (P) Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Thulasimani", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Thulir Motors", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "TIDEWATER OIL CO (I) LTD", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Tide Water Oil Co.(India) LTD", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "T.MANICKAVASAGAM MANICKAM AUTO PARTS COMPANY", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Triumph Engineering & Associated Pvt Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "United Agencies", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "United Trade Fairs India Pvt Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Varun CNC", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Veeramani Tread Rolling", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Venus Enterprises", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Vibrant NDT Services Pvt.Ltd", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Vighnesh Engineering Process", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Vignesh Agency", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Vignesh Engineering Process", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Vignesh Heat Treatment", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "V.Mohan Kumar Kangeyam", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "V-Tech Engineering", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "V.V.Engineering Works", 
+            "CLOSINGBALANCE": "0"
+        }, 
+        {
+            "Godown": "Website", 
+            "CLOSINGBALANCE": "0"
+        }
+    ]
+}
