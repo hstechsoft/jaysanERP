@@ -94,7 +94,7 @@ $(document).ready(function () {
         }
     );
 
-
+get_all_subtypename()
 
     check_login();
 
@@ -393,7 +393,10 @@ $(document).ready(function () {
             salert("Warning", "Fill the type", "warning");
             return;
         }
-        insert_jaysan_model_subtype($("#type_add_field").val());
+        // insert_jaysan_model_subtype($("#type_add_field").val());
+
+        console.log($("#product_type_table").html());
+        
     })
 
 
@@ -776,9 +779,67 @@ $(document).ready(function () {
     // })
 
 
+$("#type_add_select").on("change", function(event) {
+  event.preventDefault();
+  // TODO: handle click here
+
+    $("#type_add_field").val($(this).find(":selected").text());
+        $("#section_alice_name").val( $("#product_auto").val() + " " + $("#model_auto").val()  + " " + $("#sub_model_auto").val() + " " + $("#type_add_field").val() )
+
 });
 
+});
 
+function get_all_subtypename() {
+
+
+    $.ajax({
+        url: "php/get_jaysan_model_subtypename.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+
+            $('#type_add_select').empty()
+            $('#type_add_select').append("<option value='0' selected disabled>Choose Options...</option>")
+            if (response.trim() != "error") {
+                console.log(response);
+
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+                    var count = 0
+
+
+                    obj.forEach(function (obj) {
+                        count = count + 1;
+                        $('#type_add_select').append("<option  value = '" + obj.msid + "'>" + obj.subtype_name + "</option>")
+
+                    });
+
+
+                }
+                else {
+                    // $("#@id@") .append("<td colspan='0' scope='col'>No Data</td>");
+
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 

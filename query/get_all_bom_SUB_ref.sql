@@ -1,5 +1,6 @@
 DROP TEMPORARY TABLE IF EXISTS tmp_bom_hi;
 DROP TEMPORARY TABLE IF EXISTS child_part;
+DROP TEMPORARY TABLE IF EXISTS parent_part;
 
     CREATE TEMPORARY TABLE tmp_bom_hi AS
     WITH RECURSIVE bom_hi AS (
@@ -18,9 +19,9 @@ DROP TEMPORARY TABLE IF EXISTS child_part;
         WHERE bo.part_id = (
             SELECT part_id
             FROM parts_tbl
-            WHERE part_name = '001 Roller Ass 310'
+            WHERE part_name = '001 Roller Assmbly 312'
         )
-        AND bo.component_cat = 'Roller Assy 10.5.2025'
+        AND bo.component_cat = 'Roller Assy 12.5.25'
 
         UNION ALL
 
