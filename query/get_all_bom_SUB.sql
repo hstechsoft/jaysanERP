@@ -4,6 +4,7 @@ WITH RECURSIVE bom_hi AS (
     SELECT
         bo.part_id AS output_part,
         bi.part_id AS input_part,
+        bi.qty,
         pt_hi.sub_ass,
         0 as level,
         bo.component_cat
@@ -32,6 +33,7 @@ WITH RECURSIVE bom_hi AS (
     SELECT
         boc.part_id AS output_part,
         bi.part_id AS input_part,
+        bi.qty,
      (SELECT sub_ass from parts_tbl WHERE part_id = bi.part_id) as sub_ass,
         h.level + 1 as level,
         boc.component_cat
@@ -49,9 +51,8 @@ WITH RECURSIVE bom_hi AS (
         ) and boc.part_id != h.output_part and boc.component_cat <> 'Process' 
 )
 
-SELECT bom_hi.sub_ass , po.part_name as output_part, pi.part_name as input_part, if(input_part=output_part,'duplicate_entry','') as duplicate, ROW_NUMBER() OVER () as row_num FROM bom_hi  
+SELECT bom_hi.sub_ass ,bom_hi.output_part as outpart,bom_hi.input_part as inpart,bom_hi.qty,level, if(input_part=output_part,'duplicate_entry','') as duplicate FROM bom_hi WHERE level > 0  ORDER BY LEVEL 
 
-INNER JOIN parts_tbl pi on bom_hi.input_part=pi.part_id
-INNER JOIN parts_tbl po on bom_hi.output_part=po.part_id WHERE bom_hi.sub_ass = 0
+
 
 
