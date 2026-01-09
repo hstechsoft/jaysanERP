@@ -1,8 +1,5 @@
-DROP TEMPORARY TABLE IF EXISTS tmp_bom_hi;
-DROP TEMPORARY TABLE IF EXISTS child_part;
-DROP TEMPORARY TABLE IF EXISTS parent_part;
 
-    CREATE TEMPORARY TABLE tmp_bom_hi AS
+ 
     WITH RECURSIVE bom_hi AS (
 
         /* ========= Anchor ========= */
@@ -19,9 +16,9 @@ DROP TEMPORARY TABLE IF EXISTS parent_part;
         WHERE bo.part_id = (
             SELECT part_id
             FROM parts_tbl
-            WHERE part_name = '001 Roller Assmbly 312'
+            WHERE part_name = '001 Roller Ass 310'
         )
-        AND bo.component_cat = 'Roller Assy 12.5.25'
+        AND bo.component_cat = 'Roller Assy 10.5.2025'
 
         UNION ALL
 
@@ -41,34 +38,54 @@ DROP TEMPORARY TABLE IF EXISTS parent_part;
         JOIN parts_tbl pt ON bi.part_id = pt.part_id
         WHERE boc.component_cat <> 'Process'
         AND boc.part_id <> h.output_part
-    )
+    ),
+    parent_part AS (
+    SELECT bom_hi.*,parts_tbl.part_name
+    FROM bom_hi inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id
+    WHERE level = 0 ORDER BY bom_hi.sub_ass DESC
+),
 
-    SELECT * FROM bom_hi;
+child_part AS (
+   SELECT bom_hi.*,parts_tbl.part_name
+    FROM bom_hi inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id
+    WHERE level > 0
+),
+
+   tb AS (
+    /* LEFT side */
+    SELECT
+        p.input_part AS parent_input_part,
+        p.qty        AS parent_qty,
+        c.input_part AS child_input_part,
+        c.qty        AS child_qty
+    FROM parent_part p
+    LEFT JOIN child_part c
+        ON p.input_part = c.input_part
+
+    UNION 
+
+    /* RIGHT side unmatched */
+    SELECT
+        p.input_part,
+        p.qty,
+        c.input_part,
+        c.qty
+    FROM parent_part p
+    RIGHT JOIN child_part c
+        ON p.input_part = c.input_part
+
+)
+-- SELECT tb.*,inpart.part_name as parent, chpart.part_name as child_part FROM tb 
+-- left join parts_tbl inpart on tb.parent_input_part = inpart.part_id
+-- left join parts_tbl chpart on tb.child_input_part = chpart.part_id;
+
+SELECT * FROM parent_part 
+LEFT join child_part on parent_part.input_part = child_part.input_part
 
 
+UNION 
 
-    CREATE TEMPORARY TABLE child_part (
-    
-        input_part      INT,
-        qty             INT
-    
-    );
-      CREATE TEMPORARY TABLE parent_part (
-    
-        input_part      INT,
-        qty             INT
-    
-    );
-
-INSERT INTO child_part (input_part, qty)
-SELECT input_part, qty
-FROM tmp_bom_hi WHERE tmp_bom_hi.LEVEL>0;
-
-INSERT INTO parent_part (input_part, qty)
-SELECT input_part, qty
-FROM tmp_bom_hi WHERE tmp_bom_hi.LEVEL=0;
+SELECT * FROM parent_part 
+right join child_part on parent_part.input_part = child_part.input_part
 
 
-SELECT * FROM parent_part LEFT join child_part on parent_part.input_part = child_part.input_part
-UNION
-SELECT * FROM parent_part RIGHT join child_part on parent_part.input_part = child_part.input_part
