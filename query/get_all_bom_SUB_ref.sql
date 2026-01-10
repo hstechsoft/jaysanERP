@@ -74,11 +74,13 @@ child_part AS (
     RIGHT JOIN child_part c
         ON p.input_part = c.input_part
 
-)
+),
 
-SELECT bom_hi.*,(SELECT part_name FROM parts_tbl WHERE part_id = input_part) as partname, 
+bom_sum as(SELECT bom_hi.*,(SELECT part_name FROM parts_tbl WHERE part_id = input_part) as inpartname, (SELECT part_name FROM parts_tbl WHERE part_id = output_part) as outpartname, 
 sum(qty) over (PARTITION BY input_part) as total, 
 sum(if(level = 0, qty, 0)) over (PARTITION BY input_part) as total_level_main,
 sum(if(level>0, qty, 0)) over (PARTITION BY input_part) as total_level_sub
- FROM bom_hi ORDER BY level;
+ FROM bom_hi ORDER BY level)
+
+ SELECT output_part,input_part,qty,sub_ass,level,outpartname,inpartname,total,total_level_main,total_level_sub,total_level_main-total_level_sub, if(total_level_main<total_level_sub,'sub_excess',NULL) FROM bom_sum 
 
