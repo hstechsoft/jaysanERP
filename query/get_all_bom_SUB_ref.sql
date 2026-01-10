@@ -75,20 +75,10 @@ child_part AS (
         ON p.input_part = c.input_part
 
 )
--- SELECT tb.*,inpart.part_name as parent, chpart.part_name as child_part FROM tb 
--- left join parts_tbl inpart on tb.parent_input_part = inpart.part_id
--- left join parts_tbl chpart on tb.child_input_part = chpart.part_id;
 
--- SELECT * FROM parent_part 
--- LEFT join child_part on parent_part.input_part = child_part.input_part
-
-
--- UNION 
-
--- SELECT * FROM parent_part 
--- right join child_part on parent_part.input_part = child_part.input_part
-
-
-SELECT bom_hi.*,(SELECT part_name FROM parts_tbl WHERE part_id = input_part) as partname, sum(qty) over (PARTITION BY input_part) as total, (sum(qty) over (PARTITION BY input_part))  - qty as remi FROM bom_hi;
-
+SELECT bom_hi.*,(SELECT part_name FROM parts_tbl WHERE part_id = input_part) as partname, 
+sum(qty) over (PARTITION BY input_part) as total, 
+sum(if(level = 0, qty, 0)) over (PARTITION BY input_part) as total_level_main,
+sum(if(level>0, qty, 0)) over (PARTITION BY input_part) as total_level_sub
+ FROM bom_hi ORDER BY level;
 
