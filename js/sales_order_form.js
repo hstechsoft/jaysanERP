@@ -1374,22 +1374,38 @@ function get_jaysan_model_subtype() {
        
      
 var app_html = ""
+var app_nhtml = ""
           obj.forEach(function (obj) {
                var price_details = JSON.parse(obj.price_details) || [];
                console.log(price_details);
                       console.log(obj.sec_name);
-          
+          if(obj.sec_name === null){
                  price_details.forEach(function (item) {
             // console.log(item);
-            if(item.sec_name == "null"){
-              app_html = app_html + "<div class='col'> <div class='form-check'> <input class='form-check-input sub_type_chk' type='checkbox' value='" + item.msid + "'> <label class='form-check-label' for='option2'> " + item.subtype_name + " </label> </div> </div>"
-            }else{
+            {
+              app_nhtml =   app_nhtml + "<div  <div class='form-check'> <input class='form-check-input sub_type_chk' type='checkbox' value='" + item.msid + "'> <label class='form-check-label' for='option2'> " + item.subtype_name + " </label> </div> "
             }
           });
-          $('#sub_type_div input[type="checkbox"]').prop('disabled', false);
+          app_html = app_html + "<div><fieldset class='boxborder'><legend>Additional Features</legend>" + app_nhtml + "</fieldset></div>"
+        }
+        else{
+         
+var chk = ""
+            price_details.forEach(function (item) {
+              chk = chk +"<div class='mb-1'> <label class='form-label d-block mb-1'><div class='form-check form-check-inline'> <input class='form-check-input' type='radio' name='"+item.sec_name+"'  id='' value='" + item.msid + "' " + (item.is_default == 1 ? "checked" : "") + "> <label class='form-check-label' > " + item.subtype_name + "</label> </div></label> </div>"
+                // chk = chk + "<div class='col'> <div class='form-check'> <input class='form-check-input sub_type_chk' type='checkbox' name='"+item.sec_name+"' value='" + item.msid + "' " + (item.is_default == 1 ? "checked" : "") + "> <label class='form-check-label' for='option2'> " + item.subtype_name + " </label> </div> </div>"
+            });
+
+            app_html = app_html + "<div><fieldset class='boxborder'><legend>" + obj.sec_name + "</legend>" + chk + "</fieldset></div>"
+        }
+
+
+
+   
+          });
+                 $('#sub_type_div input[type="checkbox"]').prop('disabled', false);
             $('#sub_type_div').append(app_html);
             $('#qty').focus()
-          });
           get_subcus_price();
 
 
