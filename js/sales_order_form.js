@@ -1356,14 +1356,14 @@ function get_jaysan_model_subtype() {
 
 
   $.ajax({
-    url: "php/get_jaysan_model_subtype1.php",
+    url: "php/get_jaysan_model_subtype_sale.php",
     type: "get", //send it through get method
     data: {
       mtid: $('#ptype').val()
 
     },
     success: function (response) {
-      console.log(response);
+     
       $('#sub_type_div').empty()
       $('#product_sub_type_card').removeClass('d-none')
       if (response.trim() != "error") {
@@ -1371,11 +1371,23 @@ function get_jaysan_model_subtype() {
         if (response.trim() != "0 result") {
 
           var obj = JSON.parse(response);
-          var count = 0
-          $('#sub_type_div input[type="checkbox"]').prop('disabled', false);
-
+       
+     
+var app_html = ""
           obj.forEach(function (obj) {
-            $('#sub_type_div').append(" <div class='col'> <div class='form-check'> <input class='form-check-input sub_type_chk' type='checkbox' value='" + obj.msid + "'> <label class='form-check-label' for='option2'> " + obj.subtype_name + " </label> </div> </div>")
+               var price_details = JSON.parse(obj.price_details) || [];
+               console.log(price_details);
+                      console.log(obj.sec_name);
+          
+                 price_details.forEach(function (item) {
+            // console.log(item);
+            if(item.sec_name == "null"){
+              app_html = app_html + "<div class='col'> <div class='form-check'> <input class='form-check-input sub_type_chk' type='checkbox' value='" + item.msid + "'> <label class='form-check-label' for='option2'> " + item.subtype_name + " </label> </div> </div>"
+            }else{
+            }
+          });
+          $('#sub_type_div input[type="checkbox"]').prop('disabled', false);
+            $('#sub_type_div').append(app_html);
             $('#qty').focus()
           });
           get_subcus_price();

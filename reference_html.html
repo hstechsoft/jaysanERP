@@ -19,11 +19,26 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
 
-  <style>
-    #purchase_order_table tr {
-      font-size: 12px;
-    }
-  </style>
+<style>
+
+.box {
+  width: 350px;
+  padding: 15px;
+  border: 0.5px solid #333;
+  min-inline-size: min-content; /* IMPORTANT */
+}
+
+.box legend {
+  float: unset;                 /* Bootstrap override */
+  width: auto;                  /* Bootstrap override */
+  padding: 0 8px;
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+</style>
+
+
 
 </head>
 
@@ -44,33 +59,18 @@
     </div>
   </div>
     <section id="menu_bar" class="d-none"></section>
-  <div class="container-fluid " style="height: 100%; overflow-y: auto;">
+  <div class="container-fluid ">
     <!-- top bar -->
 
 
+<fieldset class="box">
+  <legend>Title Here</legend>
+  Your content goes here.
+</fieldset>
 
 
 
 
-
-
-
-    <div class="page-wrapper">
-
-      <!-- content -->
-
-      <button type="button" class="btn btn-primary position-relative">
-        Profile
-        <span
-          class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
-          <span class="visually-hidden">New alerts</span>
-        </span>
-      </button>
-      <div class="alert alert-primary" role="alert">
-        A simple primary alert—check it out!
-      </div>
-
-    </div>
 
   </div>
     <!-- jQuery -->
