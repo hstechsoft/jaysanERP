@@ -21,3 +21,6 @@ SELECT
         left join mrf_purchase on mrf.mrf_id = mrf_purchase.mrf_id
         
     WHERE mrf.mrf_id =  1079 ORDER BY part_name, dated DESC;
+
+
+    SELECT * FROM customer_subgroup_master
