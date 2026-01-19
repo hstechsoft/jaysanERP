@@ -27,7 +27,7 @@
       "name": "Launch Chrome for JS/jQuery Debugging",
       "type": "pwa-chrome",
       "request": "launch",
-      "url": "http://localhost/jaysanERP/sales_order_form.html",
+      "url": "http://localhost/jaysanERP/product_price_entry.html",
        "webRoot": "C:/xampp/htdocs/jaysanERP",
       // "webRoot": "E:/web/htdocs/jaysanERP",
       "userDataDir": true,
