@@ -20,7 +20,8 @@
             FROM parts_tbl
             WHERE part_name = '001 Roller Ass 310'
         )
-        AND bo.component_cat = 'Roller Assy 10.5.2025'
+        -- AND bo.component_cat = 'Roller Assy 10.5.2025'
+        and bo.is_default = 1
 
         UNION ALL
 

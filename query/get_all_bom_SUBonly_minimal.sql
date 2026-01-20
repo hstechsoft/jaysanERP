@@ -88,5 +88,5 @@ sum(if(level>0, qty, 0)) over (PARTITION BY input_part) as total_level_sub
  FROM bom_hi ORDER BY level),
 
  bom_final as(SELECT path,output_part,input_part,qty,sub_ass,level,outpartname,inpartname,total,total_level_main,total_level_sub,total_level_main-total_level_sub as bal, if(total_level_main<total_level_sub,'sub_excess',if(total_level_main-total_level_sub=0,'no_main','available')) as sts FROM bom_sum )
- SELECT level,output_part,path,outpartname,JSON_ARRAYAGG(JSON_OBJECT('input_part',input_part,'qty',qty,'sub_ass',sub_ass,'inpartname',inpartname,'total',total,'total_level_main',total_level_main,'total_level_sub',total_level_sub,'bal',bal,'sts',sts)) FROM bom_final GROUP BY output_part
+ SELECT * FROM bom_final WHERE sts = "available" and level = 0
 
