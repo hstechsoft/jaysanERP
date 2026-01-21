@@ -42,7 +42,7 @@
         AND h.sub_ass = 1
         JOIN bom_input bi ON boc.bom_id = bi.bom_id
         JOIN parts_tbl pt ON bi.part_id = pt.part_id
-        WHERE boc.component_cat <> 'Process'
+        WHERE boc.component_cat <> 'Process' and boc.is_default = 1
         AND boc.part_id <> h.output_part
     ),
     parent_part AS (
