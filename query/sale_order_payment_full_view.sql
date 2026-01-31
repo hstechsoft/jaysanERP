@@ -7,7 +7,7 @@ WITH advance_given_details AS (
                 'utr_no', utr_no,
                 'received_amount', jaysan_payment.amount,
                 'advance_given', sale_payment_advance.amount
-            )śś
+            )
         ) AS advance_deposite_details,
         SUM(sale_payment_advance.amount) AS advance_deposite,
         sale_payment_advance.oid
@@ -43,7 +43,7 @@ advance_taken AS (
                 'advance_given', advance_given,
                 'advance_taken', advance_taken
             )
-        ) AS advance_taken_deetails,
+        ) AS advance_taken_details,
         SUM(advance_taken) AS total_advance_taken 
     FROM (
         SELECT 
@@ -78,7 +78,7 @@ payment_summary AS (
         total_received_payment,
         advance_deposite_details,
         advance_deposite,
-        advance_taken_deetails,
+        advance_taken_details,
         total_advance_taken,
         total_product_price,
         total_spares_amount,
