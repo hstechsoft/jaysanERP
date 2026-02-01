@@ -67,6 +67,21 @@ advance_taken AS (
 received_payment AS (
     SELECT 
         SUM(amount) AS total_received_payment,
+      JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'payment_id', payment_id,
+            'amount', amount,
+            'approved_by', approved_by,
+            'approved_date', approved_date,
+            'dated', dated,
+            'oid', oid,
+            'payment_date', payment_date,
+            'ref_no', ref_no,
+            'sts', sts,
+            'utr_no', utr_no,
+            'formatted_datetime', DATE_FORMAT(dated, '%d-%m-%Y %h:%i %p')
+        )
+    ) as received_details,
         oid 
     FROM jaysan_payment
     GROUP BY oid
@@ -76,6 +91,7 @@ payment_summary AS (
     SELECT 
         sof.oid,
         total_received_payment,
+        received_details,
         advance_deposite_details,
         advance_deposite,
         advance_taken_details,
