@@ -39,6 +39,8 @@ advance_taken AS (
         oid,
         JSON_ARRAYAGG(
             JSON_OBJECT(
+                'ref_no', ref_no,
+                'payment_date', payment_date,
                 'utr_no', utr_no,
                 'advance_given', advance_given,
                 'advance_taken', advance_taken
@@ -50,6 +52,8 @@ advance_taken AS (
             sa.oid,
             sa.advance_ref_id,
             utr_no,
+           ref_no,
+            DATE_FORMAT(dated, '%d-%m-%Y %h:%i %p') as payment_date,
             advance.amount AS advance_given,
             SUM(sa.amount) AS advance_taken 
         FROM sale_payment_advance sa
