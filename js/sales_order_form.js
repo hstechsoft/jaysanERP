@@ -895,7 +895,7 @@ $(document).ready(function () {
     }
   })
 
-  $('#payment_table').on("click", "button", function () {
+  $('#payment_table').on("click", "button#fa-trash", function () {
     var btn_val = $(this).val()
     console.log($(this).val(), $(this).data("oid"));
 
@@ -940,6 +940,47 @@ $(document).ready(function () {
 
   });
 
+
+  $('#payment_table').on("click", "#fa_edit", function () {
+
+    $("#payment_update_btn").removeClass("d-none");
+    $("#payment_add_btn").addClass("d-none");
+    var row = $(this).closest("tr");
+
+    var d = new Date(row.find("td").eq(5).text());
+    var ddd = d.toISOString().slice(0, 16);
+    console.log(d, ddd);
+    $("#amount").val(row.find("td").eq(3).text()).data({ "payment_id": $(this).val(), "oid": $(this).data("oid") });
+    $("#payment_date").val(ddd);
+    $("#ref_no").val(row.find("td").eq(1).text());
+    $("#utr_no").val(row.find("td").eq(2).text());
+
+
+
+
+  });
+
+  $("#payment_update_btn").on("click", function () {
+
+    console.log($("#amount").val(), $("#payment_date").val(), $("#ref_no").val(), $("#utr_no").val(), $("#amount").data("payment_id"));
+
+    const amount = parseFloat($("#amount").val());
+    const utr = $("#utr_no").val().trim();
+    const paymentId = Number($("#amount").data("payment_id"));
+
+    if (
+      !amount || amount <= 0 ||
+      !utr ||
+      !paymentId || paymentId <= 0
+    ) {
+      salert("Warning", "Data missing, try later", "warning");
+      return;
+
+    }
+    else {
+      update_jaysan_payment1(amount, $("#payment_date").val(), $("#ref_no").val(), utr, paymentId, $("#amount").data("oid"));
+    }
+  })
 
   var pt_p = 0;
   var pe_a = 0;
@@ -1082,6 +1123,7 @@ $(document).ready(function () {
     var oid = $(this).data("oid");
     var advance_id = $("#amount").data("advance_id");
     var payment_id = $("#amount").data("payment_id");
+    $("#amount").prop("disabled", false);
 
     if ($('#amount').val() != "" && $('#payment_date').val() != "" && $('#ref_no').val() != "" && $('#utr_no').val() != "" && edit_sec == 0) {
 
@@ -1119,10 +1161,11 @@ $(document).ready(function () {
 
       if (Number($('#total_balance_amount').text()) <= 0 && parseFloat($('#total_payment').val()) == parseFloat($("#total_amount").text())) {
         $("#advance_payment_card").prop("disabled", true).css("pointer-events", "none");
-        $("#advance_payment_card td").prop("disabled", true).css({ "pointer-events": "none", "opacity": "0.6", color: "red" });
+        $("#advance_payment_card td").css({ "opacity": "0.6", color: "red" });
       }
       else {
-        $("#advance_payment_card td").prop("disabled", true).css({ color: "green" });
+        $("#advance_payment_card").prop("disabled", false).css("pointer-events", "auto");
+        $("#advance_payment_card td").css({ color: "green" });
       }
 
     }
@@ -1155,7 +1198,7 @@ $(document).ready(function () {
     insert_sales_pay()
   });
 
-  $('#payment_table_m').on("click", "button", function () {
+  $('#payment_table_m').on("click", "button#fa-trash", function () {
     var btn_val = $(this).val()
     console.log(btn_val);
 
@@ -1181,6 +1224,7 @@ $(document).ready(function () {
 
 
   });
+
 
 
   $('#billing_price').on('input', function () {
@@ -1698,7 +1742,7 @@ function update_sale_order_spares(oid, qno, remark, amount, dcf_no, spares_id) {
 
       console.log(response);
 
-      if (response.trim() == "Payment already full") {
+      if (response.trim() == "ok") {
 
         $("#update_quotation_btn").addClass("d-none");
         $("#add_quotation_btn").removeClass("d-none");
@@ -1789,7 +1833,7 @@ function insert_sale_order_spares(oid, qno, remark, amount, dcf_no) {
 
       console.log(response);
 
-      if (response.trim() == "Payment already full") {
+      if (response.trim() == "ok") {
 
         $("#spareModal").modal("hide");
         shw_toast("Success", "Spares Updated", "success")
@@ -1837,7 +1881,7 @@ function insert_sales_order_product(oid, type_id, model_id, sub_type, required_q
 
       console.log(response);
 
-      if (response.trim() == "Payment already full") {
+      if (response.trim() == "ok") {
 
         $('#product').val("")
         $('#pmodel').val("")
@@ -1896,7 +1940,7 @@ function update_sales_order_product(oid, opid, type_id, model_id, sub_type, requ
 
       console.log(response);
 
-      if (response.trim() == "Payment already full") {
+      if (response.trim() == "ok") {
 
         $('#product').val("")
         $('#pmodel').val("")
@@ -2145,7 +2189,8 @@ function e_delete_sales_pay(payment_id, oid) {
 
     },
     error: function (xhr) {
-      //Do Something to handle error
+      console.log(xhr.responseText);
+      salert("Warning", xhr.responseText, "warning");
     }
   });
 
@@ -2184,7 +2229,7 @@ function delete_sales_pay(payment_id) {
 
     },
     error: function (xhr) {
-      //Do Something to handle error
+      salert("Warning", xhr.responseText, "warning");
     }
   });
 
@@ -2302,7 +2347,7 @@ function update_sales_pay(amount, payment_date, oid, ref_no, utr_no, customer_id
 
       console.log(response);
 
-      if (response.trim() == "Payment already full") {
+      if (response.trim() == "ok") {
 
         shw_toast("Success", "Payment Added", "success")
         $('#ref_no').val("")
@@ -2331,6 +2376,53 @@ function update_sales_pay(amount, payment_date, oid, ref_no, utr_no, customer_id
 
 }
 
+function update_jaysan_payment1(amount, payment_date, ref_no, utr_no, payment_id, oid) {
+  $.ajax({
+    url: "php/update_jaysan_payment1.php",
+    type: "post", //send it through get method
+    data: {
+      ref_no: ref_no,
+      utr_no: utr_no,
+      amount: amount,
+      pay_date: payment_date,
+      payment_id: payment_id,
+
+    },
+    success: function (response) {
+
+      console.log(response);
+
+      if (response.trim() == "ok") {
+
+        $("#payment_update_btn").addClass("d-none");
+        $("#payment_add_btn").removeClass("d-none");
+        shw_toast("Success", "Payment Added", "success")
+
+        $('#ref_no').val("")
+        $('#utr_no').val("")
+        $('#amount').val("")
+        $('#amount').data({ "advance_id": "", payment_id: "" })
+        $('#payment_date').val("")
+        $("#extra_payment").val("");
+        get_sales_order_single(oid)
+
+
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      salert("Warning", xhr.responseText, "warning");
+    }
+  });
+
+
+
+
+}
 
 
 function update_sales_pay_date() {
@@ -2816,7 +2908,7 @@ function delete_sales_order_product(oid, opid) {
 
       if (response.trim() != "error") {
 
-        if (response.trim() == "Payment already full") {
+        if (response.trim() == "ok") {
           shw_toast("Success", "Product Deleted", "success")
           // $("#total_payment").val(0);
           get_sales_order_single(oid)
@@ -3495,7 +3587,7 @@ function get_req_order_single(oid) {
 function get_jaysan_sales_payment(oid) {
 
   $.ajax({
-    url: "php/get_sales_payment1.php",
+    url: "php/get_sale_order_payment_details.php",
     type: "get", //send it through get method
     data: {
 
@@ -3517,18 +3609,18 @@ function get_jaysan_sales_payment(oid) {
 
           obj.forEach(function (obj) {
 
-            var payments_json = obj.payments_json ? JSON.parse(obj.payments_json) : [];
-            payments_json.forEach(function (payment) {
+            var received_details = obj.received_details ? JSON.parse(obj.received_details) : [];
+            received_details.forEach(function (payment) {
               count = count + 1;
-              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td><td contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + 0 + "</td><td>" + payment.formatted_datetime + "</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + payment.payment_id + "' data-oid='" + payment.oid + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td><td contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + 0 + "</td><td>" + payment.formatted_datetime + "</td> <td><button class='btn btn-outline-warning btn-sm border-0 fa_edit' type='button' value='" + payment.payment_id + "' data-oid='" + payment.oid + "' id='fa_edit'><i class='fa fa-edit' aria-hidden='true'></i></button><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + payment.payment_id + "' data-oid='" + payment.oid + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
               total_amount += Number(payment.amount)
             });
 
-            var advances_json = obj.advances_json ? JSON.parse(obj.advances_json) : [];
-            advances_json.forEach(function (advance) {
+            var advance_taken_details = obj.advance_taken_details ? JSON.parse(obj.advance_taken_details) : [];
+            advance_taken_details.forEach(function (advance) {
               count = count + 1;
-              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.amount + "</td> <td>" + 1 + "</td><td>" + advance.formatted_datetime + "</td> <td><button class='btn btn-outline-danger btn-sm border-0' type='button' value='" + payment.payment_id + "' data-oid='" + payment.oid + "' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
-              total_amount += Number(advance.amount)
+              $('#payment_table').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.advance_taken + "</td> <td>" + 1 + "</td><td>" + advance.payment_date + "</td> <td><button class='btn btn-outline-danger btn-sm border-0' disabled type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              total_amount += Number(advance.advance_taken)
             });
 
             // count = count + 1;
@@ -3536,6 +3628,9 @@ function get_jaysan_sales_payment(oid) {
             // total_amount += Number(obj.amount)
 
             // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
+            // $('#total_amount').text(obj.debit)
+            // $('#')
+
           })
           $('#total_amount').text(total_amount)
           $('#total_balance_amount').text(parseFloat($('#total_payment').val() || 0) - total_amount)
@@ -3548,11 +3643,13 @@ function get_jaysan_sales_payment(oid) {
 
           if ($("#total_balance_amount").text() <= 0) {
             $("#advance_payment_card").prop("disabled", true).css("pointer-events", "none");
-            $("#advance_payment_card td").prop("disabled", true).css({ "pointer-events": "none", "opacity": "0.6", color: "red" });
+            $("#advance_payment_card td").css({ "opacity": "0.6", color: "red" });
           }
           else {
-            $("#advance_payment_card td").prop("disabled", true).css({ color: "green" });
+            $("#advance_payment_card").prop("disabled", false).css("pointer-events", "auto");
+            $("#advance_payment_card td").css({ color: "green" });
           }
+
 
         }
         else {
@@ -3578,7 +3675,8 @@ function get_jaysan_sales_payment_m(oid) {
 
 
   $.ajax({
-    url: "php/get_sales_payment_m.php",
+    // url: "php/get_sales_payment_m.php",
+    url: "php/get_sale_order_payment_details.php",
     type: "get", //send it through get method
     data: {
 
@@ -3599,26 +3697,55 @@ function get_jaysan_sales_payment_m(oid) {
           var total_amount = 0
           var sts = ""
           obj.forEach(function (obj) {
-            if (obj.sts == "approved") {
-              sts = "<i class='fa-solid fa-thumbs-up'></i>"
-            }
-            else
-              sts = "<i class='fa-solid fa-hourglass-half'></i>"
 
-            $('#total_payment_m').val(obj.total_payment)
-            count = count + 1;
-            $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + obj.ref_no + "</td> <td  contenteditable=\"true\">" + obj.utr_no + "</td> <td>" + obj.amount + "</td> <td>" + obj.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + obj.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
-            total_amount = total_amount + Number(obj.amount)
+            var received_details = obj.received_details ? JSON.parse(obj.received_details) : [];
+            received_details.forEach(function (payment) {
+              if (payment.sts == "approved") {
+                sts = "<i class='fa-solid fa-thumbs-up'></i>"
+              }
+              else
+                sts = "<i class='fa-solid fa-hourglass-half'></i>"
+
+              count = count + 1;
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + payment.ref_no + "</td> <td  contenteditable=\"true\">" + payment.utr_no + "</td> <td>" + payment.amount + "</td> <td>" + payment.formatted_datetime + "</td><td>" + sts + "</td><td><button value  = '" + payment.payment_id + "' class='btn btn-outline-danger btn-sm border-0' type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              total_amount = total_amount + Number(payment.amount)
+            });
+
+            var advance_taken_details = obj.advance_taken_details ? JSON.parse(obj.advance_taken_details) : [];
+            advance_taken_details.forEach(function (advance) {
+              count = count + 1;
+              $('#payment_table_m').append("<tr class='small'> <td>" + count + "</td> <td  contenteditable=\"true\">" + advance.ref_no + "</td><td contenteditable=\"true\">" + advance.utr_no + "</td> <td>" + advance.advance_taken + "</td> <td>" + advance.payment_date + "</td> <td></td><td><button class='btn btn-outline-danger btn-sm border-0' disabled type='button' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button></td> </tr>")
+              total_amount += Number(advance.advance_taken)
+            });
 
             // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
+            // $('#total_amount_m').text(total_amount)
+            // var d = Number($("#total_payment_m").val()) - total_amount;
+            // if (d <= 0) {
+            //   $("#total_payment_m").data("paid_am st", -1)
+            // }
+            // else {
+            //   $("#total_payment_m").data("paid_amt", d)
+            // }
+            $('#total_payment_m').val(parseFloat(obj.total_product_price) + parseFloat(obj.total_spares_amount))
             $('#total_amount_m').text(total_amount)
-            var d = Number($("#total_payment_m").val()) - total_amount;
-            if (d <= 0) {
-              $("#total_payment_m").data("paid_am st", -1)
+            $('#total_balance_amount_m').text(parseFloat($('#total_payment_m').val() || 0) - total_amount)
+            if (total_amount < Number($("#total_payment_m").val())) {
+              $("#total_payment_m").data("paid_amt", Number($("#total_payment_m").val()) - total_amount)
             }
             else {
-              $("#total_payment_m").data("paid_amt", d)
+              $("#total_payment_m").data("paid_amt", -1)
             }
+
+            if ($("#total_balance_amount_m").text() <= 0) {
+              $("#advance_payment_card_m").prop("disabled", true).css("pointer-events", "none");
+              $("#advance_payment_card_m td").css({ "opacity": "0.6", color: "red" });
+            }
+            else {
+              $("#advance_payment_card_m").prop("disabled", false).css("pointer-events", "auto");
+              $("#advance_payment_card_m td").css({ color: "green" });
+            }
+
             $('#nex_payment_date_m').val(obj.next_payment_date)
           })
 
