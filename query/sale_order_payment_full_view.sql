@@ -20,7 +20,7 @@ WITH advance_given_details AS (
 
 sop AS (
     SELECT 
-        SUM(price) AS total_product_price,
+        SUM(price*required_qty) AS total_product_price,
         oid
     FROM sales_order_product
     GROUP BY oid
