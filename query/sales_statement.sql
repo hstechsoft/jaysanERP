@@ -9,7 +9,7 @@ WITH product_price AS (
             'type_name', (SELECT jt.type_name FROM jaysan_model_type jt WHERE jt.mtid = sop.type_id),
             'model_name', (SELECT jm.model_name FROM jaysan_product_model jm WHERE jm.model_id = sop.model_id),
             'product_name', (SELECT product_name FROM jaysan_final_product 
-                              WHERE product_id = (SELECT jpm.product_id 
+                            WHERE product_id = (SELECT jpm.product_id 
                                                   FROM jaysan_product_model jpm 
                                                   WHERE model_id = sop.model_id)),
             'order_no', (SELECT order_no FROM sales_order_form WHERE oid = sop.oid)
