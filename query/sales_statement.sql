@@ -21,7 +21,7 @@ WITH product_price AS (
     INNER JOIN sales_order_product sop ON ap.opid = sop.opid
     inner join sales_order_form sof on sof.oid = sop.oid
     WHERE ap.dcf_id > 0 
-      AND ap.assign_type = 'Delivered' and sof.customer_id = 141
+      and sof.customer_id = 6481
     GROUP BY ap.dcf_id
 ),
 
@@ -33,7 +33,7 @@ spares_details AS (
         (SELECT DATE_ONLY(dcf.dated) FROM dcf WHERE dcf_id = sos.dcf_no) AS dcf_date
     FROM sale_order_spares sos
     inner join sales_order_form sof on sof.oid = sos.oid
-    WHERE sof.customer_id = 141
+    WHERE sof.customer_id = 6481
     GROUP BY sos.dcf_no
 ),
 
@@ -44,7 +44,7 @@ jaysan_payment_details AS (
         jp.utr_no
     FROM jaysan_payment jp 
     inner join sales_order_form sof on jp.oid = sof.oid
-    WHERE sof.customer_id = 141
+    WHERE sof.customer_id = 6481
       AND jp.amount > 0
       AND jp.sts = 'approved'
 
