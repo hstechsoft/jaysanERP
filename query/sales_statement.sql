@@ -14,7 +14,7 @@ WITH product_price AS (
                                                   WHERE model_id = sop.model_id)),
             'order_no', (SELECT order_no FROM sales_order_form WHERE oid = sop.oid)
         )) AS product_details,
-        SUM(price) OVER (PARTITION BY ap.dcf_id) AS total_product_price,
+        SUM(price)  total_product_price,
         ap.dcf_id,
         (SELECT DATE_ONLY(dcf.dated) FROM dcf WHERE dcf_id = ap.dcf_id) AS dcf_date
     FROM assign_product ap
