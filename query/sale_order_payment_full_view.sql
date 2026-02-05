@@ -55,7 +55,7 @@ advance_taken AS (
             sa.advance_ref_id,
             utr_no,
            ref_no,
-            DATE_FORMAT(dated, '%d-%m-%Y %h:%i %p') as payment_date,
+            DATE_FORMAT(jaysan_payment.dated, '%d-%m-%Y %h:%i %p') as payment_date,
             advance.amount AS advance_given,
             SUM(sa.amount) AS advance_taken 
         FROM sale_payment_advance sa
@@ -79,13 +79,13 @@ received_payment AS (
             'amount', amount,
             'approved_by', approved_by,
             'approved_date', approved_date,
-            'dated', dated,
+            'dated', jaysan_payment.dated,
             'oid', oid,
             'payment_date', payment_date,
             'ref_no', ref_no,
             'sts', sts,
             'utr_no', utr_no,
-            'formatted_datetime', DATE_FORMAT(dated, '%d-%m-%Y %h:%i %p')
+            'formatted_datetime', DATE_FORMAT(jaysan_payment.dated, '%d-%m-%Y %h:%i %p')
         )
     ) as received_details,
         oid 
