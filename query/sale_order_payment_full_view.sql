@@ -40,6 +40,7 @@ advance_taken AS (
         JSON_ARRAYAGG(
             JSON_OBJECT(
                 'ref_no', ref_no,
+                'advance_id', advance_id,
                 'payment_date', payment_date,
                 'utr_no', utr_no,
                 'advance_given', advance_given,
@@ -50,6 +51,7 @@ advance_taken AS (
     FROM (
         SELECT 
             sa.oid,
+            sa.advance_id,
             sa.advance_ref_id,
             utr_no,
            ref_no,
