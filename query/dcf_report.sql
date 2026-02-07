@@ -1,4 +1,5 @@
--- Active: 1766425908618@@srv1002.hstgr.io@3306@u333142350_jaysan
+-- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
+
 with ass_pro as (SELECT ap.dcf_id,ap.opid,sop.price,sop.required_qty,sp.product as product,dcf.sts,date_only(dcf.dated) as dcf_date,ass_id FROM assign_product ap
 inner join sales_order_product sop on ap.opid = sop.opid
 inner join sales_product sp on ap.opid = sp.opid
