@@ -16,3 +16,7 @@ count(ass_id) as dcf_count,count(ass_id) * price as delivered_amount FROM ass_pr
  SELECT products,spares,ass_pro_final.dcf_id,total_dcf_count as total_product_deleliverd,total_delivered_amount as total_delivered_amount_product,sts,ass_pro_final.dcf_date,total_spares_amount FROM ass_pro_final LEFT join  spares_dcf on ass_pro_final.dcf_id = spares_dcf.dcf_id
  UNION all 
  SELECT JSON_ARRAYAGG(JSON_OBJECT('product','null')) as products,JSON_ARRAYAGG(JSON_OBJECT('qno',qno,'oid',oid,'spares_amount',sos.amount)) as spares,dcf_id,0,0,sts,sos.dated,0  FROM sale_order_spares sos INNER join dcf on sos.dcf_no = dcf.dcf_id WHERE sos.dcf_no > 0 and dcf_no not in(SELECT dcf_id FROM assign_product WHERE dcf_id>0) GROUP BY dcf_id
+
+
+
+ 
