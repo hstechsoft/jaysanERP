@@ -179,6 +179,7 @@ $(document).ready(function () {
 
   $("#dcf_submit_btn").on("click", function () {
     if (ass_id.length > 0 && $("#consignee").val() != "" && $("#godown").val() != null) {
+        $("#dcf_submit_btn").prop("disabled", true);
       $("#print_company").html($("#godown_des").val().replace(/\n/g, "<br>"));
       $("#print_consignee").html($("#consignee").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
       $("#print_buyer").html($("#buyer").val().replace(/,/g, ",<br>").replace(/\n/g, "<br>"));
@@ -270,6 +271,27 @@ $(document).ready(function () {
   })
 
   get_sale_statement()
+
+  $("#sales_pro_table").on("click", "#modal_btn", function () {
+
+    $("#add_extra").data({"oid": $(this).data("oid"), "cus_id": $(this).data("cus_id")});
+    $("#extraProductModal").modal("show");
+  })
+
+  $("#add_extra").on("click", function () {
+    var amount = $("#amount").val() || 0;
+    var qno = $("#quotation_no").val() || "";
+    var oid = $(this).data("oid") || 0;
+    var customer_id = $(this).data("cus_id") || 0;
+    var remark = $("#remark").val();
+
+    if (amount != 0 && qno != '' && oid != 0 && customer_id != 0) {
+      insert_sale_order_spares(oid, qno, remark, amount, "null", customer_id)
+    }
+    else {
+      salert("Warning", "Fill the required field", "warning");
+    }
+  })
 });
 
 
@@ -431,6 +453,54 @@ function get_sale_statement() {
 
 
 
+function insert_sale_order_spares(oid, qno, remark, amount, dcf_no, customer_id) {
+
+
+  $.ajax({
+    url: "php/insert_sale_order_spares.php",
+    type: "POST", //send it through get method
+    data: {
+      oid: oid,
+      qno: qno,
+      remark: remark,
+      amount: amount,
+      dcf_no: dcf_no,
+      customer_id: customer_id
+
+    },
+    success: function (response) {
+      $("#extraProductModal").modal("hide");
+      console.log(response);
+
+      if (response.trim() == "ok") {
+
+        // $("#amount").val('');
+        // $("#quotation_no").val('');
+        // $(this).data("oid", '');
+        // $(this).data("cus_id", '');
+        // $("#remark").val('');
+
+
+        // get_sales_product()
+        // get_sales_cus()
+        window.location.reload();
+      }
+
+
+
+
+
+    },
+    error: function (xhr) {
+      salert("Warning", xhr.responseText, "warning")
+    }
+  });
+
+
+
+
+}
+
 
 
 function insert_dcf() {
@@ -448,7 +518,8 @@ function insert_dcf() {
       dcf_by: current_user_id,
       ass_arr: ass_id,
       dcf_report: $("#dcf_print").html(),
-      narration: narration
+      narration: narration,
+      spares_arr: 0,
 
     },
     beforeSend: function () {
@@ -462,8 +533,8 @@ function insert_dcf() {
 
       if (response.trim() == "ok") {
         $("#dcf_submit_btn").prop("disabled", true);
-        $("#dcf").find("*").prop("disabled", true);
-        $("#print_btn").removeAttr("disabled")
+        // $("#dcf").find("*").prop("disabled", false);
+        $("#print_btn").prop("disabled", false)
         shw_toast("success", "Dispatch Clearance Form Created", "")
         $("#print_btn").trigger("click");
       }
@@ -684,7 +755,7 @@ function get_sales_product() {
 
           obj.forEach(function (obj) {
             count = count + 1;
-            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "</td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
+            $('#sales_pro_table').append("<tr data-billing_amount='" + obj.billing_amount + "'><td>" + count + "<button type='submit' class='btn btn-success float-end d-none' id='modal_btn' data-oid='" + obj.oid + "' dat a-cus_id='" + obj.customer_id + "'>+</button></td><td>" + obj.product + "</td><td>" + obj.order_no + "</td><td>" + obj.delivered + "</td><td>" + obj.rtd + "</td></tr>")
 
           });
           get_sale_order_spares()
