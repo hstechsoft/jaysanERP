@@ -42,4 +42,4 @@ WHERE  bom_output_child.component_cat <> "Process" AND (
 ) <= 1
 )
 
-SELECT bom_hi.*FROM bom_hi 
+SELECT bom_hi.*,FROM bom_hi 
