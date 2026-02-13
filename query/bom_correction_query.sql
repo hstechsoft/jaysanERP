@@ -1,4 +1,4 @@
--- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
+-- Active: 1766425908618@@srv1002.hstgr.io@3306@u333142350_jaysan
 with RECURSIVE bom_hi as(SELECT
     bom_output.bom_id AS parent_bom_id,
     bom_output.component_cat,
@@ -7,7 +7,7 @@ with RECURSIVE bom_hi as(SELECT
     bom_input.qty,
     out_part.part_name AS output_part_name,
     in_part.part_name AS input_part_name,
-   ifnull(bom_correction.bomlist_id,(SELECT bolist.bom_id FROM bom_output bolist WHERE bolist.part_id = bom_input.part_id and bolist.component_cat <> "Process" and  component_cat <> "Porcess" LIMIT 1)) as bomlist_id,
+   ifnull(bom_correction.bomlist_id,(SELECT bolist.bom_id FROM bom_output bolist WHERE bolist.part_id = bom_input.part_id and bolist.component_cat <> 'Process' and  component_cat <> 'Porcess' LIMIT 1)) as bomlist_id,
 
     IF(
         bom_correction.bomlist_id IS NULL,
@@ -22,9 +22,10 @@ with RECURSIVE bom_hi as(SELECT
         ),
         'valid'
     ) AS correction_status,
-       (SELECT JSON_ARRAYAGG(JSON_OBJECT('bom_id',bo1.bom_id,'component_cat',bo1.component_cat)) from bom_output bo1 WHERE bo1.part_id = bom_input.part_id and bo1.component_cat <> "Process" GROUP BY bo1.part_id having count(bo1.part_id)>1) as bom_list,
+       (SELECT JSON_ARRAYAGG(JSON_OBJECT('bom_id',bo1.bom_id,'component_cat',bo1.component_cat)) from bom_output bo1 WHERE bo1.part_id = bom_input.part_id and bo1.component_cat <> 'Process' GROUP BY bo1.part_id having count(bo1.part_id)>1) as bom_list,
        0 as level,
-       CAST(bom_output.bom_id AS CHAR(2000)) AS path
+       CAST(bom_output.bom_id AS CHAR(2000)) AS path,
+       CAST(out_part.part_name  AS CHAR(2000)) AS part_path
 
 
 
@@ -49,8 +50,8 @@ SELECT
     bom_input_child.qty,
     out_part_child.part_name AS output_part_name,
     in_part_child.part_name AS input_part_name,
-    ifnull(bom_correction_child.bomlist_id,(SELECT bolist.bom_id FROM bom_output bolist WHERE bolist.part_id = bom_input_child.part_id and bolist.component_cat <> "Process" and component_cat <> "Porcess" LIMIT 1)) as bomlist_id,
-
+    ifnull(bom_correction_child.bomlist_id,(SELECT bolist.bom_id FROM bom_output bolist WHERE bolist.part_id = bom_input_child.part_id and bolist.component_cat <> 'Process' and component_cat <> 'Porcess' LIMIT 1)) as bomlist_id,
+--    ifnull(bom_correction.bomlist_id,(SELECT bolist.bom_id FROM bom_output bolist WHERE bolist.part_id = bom_input.part_id and bolist.component_cat <> 'Process' and  component_cat <> 'Porcess' LIMIT 1)) as bomlist_id
     IF(
         bom_correction_child.bomlist_id IS NULL,
         IF(
@@ -64,9 +65,10 @@ SELECT
         ),
         'valid'
     ) AS correction_status,
-       (SELECT JSON_ARRAYAGG(JSON_OBJECT('bom_id',bo1.bom_id,'component_cat',bo1.component_cat)) from bom_output bo1 WHERE bo1.part_id = bom_input_child.part_id and bo1.component_cat <> "Process" GROUP BY bo1.part_id having count(bo1.part_id)>1) as bom_list,
+       (SELECT JSON_ARRAYAGG(JSON_OBJECT('bom_id',bo1.bom_id,'component_cat',bo1.component_cat)) from bom_output bo1 WHERE bo1.part_id = bom_input_child.part_id and bo1.component_cat <> 'Process' GROUP BY bo1.part_id having count(bo1.part_id)>1) as bom_list,
        level +1 as level,
-    CONCAT(bom_hi.path, ',', bom_output_child.bom_id) AS path
+    CONCAT(bom_hi.path, ',', bom_output_child.bom_id) AS path,
+    CONCAT(bom_hi.part_path, '->', out_part_child.part_name) AS part_path
 
 
 
@@ -81,5 +83,5 @@ INNER JOIN parts_tbl in_part_child
 LEFT JOIN bom_correction bom_correction_child
     ON bom_input_child.part_id = bom_correction_child.part_id
    AND bom_correction_child.outpart_bom_id = 570 
-   WHERE bom_output_child.component_cat <> "Process" AND  bom_hi.correction_status = 'valid'  AND FIND_IN_SET(bom_output_child.bom_id, bom_hi.path) = 0)
-   SELECT * FROM bom_hi 
+   WHERE bom_output_child.component_cat <> 'Process' AND  bom_hi.correction_status = 'valid'  AND FIND_IN_SET(bom_output_child.bom_id, bom_hi.path) = 0)
+   SELECT bom_hi.*,if(FIND_IN_SET(bomlist_id,path)>0,'duplicate','valid') as duplication_status FROM bom_hi WHERE 1 order by level;
