@@ -55,7 +55,3 @@ SELECT bom_hi.*, if(input_part=output_part,'duplicate_entry','') as duplicate FR
 
 
 
-mysqlbinlog \
-  --base64-output=DECODE-ROWS -vv \
-  /var/log/mysql/mysql-bin.000008 \
-  > /root/demo.sql
