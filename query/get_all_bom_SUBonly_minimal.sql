@@ -1,6 +1,6 @@
 -- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
 
- 
+--  CREATE TEMPORARY TABLE tmp_bom_result AS
     WITH RECURSIVE bom_hi AS (
 
         /* ========= Anchor ========= */
@@ -16,13 +16,7 @@
         FROM bom_output bo
         JOIN bom_input bi ON bo.bom_id = bi.bom_id
         JOIN parts_tbl pt_hi ON bi.part_id = pt_hi.part_id
-        WHERE bo.part_id = (
-            SELECT part_id
-            FROM parts_tbl
-            WHERE part_name = '006 Door Assembly 312 SL'
-        )
-        AND bo.component_cat = 'Door Assy SL 16.5.25'
-
+        WHERE bo.bom_id in (1094)
         UNION ALL
 
         /* ========= Recursive ========= */
@@ -47,27 +41,41 @@
         AND boc.part_id <> h.output_part
     ),
     parent_part AS (
-    SELECT bom_hi.*,parts_tbl.part_name
-    FROM bom_hi inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id
+    SELECT bom_hi.*,
+    outpart.part_name AS outpart_name,
+    inpart.part_name AS inpart_name 
+    FROM bom_hi 
+    inner join parts_tbl inpart on bom_hi.input_part = inpart.part_id
+    inner join parts_tbl outpart on bom_hi.output_part = outpart.part_id
     WHERE level = 0 ORDER BY bom_hi.sub_ass DESC
 ),
 
 child_part AS (
-   SELECT bom_hi.*,parts_tbl.part_name
-    FROM bom_hi inner join parts_tbl on bom_hi.input_part = parts_tbl.part_id
+   SELECT bom_hi.*,
+outpart.part_name AS outpart_name,
+inpart.part_name AS inpart_name
+    FROM bom_hi 
+    inner join parts_tbl inpart on bom_hi.input_part = inpart.part_id
+    inner join parts_tbl outpart on bom_hi.output_part = outpart.part_id
     WHERE level > 0
 ),
 
    tb AS (
     /* LEFT side */
     SELECT
-        p.input_part AS parent_input_part,
-        p.part_name as paren_part_name,
-        c.part_name as child_part_name,
+    p.outpart_name as parent_outpart_name,
+    p.inpart_name as parent_inpart_name,
+    c.outpart_name as child_outpart_name,
+    c.inpart_name as child_inpart_name,
+    p.input_part AS parent_input_part,
+        
+      
+        c.inpart_name as child_part_name,
         p.bom_in_id AS parent_bom_in_id,
         p.qty        AS parent_qty,
         c.input_part AS child_input_part,
-        c.qty        AS child_qty
+        c.qty        AS child_qty,
+        c.path
     FROM parent_part p
     LEFT JOIN child_part c
         ON p.input_part = c.input_part
@@ -76,27 +84,43 @@ child_part AS (
 
     /* RIGHT side unmatched */
     SELECT
+       p.outpart_name as parent_outpart_name,
+    p.inpart_name as parent_inpart_name,
+    c.outpart_name as child_outpart_name,
+    c.inpart_name as child_inpart_name,
         p.input_part,
-          p.part_name as paren_part_name,
-        c.part_name as child_part_name,
+     
+        c.inpart_name as child_part_name,
         p.bom_in_id ,
         p.qty,
         c.input_part,
-        c.qty
+        c.qty,
+        c.path
     FROM parent_part p
     RIGHT JOIN child_part c
         ON p.input_part = c.input_part
 
 )
 
-SELECT * FROM tb
+-- SELECT IFNULL(parent_bom_in_id, 0) AS parent_bom_in_id,
+--        child_qty,
+    
+--        child_input_part
+-- FROM tb
+-- WHERE child_input_part IS NOT NULL
+-- ORDER BY parent_bom_in_id;
 
--- bom_sum as(SELECT bom_hi.*,(SELECT part_name FROM parts_tbl WHERE part_id = input_part) as inpartname, (SELECT part_name FROM parts_tbl WHERE part_id = output_part) as outpartname, 
--- sum(qty) over (PARTITION BY input_part) as total, 
--- sum(if(level = 0, qty, 0)) over (PARTITION BY input_part) as total_level_main,
--- sum(if(level>0, qty, 0)) over (PARTITION BY input_part) as total_level_sub
---  FROM bom_hi ORDER BY level),
+-- SELECT * from tmp_bom_result;
 
---  bom_final as(SELECT path,output_part,input_part,qty,sub_ass,level,outpartname,inpartname,total,total_level_main,total_level_sub,total_level_main-total_level_sub as bal, if(total_level_main<total_level_sub,'sub_excess',if(total_level_main-total_level_sub=0,'no_main','available')) as sts FROM bom_sum )
---  SELECT * FROM bom_final WHERE sts = "available" and level = 0
+-- SELECT parent_bom_in_id,child_qty,parent_bom_in_id,child_input_part FROM tb where child_input_part is not null order by parent_bom_in_id;
 
+ SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id FROM tb where child_input_part is not null
+-- UPDATE bom_input bi
+-- JOIN tmp_bom_result t 
+--     ON bi.bom_in_id = t.parent_bom_in_id
+-- SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty;
+
+
+
+
+  
