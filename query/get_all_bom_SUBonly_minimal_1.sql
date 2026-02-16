@@ -1,6 +1,6 @@
 -- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
 
- CREATE TEMPORARY TABLE tmp_bom_result AS
+--  CREATE TEMPORARY TABLE tmp_bom_result AS
     WITH RECURSIVE bom_hi AS (
 
         /* ========= Anchor ========= */
@@ -102,19 +102,19 @@ inpart.part_name AS inpart_name
 
 )
 
-SELECT IFNULL(parent_bom_in_id, 0) AS parent_bom_in_id,
-       child_qty,
+-- SELECT IFNULL(parent_bom_in_id, 0) AS parent_bom_in_id,
+--        child_qty,
     
-       child_input_part
-FROM tb
-WHERE child_input_part IS NOT NULL
-ORDER BY parent_bom_in_id;
+--        child_input_part
+-- FROM tb
+-- WHERE child_input_part IS NOT NULL
+-- ORDER BY parent_bom_in_id;
 
-SELECT * from tmp_bom_result;
+-- SELECT * from tmp_bom_result;
 
 -- SELECT parent_bom_in_id,child_qty,parent_bom_in_id,child_input_part FROM tb where child_input_part is not null order by parent_bom_in_id;
 
---  SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id FROM tb where child_input_part is not null
+ SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id FROM tb where child_input_part is not null
 -- UPDATE bom_input bi
 -- JOIN tmp_bom_result t 
 --     ON bi.bom_in_id = t.parent_bom_in_id
