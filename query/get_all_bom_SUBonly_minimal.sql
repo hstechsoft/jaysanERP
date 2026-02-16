@@ -115,12 +115,21 @@ SELECT * from tmp_bom_result;
 -- SELECT parent_bom_in_id,child_qty,parent_bom_in_id,child_input_part FROM tb where child_input_part is not null order by parent_bom_in_id;
 
 --  SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id FROM tb where child_input_part is not null
--- UPDATE bom_input bi
--- JOIN tmp_bom_result t 
---     ON bi.bom_in_id = t.parent_bom_in_id
--- SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty;
+UPDATE bom_input bi
+JOIN tmp_bom_result t 
+    ON bi.bom_in_id = t.parent_bom_in_id
+SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty;
 
-
+INSERT INTO bom_input (bom_id, part_id, qty, bom_source, sub_ass_qty)
+SELECT 
+    1094,
+    child_input_part,
+    0,
+    'MANUAL',
+    child_qty
+FROM tmp_bom_result
+ON DUPLICATE KEY UPDATE 
+sub_ass_qty = IFNULL(bom_input.sub_ass_qty,0) + VALUES(sub_ass_qty);
 
 
   
