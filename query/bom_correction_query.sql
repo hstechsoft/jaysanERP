@@ -63,7 +63,7 @@ SELECT
             'invalid',
             'valid'
         ),
-        'valid'
+        'valid' 
     ) AS correction_status,
        (SELECT JSON_ARRAYAGG(JSON_OBJECT('bom_id',bo1.bom_id,'component_cat',bo1.component_cat)) from bom_output bo1 WHERE bo1.part_id = bom_input_child.part_id and bo1.component_cat <> 'Process' GROUP BY bo1.part_id having count(bo1.part_id)>1) as bom_list,
        level +1 as level,
