@@ -16,7 +16,7 @@
         FROM bom_output bo
         JOIN bom_input bi ON bo.bom_id = bi.bom_id
         JOIN parts_tbl pt_hi ON bi.part_id = pt_hi.part_id
-        WHERE bo.bom_id in (1094)
+        WHERE bo.bom_id in (898)
         UNION ALL
 
         /* ========= Recursive ========= */
@@ -114,7 +114,7 @@ inpart.part_name AS inpart_name
 
 -- SELECT parent_bom_in_id,child_qty,parent_bom_in_id,child_input_part FROM tb where child_input_part is not null order by parent_bom_in_id;
 
- SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id FROM tb where child_input_part is not null
+ SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id,sum(child_qty ) over (PARTITION BY child_input_part) AS Y FROM tb where child_input_part is not null
 -- UPDATE bom_input bi
 -- JOIN tmp_bom_result t 
 --     ON bi.bom_in_id = t.parent_bom_in_id

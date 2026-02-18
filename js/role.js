@@ -40,12 +40,12 @@ $(document).ready(function () {
     $("#role_name").val(selectedOption.val());
     $("#web_res_text").val(selectedOption.data("res"))
 
-    let currentAppRoleSelect = $("#app_role_name_select").val();
+    let currentAppRoleSelect = $("#app_role_name_select").val() || '';
 
-    if (currentAppRoleSelect !== vall) {
-      $("#app_role_name_select").val(vall).trigger("change");
-      // return;
-    }
+    // if ((currentAppRoleSelect !== vall || currentAppRoleSelect == '') ) {
+    //   $("#app_role_name_select").val(vall).trigger("change");
+    //   // return;
+    // }
 
     let menu = selectedOption.data("menu");
 
@@ -216,12 +216,12 @@ $(document).ready(function () {
     $("#app_role_name").val(AppselectedOption.val());
     $("#app_res_text").val(AppselectedOption.data("res") || "")
 
-    let currentRoleSelect = $("#role_name_select").val();
-
-    if (currentRoleSelect !== vall) {
-      $("#role_name_select").val(vall).trigger("change");
-      // return;
-    }
+    let currentRoleSelect = $("#role_name_select").val() || '';
+    
+    // if (currentRoleSelect !== vall || currentRoleSelect == '') {
+    //   $("#role_name_select").val(vall).trigger("change");
+    //   // return;
+    // }
 
     let menu = AppselectedOption.data("menu");
 
