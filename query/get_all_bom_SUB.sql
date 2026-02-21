@@ -18,10 +18,10 @@ WITH RECURSIVE bom_hi AS (
     WHERE bo.part_id = (
             SELECT part_id
             FROM parts_tbl
-            WHERE part_name = '001 Roller Ass 310'
+            WHERE part_name = '001 Roller Assmbly 312'
         )
       AND bo.component_cat = 
-            "Roller Assy 10.5.2025"
+            "Roller Assy 12.5.25"
         
 
     UNION ALL
