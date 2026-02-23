@@ -246,6 +246,7 @@ $(document).ready(function () {
     });
     //console.logsub_type_id);
 
+    
 
 
     {
@@ -461,7 +462,7 @@ $(document).ready(function () {
       $("#extra_payment").val(0);
       var count = 0
       var sub_type = ""
-      $('#sub_type_div input[type="checkbox"]:checked,input[type="radio"]:checked').each(function () {
+      $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
         count = count + 1;
         //console.log$(this).parent().text());
 
@@ -477,7 +478,7 @@ $(document).ready(function () {
       var amount = parseFloat($("#machine_price").val() || 0)
       var total_amount = parseFloat($('#total_payment').val() || 0)
 
-      var total_qty = 0;
+      var total_qty = parseFloat($('#required_qty').val() || 0);
 
       total_amount = total_amount + (parseFloat(qty * amount))
       total_qty = total_qty + parseFloat(qty)
@@ -590,8 +591,10 @@ $(document).ready(function () {
     }
 
     else if (edit_sec == 1 && $('#product').val() != "" && $('#pmodel').val() != "" && $('#ptype').val() != "" && $('#qty').val() != "" && $('#billing_price').val() != "" && $('#machine_price').val() != "" && oid > 0) {
+      var total_qty = parseFloat($('#required_qty').val() || 0);
+      total_qty = total_qty + parseFloat($('#qty').val())
       var sub_type = ""
-      $('#sub_type_div input[type="checkbox"]:checked,input[type="radio"]:checked').each(function () {
+      $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
         count = count + 1;
         //console.log$(this).parent().text());
 
@@ -600,6 +603,7 @@ $(document).ready(function () {
       });
 
       sub_type = sub_type.slice(0, -1);
+      $("#update_order_btn").trigger("click")
 
       insert_sales_order_product(oid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), 'null')
     }
@@ -703,22 +707,25 @@ $(document).ready(function () {
 
   });
 
-  $('#sales_product, #product_details_mobile_view').on("click", "button#fa_edit", function () {
+  $('#sales_product, #product_details_mobile_view').on("click", ".edit-row", function () {
 
     $("#update_sale_product_btn, #cancel_sale_product_btn").removeClass("d-none");
     $("#add_sale_product_btn").addClass("d-none");
-    var thiss = $("#sales_product").find("#fa_edit")
-    var opid = thiss.val()
-    var oid = thiss.data("oid")
-    var product_id = thiss.closest('tr').find('td').eq(1).data("product_id");
-    var model_id = thiss.closest('tr').find('td').eq(2).data("model_id");
-    var type_id = thiss.closest('tr').find('td').eq(3).data("type_id");
-    var price = thiss.closest('tr').find('td').eq(6).text();
-    var qty = thiss.closest('tr').find('td').eq(5).text();
-    var sub_type = thiss.closest('tr').find('td').eq(4).text();
-    var billing_price = thiss.closest('tr').find('td').eq(7).text();
 
-    $("#update_sale_product_btn").data({ "opid": opid, oid: oid });
+    var thiss = $(this);
+
+    var product_id = thiss.data("product_id");
+    var model_id = thiss.data("model_id");
+    var type_id = thiss.data("type_id");
+    var price = thiss.data("price");
+    var qty = thiss.data("qty");
+    var sub_type = thiss.data("subtype");
+    var billing_price = thiss.data("billing_price");
+    var oid = thiss.data("oid");
+    var opid = thiss.val();
+
+    $("#update_sale_product_btn").data({opid: opid, oid: oid});
+    console.log(product_id, model_id, type_id, price, qty, sub_type, billing_price, oid, opid);
 
     $("#qty").val(qty);
     $('#product').val(product_id).trigger('change');
@@ -732,21 +739,22 @@ $(document).ready(function () {
         setTimeout(() => {
 
           const subArr = sub_type.split(',').map(s => s.trim());
-
-          $('#sub_type_div input[type="checkbox"], #sub_type_div input[type="radio"]').each(function () {
-            if (subArr.includes($(this).parent().text().trim())) {
-              $(this).prop('checked', true);
-            }
-          });
+          
+          $('#sub_type_div input[type="checkbox"], #sub_type_div input[type="radio"]')
+            .each(function () {
+              if (subArr.includes($(this).parent().text().trim())) {
+                $(this).prop('checked', true);
+              }
+            });
 
           $('#billing_price').val(billing_price);
           $('#machine_price').val(price);
 
-        }, 500);
+        }, 300);
 
-      }, 500);
+      }, 300);
 
-    }, 500);
+    }, 300);
 
   });
 
@@ -756,7 +764,7 @@ $(document).ready(function () {
     var oid = $(this).data("oid")
     var sub_type = ""
     var count = 0
-    $('#sub_type_div input[type="checkbox"]:checked,input[type="radio"]:checked').each(function () {
+    $('#sub_type_div input[type="checkbox"]:checked, #sub_type_div input[type="radio"]:checked').each(function () {
       count = count + 1;
       //console.log$(this).parent().text());
       sub_type = sub_type + $(this).parent().text().trim() + ","
@@ -764,10 +772,16 @@ $(document).ready(function () {
     //console.logsub_type);
 
     sub_type = sub_type.slice(0, -1);
+    
     if (count >= 1 && opid > 0 && oid > 0 && $('#product').val() != "" && $('#pmodel').val() != "" && $('#ptype').val() != "" && $('#qty').val() != "" && $('#billing_price').val() > 0 && $('#machine_price').val() > 0 && cus_id > 0) {
-      update_sales_order_product(oid, opid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), cus_id)
+      update_sales_order_product(oid, opid, $('#ptype').val(), $('#pmodel').val(), sub_type, $('#qty').val(), $('#machine_price').val(), $('#billing_price').val(), cus_id);
+      setTimeout(function(){
+        $("#update_order_btn").trigger("click")
+      }, 1000)
     }
     else {
+      console.log(opid, oid, cus_id);
+
       salert("Warning", "Data missing try again", "warning");
     }
   })
@@ -894,10 +908,10 @@ $(document).ready(function () {
     var t_rem_payment = parseFloat($("#total_payment_m").data("paid_amt"));
     var amnt = parseFloat($(this).val() || 0);
 
-    // alert(t_rem_payment)
+    
 
     if (t_rem_payment > 0) {
-      // alert("1")
+      
       if (t_rem_payment > amnt) {
 
         pt_p = t_rem_payment - amnt;
@@ -921,7 +935,7 @@ $(document).ready(function () {
 
     }
     else if (t_rem_payment <= 0) {
-      // alert("2")
+      
       if (t_payment < amnt && t_rem_payment == 0) {
         pe_a = amnt - t_payment;
         pt_p = -1;
@@ -1451,7 +1465,7 @@ $(document).ready(function () {
 
     if (edit_sec == 1) {
       if (!oid) {
-        // alert(oid)
+        
         salert("Warning", "Data missing, try again", "warning");
         return;
       }
@@ -1962,7 +1976,7 @@ function update_sales_order_product(oid, opid, type_id, model_id, sub_type, requ
 
 function get_sales_advance(cus_id) {
 
-  // alert(cus_id);
+  
 
 
   $.ajax({
@@ -2012,7 +2026,7 @@ function get_sales_advance(cus_id) {
 }
 function get_sales_advance_m(cus_id) {
 
-  // alert(cus_id);
+  
 
 
   $.ajax({
@@ -2417,8 +2431,7 @@ function insert_sales_pay(cus_id) {
 
 
 function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id) {
-  // alert("insert" + current_user_id)
-  //console.logpayment_id, advance_id, amount, oid, cus_id);
+  
 
   $.ajax({
     url: "php/insert_sale_payment_advance.php",
@@ -2470,7 +2483,6 @@ function insert_sale_payment_advance(payment_id, advance_id, amount, oid, cus_id
 }
 
 function update_sales_pay(amount, payment_date, oid, ref_no, utr_no, customer_id, advance_deposite) {
-  // alert("update")
   $.ajax({
     url: "php/insert_sales_payment.php",
     type: "post", //send it through get method
@@ -4546,7 +4558,6 @@ function get_req_order(approve_sts) {
 }
 
 function get_sales_order_single(oid) {
-  // alert(oid)
   $.ajax({
     url: "php/get_sales_order_single.php",
     type: "get", //send it through get method
@@ -5049,7 +5060,7 @@ function get_jaysan_sales_product(oid) {
           obj.forEach(function (obj) {
             count = count + 1;
             total_amount += (Number(obj.price) * Number(obj.required_qty));
-            $('#sales_product').append(" <tr class='small'> <td>" + count + "</td> <td data-product_id='" + obj.product_id + "'>" + obj.produt + "</td> <td data-model_id='" + obj.model_id + "'>" + obj.model_name + "</td> <td data-type_id='" + obj.type_id + "'>" + obj.type_name + "</td> <td>" + obj.sub_type + "</td> <td contenteditable='true'  class='editable-qty'>" + obj.required_qty + "</td> <td contenteditable='true' class='editable-price'>" + obj.price + "</td>   <td contenteditable='true' class='editable-price'>" + obj.billing_amount + "</td> <td><button name='db_edit' value ='" + obj.opid + "' data-oid='" + obj.oid + "' type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa_edit'><i class='fa fa-edit' aria-hidden='true'></i></button> <button name='db_delete' value ='" + obj.opid + "' data-oid='" + obj.oid + "' type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr")
+            $('#sales_product').append(" <tr class='small'> <td>" + count + "</td> <td data-product_id='" + obj.product_id + "'>" + obj.produt + "</td> <td data-model_id='" + obj.model_id + "'>" + obj.model_name + "</td> <td data-type_id='" + obj.type_id + "'>" + obj.type_name + "</td> <td>" + obj.sub_type + "</td> <td contenteditable='true'  class='editable-qty'>" + obj.required_qty + "</td> <td contenteditable='true' class='editable-price'>" + obj.price + "</td>   <td contenteditable='true' class='editable-price'>" + obj.billing_amount + "</td> <td><button  value ='" + obj.opid + "' data-oid='" + obj.oid + "' class='edit-row btn btn-sm border-0 btn-outline-primary' data-product_id=" + obj.product_id + " data-model_id=" + obj.model_id + " data-type_id=" + obj.type_id + " data-price=" + obj.price + " data-qty=" + obj.required_qty + " data-subtype='" + obj.sub_type + "' data-billing_price=" + obj.billing_amount + "> <i class='fa fa-edit'></i></button> <button name='db_delete' value ='" + obj.opid + "' data-oid='" + obj.oid + "' type = 'button' class='btn btn-outline-danger border-0 btn-sm' id='fa-trash'><i class='fa fa-trash' aria-hidden='true'></i></button> </td> </tr>")
 
             // $('#sub_type_div input[type="checkbox"]').prop('disabled', true);
 
@@ -5078,7 +5089,17 @@ function get_jaysan_sales_product(oid) {
                         value="${obj.opid}" name='db_delete' id='fa-trash'>
                         <i class="fa fa-trash"></i>
                       </button>
-                      <button  name='db_edit' value ='${obj.opid}' data-oid="${obj.oid}"  class='btn btn-sm btn-light text-warning delete-row rounded-circle' id='fa_edit'><i class='fa fa-edit' ></i></button>
+                      <button value ='${obj.opid}' data-oid="${obj.oid}" 
+                        class="edit-row btn btn-sm btn-light"
+                        data-product_id="${obj.product_id}"
+                        data-model_id="${obj.model_id}"
+                        data-type_id="${obj.type_id}"
+                        data-price="${obj.price}"
+                        data-qty="${obj.required_qty}"
+                        data-subtype="${obj.sub_type}"
+                        data-billing_price="${obj.billing_amount}">
+                        <i class="fa fa-edit"></i>
+                      </button>
                     </div>
 
                     <!-- Sub scale -->
@@ -5316,13 +5337,7 @@ function insert_sales_order_form() {
         location.reload();
 
       }
-      `<br />
-<b>Fatal error</b>:  Uncaught mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (\`u333142350_jaysan\`.\`sale_order_spares\`, CONSTRAINT \`sale_order_spares_ibfk_3\` FOREIGN KEY (\`emp_id\`) REFERENCES \`employee\` (\`emp_id\`)) in C:\\xampp\\htdocs\\jaysan\\php\\insert_sales_order_form.php:264
-Stack trace:
-#0 C:\\xampp\\htdocs\\jaysan\\php\\insert_sales_order_form.php(264): mysqli-&gt;query('INSERT INTO sal...')
-#1 {main}
-  thrown in <b>C:\\xampp\\htdocs\\jaysan\\php\\insert_sales_order_form.php</b> on line <b>264</b><br />
-`
+      
 
 
 
@@ -5344,7 +5359,11 @@ Stack trace:
 function update_sales_order_form() {
   $('#update_order_btn').attr('disabled', true)
   var productDetails = [];
+  var req_qty = 0;
   $('#sales_product').find('tr').each(function () {
+   
+    req_qty += parseFloat($(this).find('td:eq(5)').text());
+    
     var model = $(this).find('td:eq(2)').attr('data-model_id');
     var type = $(this).find('td:eq(3)').attr('data-type_id');
     var subtype = $(this).find('td:eq(4)').text();
@@ -5413,7 +5432,7 @@ function update_sales_order_form() {
       order_type: $('#order_type :selected').val(),
       oe_supply: $('#oe_supply :selected').val(),
       commitment_date: $('#commitment_date').val(),
-      required_qty: $('#required_qty').val(),
+      required_qty: req_qty,
       color_choice: color_choice,
       color_choice_des: $('#color_choice_des').val(),
       chasis_choice: chasis_choice,
