@@ -16,7 +16,7 @@
         FROM bom_output bo
         JOIN bom_input bi ON bo.bom_id = bi.bom_id
         JOIN parts_tbl pt_hi ON bi.part_id = pt_hi.part_id
-        WHERE bo.bom_id in (898)
+        WHERE bo.bom_id in (975)
         UNION ALL
 
         /* ========= Recursive ========= */
