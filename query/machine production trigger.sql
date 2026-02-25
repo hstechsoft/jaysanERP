@@ -81,7 +81,9 @@ VALUES(
     OLD.chasis_no,
     OLD.dcf_id,
     'UPDATE',
-    NOW()) ; IF NEW.assign_type = 'Production' AND NEW.dcf_id = 0 AND NEW.finished_details = 'no_sts' THEN
+    NOW()) ; 
+    
+    IF NEW.assign_type = 'Production' AND NEW.dcf_id = 0 AND NEW.finished_details = 'no_sts' THEN
 INSERT INTO machine_production(ass_id, dated, line_no)
 VALUES(
     NEW.ass_id,
@@ -110,6 +112,8 @@ line_no =(
         dated = NEW.dated
 ) ;
 END IF ;
+
+
  IF(
     OLD.assign_type = 'Production' AND NEW.assign_type <> 'Production'
 ) OR(
