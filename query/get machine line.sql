@@ -1,0 +1,1 @@
+SELECT mp.ass_id, @rn := @rn + 1 AS line_no FROM machine_production mp CROSS JOIN (SELECT @rn := 0) r ORDER BY mp.dated, mp.line_no;
