@@ -122,4 +122,12 @@ WHERE
     ass_id = OLD.ass_id ;
 END IF ; END $$
 DELIMITER
-    
+
+
+
+CREATE TRIGGER `ml_insert` AFTER INSERT ON `machine_production`
+ FOR EACH ROW INSERT INTO machine_line (ass_id, line_no) VALUES ( NEW.ass_id, NEW.production_id)
+
+
+CREATE TRIGGER `ml_update` AFTER UPDATE ON `machine_production`
+ FOR EACH ROW UPDATE machine_line SET machine_line.ass_id = NEW.ass_id WHERE machine_line.line_no = NEW.production_id
