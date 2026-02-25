@@ -282,6 +282,7 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
             console.log(response);
 
 
+            
 
             if (response.trim() !== 'error') {
 
@@ -475,7 +476,7 @@ function get_bom_correction(bom_id, correction_sts, duplication_sts, component_c
 
                     $("#bom_correction_tbody").append(`
                         <tr>
-                            <td colspan="4" class="text-center text-danger">
+                            <td colspan="5" class="text-center text-danger">
                                 No data found
                             </td>
                         </tr>
