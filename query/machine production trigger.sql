@@ -23,8 +23,7 @@ END$$
 
 DELIMITER;
 
-DELIMITER
-    $$
+DELIMITER $$
 DROP TRIGGER IF EXISTS
     assign_product_after_update $$
 CREATE TRIGGER assign_product_after_update AFTER UPDATE
@@ -124,7 +123,7 @@ FROM
 WHERE
     ass_id = OLD.ass_id ;
 END IF ; END $$
-DELIMITER
+DELIMITER;
 
 
 
