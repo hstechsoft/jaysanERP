@@ -100,8 +100,7 @@ VALUES(
 )
 ON DUPLICATE KEY
 UPDATE
-    dated =
-VALUES(dated),
+    dated = NEW.dated,
 line_no =(
     SELECT
         IFNULL(MAX(line_no),
