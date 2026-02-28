@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+var socket = new WebSocket("wss://jaysan.cloud:8080");
+
+socket.onopen = function() {
+    console.log("Connected ✅");
+};
+
+socket.onmessage = function(e) {
+    console.log("Message from server:", e.data);
+};
+
+socket.onerror = function(e) {
+    console.log("Error ❌", e);
+};
+
+socket.onclose = function() {
+    console.log("Closed");
+};
+</script>
+
+<h2>WebSocket Test</h2>
+
+</body>
+</html>

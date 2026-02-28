@@ -9,7 +9,6 @@ $(document).ready(function () {
 
 
 
-
     $("#menu_bar").load('menu.html',
         function () {
             var lo = (window.location.pathname.split("/").pop());
@@ -43,6 +42,58 @@ $(document).ready(function () {
     get_assign_order();
 
 
+    $('#prepared_by').on('input', function () {
+        //check the value not empty
+        if ($('#prepared_by').val() != "") {
+            $('#prepared_by').autocomplete({
+                //get data from databse return as array of object which contain label,value
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "php/get_emp_auto.php",
+                        type: "get", //send it through get method
+                        data: {
+
+                            emp_name: $('#prepared_by').val()
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+
+                            console.log(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.emp_name,
+                                    value: item.emp_name,
+                                    id: item.emp_id,
+                                    // part_name: item.part_name
+                                };
+                            }));
+
+                        }
+
+                    });
+                },
+                minLength: 2,
+                cacheLength: 0,
+                select: function (event, ui) {
+
+                    $(this).data("emp_id", ui.item.id);
+                    //   $('#part_name_out').data("selected-part_id", ui.item.id);
+                    //   $('#part_name_out').val(ui.item.part_name)
+                    //  get_bom(ui.item.id)
+
+
+                },
+
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append("<div>" + item.label+ "</div>")
+                    .appendTo(ul);
+            };
+        }
+
+    });
 
 
     $("#sale_order").on("change", function () {
@@ -83,12 +134,15 @@ $(document).ready(function () {
             $("#sale_order").val() !== null &&
             $("#chase_no").val() !== "" &&
             $("#prepared_by").val() !== "" &&
-            $("#department").val() !== ""
+            $("#department").val() !== "" &&
+            $("#prepared_by").data("emp_id") !== "" && 
+            $("#prepared_by").data("emp_id") !== undefined
         ) {
 
 
             const chase = $("#chase_no").val();
             const prepare = $("#prepared_by").val();
+            const prepared_by = $("#prepared_by").data("emp_id")
             const department = $("#department").val();
 
             $("#chase_no_val").text(chase);
@@ -105,6 +159,8 @@ $(document).ready(function () {
                 $("#mcd").text(mcd[0] || "");
                 $("#marketing_person_name").text(details.emp_name || "");
                 $("#line_no").text(details.line_no || "");
+                $("#pcd").text(details.date_f || "");
+                $("#transport_type").text(details.loading_type || "");
                 // $("#pcd").text(details.sale_order_date || "");
                 $("#transport_type").text(details.loading_type || "");
                 $("#ins_note").text(details.color_choice || "" + " " + details.any_other_spec || "" + " " + details.any_other_spec || "" + " " + details.color_choice_des || "");
@@ -114,14 +170,18 @@ $(document).ready(function () {
 
                 // Clear old QR code
                 document.getElementById("qrcode").innerHTML = "";
+                // $("#ass_id").html("QR Code: <b class='text-primary'>" + qrData + "</b>");
+                // $("#chase_entry_btn").val(qrData)
 
                 // Generate new QR code
-                new QRCode(document.getElementById("qrcode"), {
-                    text: qrData,
-                    width: 100,
-                    height: 100,
-                });
+                // new QRCode(document.getElementById("qrcode"), {
+                //     text: qrData,
+                //     width: 150,
+                //     height: 150,
+                // });
 
+
+                update_assign_product_fd(qrData, chase, prepared_by)
 
             } else {
                 salert("Error", "No details found for selected sale order", "error");
@@ -146,54 +206,14 @@ $(document).ready(function () {
     //     }, 500);
     // })
     $("#chase_entry_btn").on("click", function (event) {
-        event.preventDefault();
-        // TODO: handle click here
-        var invoiceHtml = $("#chase_entry_table").prop("outerHTML");
 
-        // Encode it to protect HTML structure in POST
-        console.log(invoiceHtml);
-
-        var encodedHtml = encodeURIComponent(invoiceHtml);
-        $.ajax({
-            url: "pdf_handler.php",
-            method: "POST",
-            data: {
-                save_path: "storage/pdf/jobcard",
-                file_name: "jobcard.pdf",
-                unique_file: "yes",
-                header_html: "<h3>Jaysan Agri Industial - Job Card</h3>",
-                footer_html: "<p>Generated by HS Tech Soft ERP</p>",
-                body_html: encodedHtml,
-                orientation: "portrait",
-                paper_size: "A4",
-                stream: "no",
-                // email_to: "nklharish1@gmail.com",
-                // email_subject: "Invoice #1001",
-                // email_body: "Hello, please find attached your invoice.",
-                // pdf_password: "",        // optional
-                // watermark_text: ""       // optional
-            },
-            success: function (res) {
-                console.log(res);
-                if (res.download_url) {
-                    // 3️⃣ open PDF and trigger browser print dialog
-                    const win = window.open(res.download_url, "_blank");
-                    // Some browsers need a delay before printing
-                    const printTimer = setInterval(() => {
-                        if (win.document.readyState === "complete") {
-                            clearInterval(printTimer);
-                            win.focus();
-                            win.print();
-                        }
-                    }, 500);
-                } else {
-                    alert("PDF generated, but no download URL returned");
-                }
-            },
-            error: function (xhr) {
-                alert("Error: " + xhr.responseText);
-            }
-        });
+        print()
+        // if ($(this).val()) {
+        //     update_assign_product_fd($(this).val())
+        // }
+        // else {
+        //     salert("Warning", "Try again later", "warning")
+        // }
     });
 
 
@@ -214,10 +234,130 @@ $(document).ready(function () {
         }
     })
 
+    get_assigned_order();
 
 
+    $("#scanned_data_tbody").on("click", ".qr_f_print", function () {
+        const encodedDetails = $(this).data("all_data");
+        console.log(encodedDetails);
+
+        if (encodedDetails) {
+
+            details = JSON.parse(decodeURIComponent(encodedDetails));
+            $("#customer").val(details.cus_name);
+            console.log(" Details loaded:", details);
+        } else {
+            console.warn("No details found in selected option");
+            details = null;
+        }
+
+        if (details !== null) {
+            var mcd = details.commitment_date.trim().split(" ");
+            $("#sale_order_no").text(details.order_no || "");
+            $("#customer_name").text(details.cus_name || "")
+            $("#model").text(details.model || "");
+            $("#type").text(details.type || "");
+            $("#sub_type").text(details.sub_type || "");
+            $("#mcd").text(mcd[0] || "");
+            $("#marketing_person_name").text(details.emp_name || "");
+            $("#line_no").text(details.line_no || "");
+            $("#pcd").text(details.date_f || "");
+            $("#prepared_by_val").text(details.prepared_by || "");
+            $("#sale_order_no").text(details.order_no || "");
+            $("#line_no").text(details.qr_no || "");
+            $("#transport_type").text(details.loading_type || "");
+            $("#chase_no_val").text(details.chasis_no || "");
+            $("#department_val").text("Assembly");
+            // $("#pcd").text(details.sale_order_date || "");
+            $("#transport_type").text(details.loading_type || "");
+            $("#ins_note").text(details.color_choice || "" + " " + details.any_other_spec || "" + " " + details.any_other_spec || "" + " " + details.color_choice_des || "");
+
+
+            const qrData = details.qr_no;
+
+            // Clear old QR code
+            document.getElementById("qrcode").innerHTML = "";
+            $("#ass_id").html("QR Code: <b class='text-primary'>" + qrData + "</b>");
+            $("#chase_entry_btn").val(qrData)
+
+            // Generate new QR code
+            new QRCode(document.getElementById("qrcode"), {
+                text: qrData,
+                width: 150,
+                height: 150,
+            });
+
+            setTimeout(() => {
+                print();
+            }, 500);
+
+        }
+    })
 });
 
+
+
+
+function get_assigned_order() {
+    $.ajax({
+        url: "php/get_assigned_order.php",
+        type: "get", //send it through get method
+        data: {
+
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != 'error') {
+                $("#scanned_data_tbody").empty();
+                if (response.trim() != '0 results') {
+
+
+                    var obj = JSON.parse(response);
+
+
+                    obj.forEach(function (obj) {
+                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no}</td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
+                            <div class="small">
+                                <div class="fw-semibold">
+                                    ${obj.product}
+                                    <span class="text-muted">${obj.model}</span>
+                                    <span class="badge bg-info text-dark ms-1">${obj.type}</span>
+                                </div>
+
+                                <div class="text-secondary border border-success rounded-2 px-2 py-1 mt-1 bg-light">
+                                    ${obj.sub_type}
+                                </div>
+                            </div>
+                        </td><td class='text-center align-middle'><button class='btn btn-outline-primary  qr_f_print' data-all_data="${encodeURIComponent(JSON.stringify(obj))}"><i class="fa-solid fa-print"></i></button></td></tr>`)
+                    });
+
+                }
+                else {
+                    $("#scanned_data_tbody").append(`<tr><td colspan='4' class="text-center text-danger">No Product Assigned</td></tr>`)
+
+                }
+
+
+
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 function get_assign_order() {
 
@@ -228,13 +368,12 @@ function get_assign_order() {
 
         },
         success: function (response) {
-            // console.log(response);
+            console.log(response);
 
 
 
             if (response.trim() != 'error') {
                 if (response.trim() != '0 results') {
-
 
                     var obj = JSON.parse(response);
                     $("#sale_order").empty();
@@ -308,6 +447,141 @@ function get_assign_order() {
 
 }
 
+function update_assign_product_fd(ass_id, chasis_no, prepared_by) {
+    console.log(ass_id, prepared_by);
+
+    $.ajax({
+        url: "php/update_assign_product_fd.php",
+        type: "post", //send it through get method
+        data: {
+
+            ass_id: ass_id,
+            chasis_no: chasis_no,
+            prepared_by: prepared_by
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() == 'ok') {
+                get_assigned_order_ass_id(ass_id);
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function get_assigned_order_ass_id(ass_id) {
+    console.log(ass_id);
+
+    $.ajax({
+        url: "php/get_assigned_order_ass_id.php",
+        type: "get", //send it through get method
+        data: {
+
+            ass_id: ass_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim() != "error") {
+                if (response.trim() != "0 result") {
+
+                    var obj = JSON.parse(response);
+
+                    obj.forEach(function (items) {
+
+                        $("#qrcode").innerHTML = "";
+                        $("#ass_id").html("QR Code: <b class='text-primary'>" + items.qr_no + "</b>");
+                        // $("#chase_entry_btn").val(qrData)
+
+                        // Generate new QR code
+                        new QRCode(document.getElementById("qrcode"), {
+                            text: items.qr_no,
+                            width: 150,
+                            height: 150,
+                        });
+
+                    });
+                }
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
+
+function print() {
+    var invoiceHtml = $("#chase_entry_table").prop("outerHTML");
+
+    // Encode it to protect HTML structure in POST
+
+    var encodedHtml = encodeURIComponent(invoiceHtml);
+    $.ajax({
+        url: "pdf_handler.php",
+        method: "POST",
+        data: {
+            save_path: "storage/pdf/jobcard",
+            file_name: "jobcard.pdf",
+            unique_file: "yes",
+            header_html: "<h3>Jaysan Agri Industial - Job Card</h3>",
+            footer_html: "<p>Generated by HS Tech Soft ERP</p>",
+            body_html: encodedHtml,
+            orientation: "portrait",
+            paper_size: "A4",
+            stream: "no",
+            // email_to: "nklharish1@gmail.com",
+            // email_subject: "Invoice #1001",
+            // email_body: "Hello, please find attached your invoice.",
+            // pdf_password: "",        // optional
+            // watermark_text: ""       // optional
+        },
+        success: function (res) {
+            console.log(res);
+            if (res.download_url) {
+                // 3️⃣ open PDF and trigger browser print dialog
+                const win = window.open(res.download_url, "_blank");
+                // Some browsers need a delay before printing
+                const printTimer = setInterval(() => {
+                    if (win.document.readyState === "complete") {
+                        clearInterval(printTimer);
+                        win.focus();
+                        win.print();
+                    }
+                }, 500);
+            } else {
+                alert("PDF generated, but no download URL returned");
+            }
+        },
+        error: function (xhr) {
+            alert("Error: " + xhr.responseText);
+        }
+    });
+}
 
 
 
