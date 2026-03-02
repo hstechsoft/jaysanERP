@@ -83,32 +83,21 @@ VALUES(
     NOW()) ; 
     
     IF NEW.assign_type = 'Production' AND NEW.dcf_id = 0 AND NEW.finished_details = 'no_sts' THEN
+      SET @next_line_no = (
+            SELECT IFNULL(MAX(line_no), 0) + 1
+            FROM machine_production
+            WHERE dated = NEW.dated
+        );
 INSERT INTO machine_production(ass_id, dated, line_no)
 VALUES(
     NEW.ass_id,
     NEW.dated,
-    (
-    SELECT
-        IFNULL(MAX(line_no),
-        0) + 1
-    FROM
-        machine_production
-    WHERE
-        dated = NEW.dated
-)
+@next_line_no
 )
 ON DUPLICATE KEY
 UPDATE
     dated = NEW.dated,
-line_no =(
-    SELECT
-        IFNULL(MAX(line_no),
-        0) + 1
-    FROM
-        machine_production
-    WHERE
-        dated = NEW.dated
-) ;
+line_no = @next_line_no ;
 END IF ;
 
 
