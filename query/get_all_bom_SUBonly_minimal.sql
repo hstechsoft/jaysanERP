@@ -15,7 +15,7 @@ CREATE TEMPORARY TABLE tmp_bom_result AS
         FROM bom_output bo
         JOIN bom_input bi ON bo.bom_id = bi.bom_id
         JOIN parts_tbl pt_hi ON bi.part_id = pt_hi.part_id
-        WHERE bo.bom_id in (898)
+        WHERE bo.bom_id in (66952)
         UNION ALL
 
         /* ========= Recursive ========= */
@@ -114,21 +114,21 @@ SELECT tmp_bom_result.*,sum(child_qty) from tmp_bom_result WHERE 1 GROUP BY chil
 -- SELECT parent_bom_in_id,child_qty,parent_bom_in_id,child_input_part FROM tb where child_input_part is not null order by parent_bom_in_id;
 
 --  SELECT tb.*,ifnull(parent_qty,0)-ifnull(child_qty,0) as qty_diff,parent_bom_in_id,child_qty,parent_bom_in_id FROM tb where child_input_part is not null
-UPDATE bom_input bi
-JOIN tmp_bom_result t 
-    ON bi.bom_in_id = t.parent_bom_in_id
-SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty;
+-- UPDATE bom_input bi
+-- JOIN tmp_bom_result t 
+--     ON bi.bom_in_id = t.parent_bom_in_id
+-- SET bi.sub_ass_qty = bi.sub_ass_qty +  t.child_qty;
 
-INSERT INTO bom_input (bom_id, part_id, qty, bom_source, sub_ass_qty)
-SELECT 
-    898,
-    child_input_part,
-    0,
-    'MANUAL',
-    child_qty
-FROM tmp_bom_result WHERE parent_bom_in_id = 0
-ON DUPLICATE KEY UPDATE 
-sub_ass_qty = IFNULL(child_qty,0) + VALUES(sub_ass_qty);
+-- INSERT INTO bom_input (bom_id, part_id, qty, bom_source, sub_ass_qty)
+-- SELECT 
+--     898,
+--     child_input_part,
+--     0,
+--     'MANUAL',
+--     child_qty
+-- FROM tmp_bom_result WHERE parent_bom_in_id = 0
+-- ON DUPLICATE KEY UPDATE 
+-- sub_ass_qty = IFNULL(child_qty,0) + VALUES(sub_ass_qty);
 
 
   
