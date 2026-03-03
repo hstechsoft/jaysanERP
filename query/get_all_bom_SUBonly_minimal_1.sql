@@ -1,4 +1,4 @@
--- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
+-- Active: 1766425908618@@srv1002.hstgr.io@3306@u333142350_jaysan
 
 --  CREATE TEMPORARY TABLE tmp_bom_result AS
     WITH RECURSIVE bom_hi AS (
@@ -16,7 +16,7 @@
         FROM bom_output bo
         JOIN bom_input bi ON bo.bom_id = bi.bom_id
         JOIN parts_tbl pt_hi ON bi.part_id = pt_hi.part_id
-        WHERE bo.bom_id in (975)
+        WHERE bo.bom_id in (66953)
         UNION ALL
 
         /* ========= Recursive ========= */
@@ -24,7 +24,7 @@
             boc.part_id AS output_part,
             bi.bom_in_id as bom_in_id,  
             bi.part_id AS input_part,
-            bi.qty,
+            bi.qty*h.qty AS qty,
             pt.sub_ass,
             h.level + 1,
             boc.component_cat,
