@@ -15,7 +15,7 @@ WITH RECURSIVE bom_hi AS (
             SELECT bo1.component_cat
             FROM bom_output bo1
             WHERE bo1.part_id = bo.part_id
-              AND bo1.component_cat <> 'Process'
+              AND bo1.component_cat <> 'Process' AND bo1.component_cat <> 'Porcess'
             LIMIT 1
         )
 
@@ -36,7 +36,7 @@ WITH RECURSIVE bom_hi AS (
             SELECT bo1.component_cat
             FROM bom_output bo1
             WHERE bo1.part_id = boc.part_id
-              AND bo1.component_cat <> 'Process'
+              AND bo1.component_cat <> 'Process' AND bo1.component_cat <> 'Porcess'
             LIMIT 1
         ) and boc.part_id != h.output_part and boc.component_cat <> 'Process'
 )

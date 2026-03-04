@@ -1,6 +1,15 @@
--- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
+<?php
+
+
+
+
+
+function modify_payment(mysqli $conn, int $bom_id)
+{
+  $correction_check = false;
+$sql_correction_check = "
 with RECURSIVE bom_hi as(SELECT
-    bom_output.bom_id AS parent_bom_id,
+   
     bom_output.component_cat,
     bom_output.part_id AS output_part_id,
     bom_input.part_id AS input_part_id,
@@ -38,12 +47,12 @@ INNER JOIN parts_tbl in_part
     ON in_part.part_id = bom_input.part_id
 LEFT JOIN bom_correction
     ON bom_input.part_id = bom_correction.part_id
-   AND bom_correction.outpart_bom_id = 5236 and bom_correction.bom_output_id = bom_output.bom_id
+   AND bom_correction.outpart_bom_id = $bom_id and bom_correction.bom_output_id = bom_output.bom_id
 
-WHERE bom_output.bom_id = 5236
+WHERE bom_output.bom_id = $bom_id
 UNION ALL
 SELECT 
- bom_output_child.bom_id AS parent_bom_id,
+
     bom_output_child.component_cat,
     bom_output_child.part_id AS output_part_id,
     bom_input_child.part_id AS input_part_id,
@@ -82,6 +91,23 @@ INNER JOIN parts_tbl in_part_child
     ON in_part_child.part_id = bom_input_child.part_id
 LEFT JOIN bom_correction bom_correction_child
     ON bom_input_child.part_id = bom_correction_child.part_id
-   AND bom_correction_child.outpart_bom_id = 5236 and bom_correction_child.bom_output_id = bom_output_child.bom_id
+   AND bom_correction_child.outpart_bom_id = $bom_id and bom_correction_child.bom_output_id = bom_output_child.bom_id
    WHERE bom_output_child.component_cat <> 'Process' AND  bom_hi.correction_status = 'valid'  AND FIND_IN_SET(bom_output_child.part_id, bom_hi.path) = 0)
-   SELECT bom_hi.*,if(FIND_IN_SET(input_part_id,path)>0,'duplicate','valid') as duplication_status FROM bom_hi WHERE 1 order by level;
+  SELECT TRUE as correction_check
+FROM bom_hi
+WHERE correction_status = 'invalid'
+   OR FIND_IN_SET(input_part_id, path) > 0
+LIMIT 1";
+$result_correction_check = $conn->query($sql_correction_check);
+if ($result_correction_check->num_rows > 0) {
+    while($row = $result_correction_check->fetch_assoc()) {
+        $correction_check = $row['correction_check'];
+    }
+return $correction_check;
+
+}
+}
+
+ ?>
+
+
