@@ -1,4 +1,4 @@
--- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
+
 with RECURSIVE bom_hi as(SELECT
     bom_output.bom_id AS parent_bom_id,
     bom_output.component_cat,
