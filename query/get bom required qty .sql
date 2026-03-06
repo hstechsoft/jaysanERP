@@ -63,6 +63,7 @@ LEFT JOIN bom_correction bom_correction_child
   WHERE in_part_child.sub_ass = 0),
 
    bom_input_result as (SELECT input_part_id, SUM(qty) AS total_qty, input_part_name FROM bom_hi WHERE 1 GROUP BY input_part_id order by input_part_id)
+   
    SELECT * FROM bom_input_result
 
    
