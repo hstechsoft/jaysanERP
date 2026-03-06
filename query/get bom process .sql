@@ -12,10 +12,8 @@ with RECURSIVE bom_hi as(SELECT
 
        0 as level,
        CAST(bom_output.part_id AS CHAR(2000)) AS path,
-       CAST(out_part.part_name  AS CHAR(2000)) AS part_path,
-       finished_godown_master.time_taken,
-       finished_godown_master.category,
-       creditors.creditor_name
+       CAST(out_part.part_name  AS CHAR(2000)) AS part_path
+      
 
 
 
@@ -29,8 +27,7 @@ INNER JOIN parts_tbl in_part
 LEFT JOIN bom_correction
     ON bom_input.part_id = bom_correction.part_id
    AND bom_correction.outpart_bom_id = 66958 and bom_correction.bom_output_id = bom_output.bom_id
-   left join finished_godown_master on finished_godown_master.part_id = in_part.part_id
-   LEFT join creditors on creditors.creditor_id = finished_godown_master.godown_id
+   
 
 WHERE bom_output.bom_id = 66958 and in_part.sub_ass = 0
 UNION ALL
@@ -48,11 +45,8 @@ SELECT
  
        level +1 as level,
     CONCAT(bom_hi.path, ',', bom_output_child.part_id) AS path,
-    CONCAT(bom_hi.part_path, '->', out_part_child.part_name) AS part_path,
-    finished_godown_master.time_taken,
-       finished_godown_master.category,
-       creditors.creditor_name
-
+    CONCAT(bom_hi.part_path, '->', out_part_child.part_name) AS part_path
+   
 
 
 FROM bom_output bom_output_child
@@ -66,8 +60,10 @@ INNER JOIN parts_tbl in_part_child
 LEFT JOIN bom_correction bom_correction_child
     ON bom_input_child.part_id = bom_correction_child.part_id
    AND bom_correction_child.outpart_bom_id = 66958 and bom_correction_child.bom_output_id = bom_output_child.bom_id
-   left join finished_godown_master on finished_godown_master.part_id = in_part_child.part_id
-   LEFT join creditors on creditors.creditor_id = finished_godown_master.godown_id
+  WHERE in_part_child.sub_ass = 0),
 
-   WHERE in_part_child.sub_ass = 0)
-   SELECT bom_hi.* FROM bom_hi WHERE 1 order by level;
+   bom_input_result as (SELECT output_part_id, output_part_name FROM bom_hi WHERE 1 GROUP BY output_part_id )
+   SELECT * FROM bom_input_result  LEFT join 
+
+
+   
