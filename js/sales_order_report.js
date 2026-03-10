@@ -4,6 +4,7 @@ var phone_id = urlParams.get('phone_id');
 var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var sub_type_box_value = '';
+var objj = '';
 $(document).ready(function () {
 
 
@@ -475,6 +476,86 @@ $(document).ready(function () {
       $("#" + pricesummary).addClass("d-none");
       $("#" + pricedetails).removeClass("d-none");
     }
+  });
+
+  $("#excel_btn").on("click", function () {
+
+    let data = [];
+
+    data.push([
+      "#",
+      "Order No",
+      "Order Date",
+      "Employee",
+      "Customer",
+      "Product",
+      "Model",
+      "Type",
+      "Description",
+      "Order Qty",
+      "Status",
+      "Production Date",
+      "Delivered Qty",
+      "Balance Qty"
+    ]);
+
+    objj.forEach((order, i) => {
+
+      let products = JSON.parse(order.product);
+
+      products.forEach(p => {
+
+        let production_date = "";
+        let assigntype_total_count = "";
+        let assign_type = "";
+
+        if (p.assign_info && p.assign_info[0]) {
+
+          if (p.assign_info[0].assign_details[0]) {
+            production_date = p.assign_info[0].assign_details[0].production_date || "";
+          }
+
+          assigntype_total_count = p.assign_info[0].assigntype_total_count || "";
+          assign_type = p.assign_info[0].assign_type || "";
+        }
+
+        data.push([
+          i + 1,
+          order.order_no,
+          order.sale_order_date,
+          order.emp_name,
+          order.cus_name,
+          p.product,
+          p.model_name,
+          p.type_name,
+          Array.isArray(p.sub_type) ? p.sub_type.join(", ") : p.sub_type,
+          p.required_qty,
+          assign_type,
+          production_date,
+          assign_type == "Delivered" ? assigntype_total_count : "",
+          p.remain_dcf
+        ]);
+
+      });
+
+    });
+
+    
+    let ws = XLSX.utils.aoa_to_sheet(data);
+
+    
+    let wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sale Order Report");
+
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let yyyy = today.getFullYear();
+
+    let filename = `Sale_Order_Report_${dd}-${mm}-${yyyy}.xlsx`;
+
+    XLSX.writeFile(wb, filename);
+
   });
 });
 
@@ -1078,10 +1159,10 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
         $('#order_table').empty()
         if (response.trim() != "0 result") {
 
-          var obj = JSON.parse(response);
+          objj = JSON.parse(response);
           var count = 0
 
-          obj.forEach(function (obj) {
+          objj.forEach(function (obj) {
             count = count + 1;
 
             var pro = '';
@@ -1344,7 +1425,7 @@ function get_sale_order_report(emp, cust, order_no, statuss, product_name, type,
 
 
 
-            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td class='' style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn " + (block_count > 0 ? "" : ddd )+ " btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
+            $('#order_table').append("<tr class = ''><td>" + count + "</td><td class = 'small' style='max-width: 50px;'>" + obj.order_no + "</td><td class = 'small' style='max-width: 100px;'>" + obj.sale_order_date + "</td> <td class = 'small'>" + obj.emp_name + "</td><td class = 'small ' style='max-width: 250px;'>" + price + "</td> <td class = 'small ' style='max-width: 100px;'>" + obj.cus_name + "-" + obj.cus_phone + "</td><td style='max-width: 250px;'><div>" + pro + "</div></td> <td class='' style='max-width: 50px;'><button type ='button' value='" + obj.oid + "' class='btn btn-outline-primary download border-0'><i class='fa-solid fa-download pe-2'></i></button><button data-emp_id = '" + obj.emp_id + "' type ='button' value='" + obj.oid + "' class='dcf_btn " + (block_count > 0 ? "" : ddd) + " btn btn-outline-primary border-0'><i class='fa-regular fa-file'></i></button></td></tr>")
 
           });
 

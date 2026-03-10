@@ -48,7 +48,7 @@ $(document).ready(function () {
     $("#unamed").text(localStorage.getItem("ls_uname"))
     get_assign_order();
 
-
+    $('#prepared_by').val(current_user_name).data("emp_id", current_user_id);
     $('#prepared_by').on('input', function () {
         //check the value not empty
         if ($('#prepared_by').val() != "") {
@@ -108,7 +108,7 @@ $(document).ready(function () {
         $("#show_customer").prop("checked", false).trigger("change");
         $("#chase_entry_table").addClass("d-none");
         $("#chase_no").val('');
-        $("#prepared_by").val('');
+        // $("#prepared_by").val('');
         // $("#chase_entry_table").empty();
 
         $("#chase_entry_preview_btn").removeClass('d-none')
@@ -157,10 +157,23 @@ $(document).ready(function () {
             $("#department_val").html("<strong>" + department + "</strong>");
 
             if (details !== null) {
+
+                let product = (details.product || "").trim().toLowerCase();
+
+                if (product !== "baler") {
+                    $(".baler_row").hide();
+                    $(".ridgeplaster_row").show();
+                    $("#row_name").text(details.product);
+                } else {
+                    $(".baler_row").show();
+                    $(".ridgeplaster_row").hide();
+                    $("#row_name").text('');
+                }
+
                 var mcd = details.commitment_date.trim().split(" ");
                 $("#sale_order_no").text(details.order_no || "");
                 $("#customer_name").text(details.cus_name || "")
-                $("#model").text(details.model || ""); 
+                $("#model").text(details.model || "");
                 $("#product").text(details.product || "");
                 $("#type").text(details.type || "");
                 $("#sub_type").text(details.sub_type || "");
@@ -215,6 +228,13 @@ $(document).ready(function () {
     // })
     $("#chase_entry_btn").on("click", function (event) {
 
+        $("#sale_order_no").text("");
+        $("#customer_name").text("")
+        $("#model").text("");
+        $("#product").text("");
+        $("#type").text( "");
+        $("#sub_type").text("");
+
         print();
         setTimeout(() => {
             window.location.reload();
@@ -263,19 +283,32 @@ $(document).ready(function () {
         }
 
         if (details !== null) {
+
+            let product = (details.product || "").trim().toLowerCase();
+
+            if (product !== "baler") {
+                $(".baler_row").hide();
+                $(".ridgeplaster_row").show();
+                $("#row_name").text(details.product);
+            } else {
+                $(".baler_row").show();
+                $(".ridgeplaster_row").hide();
+                $("#row_name").text('');
+            }
+
             var mcd = details.commitment_date.trim().split(" ");
-            $("#sale_order_no").text(details.order_no || "");
-            $("#customer_name").text(details.cus_name || "")
-            $("#product").text(details.product || "");
-            $("#model").text(details.model || "");
-            $("#type").text(details.type || "");
-            $("#sub_type").text(details.sub_type || "");
+            // $("#sale_order_no").text(details.order_no || "");
+            // $("#customer_name").text(details.cus_name || "")
+            // $("#product").text(details.product || "");
+            // $("#model").text(details.model || "");
+            // $("#type").text(details.type || "");
+            // $("#sub_type").text(details.sub_type || "");
             $("#mcd").text(mcd[0] || "");
             $("#marketing_person_name").text(details.emp_name || "");
             $("#line_no").text(details.line_no || "");
             $("#pcd").text(details.date_f || "");
             $("#prepared_by_val").text(details.prepared_by || "");
-            $("#sale_order_no").text(details.order_no || "");
+            // $("#sale_order_no").text(details.order_no || "");
             $("#line_no").text(details.qr_no || "");
             $("#transport_type").text(details.loading_type || "");
             $("#chase_no_val").text(details.chasis_no || "");
@@ -302,9 +335,9 @@ $(document).ready(function () {
             setTimeout(() => {
                 print();
                 setTimeout(() => {
-                    window.location.reload();
-                }, 800);
-            }, 500);
+                    // window.location.reload();
+                }, 500);
+            }, 800);
 
         }
     })
@@ -334,7 +367,7 @@ function get_assigned_order() {
 
 
                     obj.forEach(function (obj) {
-                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
+                        $("#scanned_data_tbody").append(`<tr><td class='text-center align-middle'>${obj.qr_no} (QR: ${obj.production_id}) <span class='badge bg-none text-danger float-end'>Sale Order/No: ${obj.order_no}</span></td><td class='text-center align-middle'>${obj.emp_name} - <b class='badge bg-info text-dark'>Customer Name: ${obj.cus_name}</b></td><td class="py-1 text-center align-middle">
                             <div class="small">
                                 <div class="fw-semibold">
                                     ${obj.product}
@@ -396,7 +429,7 @@ function get_assign_order() {
 
 
                     obj.forEach(function (obj) {
-                        let label = obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
+                        let label = "(" + obj.line_no + ") - " + obj.order_no + " - " + obj.product + " - " + obj.cus_name + " - " + obj.commitment_date;
                         if (obj.order_type === "Emergency") {
                             label += " 🚨";
                         }
@@ -472,7 +505,7 @@ function update_assign_product_fd(ass_id, chasis_no, prepared_by) {
 
             ass_id: ass_id,
             chasis_no: chasis_no,
-            prepared_by: prepared_by
+            prepared_by: current_user_id
         },
         success: function (response) {
             console.log(response);

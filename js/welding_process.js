@@ -14,6 +14,7 @@ var process_id_array = [];
 var sel_comp_cat = ""
 var extra_bom = [];
 let editingRow = null;
+var place_filter = 0;
 $(document).ready(function () {
   //   $('[id]').each(function(){
 
@@ -192,6 +193,35 @@ $(document).ready(function () {
       var allWeldingData = [];
       var output_part = "0"
       var count = 0;
+      // var newObj = {}
+      // var extra_bomm = []
+      // $("#godown_table_data tr").each(function () {
+      //   var is_default = 0
+      //   if($(this).find("td").find("input").is(":checked")){
+      //     is_default = 1
+      //   }
+      //   var text = $(this).find("td").eq(5).text().trim();
+
+      //   var parts = text.split(" ");
+
+      //   var min = parts[0];
+      //   var max = parts[1];
+
+      //   newObj = {
+      //     godown_id: $(this).data("godown_id"),
+      //     dep_id: $(this).data("dept_id"),
+      //     dep_sec_id: $(this).data("section_id"),
+      //     dep_sec_machine_id: $(this).data("machine_id"),
+      //     min_time: min,
+      //     max_time: max,
+      //     cost: $(this).find("td").eq(6).text(),
+      //     is_default: is_default
+      //   };
+      //   extra_bomm.push(newObj)
+      // })
+
+      // console.log(extra_bomm);
+
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
         var inputParts = $(this).find("td").eq(1).find("li");
@@ -285,6 +315,37 @@ $(document).ready(function () {
       var allWeldingData = [];
       var output_part = "0";
       var count = 0;
+
+      // var newObj = {}
+      // var extra_bomm = []
+      // $("#godown_table_data tr").each(function () {
+      //   var is_default = 0
+      //   if($(this).find("td").find("input").is(":checked")){
+      //     is_default = 1
+      //   }
+      //   var text = $(this).find("td").eq(5).text().trim();
+
+      //   var parts = text.split(" ");
+
+      //   var min = parts[0];
+      //   var max = parts[1];
+
+      //   newObj = {
+      //     godown_id: $(this).data("godown_id"),
+      //     dep_id: $(this).data("dept_id"),
+      //     dep_sec_id: $(this).data("section_id"),
+      //     dep_sec_machine_id: $(this).data("machine_id"),
+      //     min_time: min,
+      //     max_time: max,
+      //     cost: $(this).find("td").eq(6).text(),
+      //     is_default: is_default
+      //   };
+      //   extra_bomm.push(newObj)
+      // })
+
+      // console.log(extra_bomm);
+
+
       $("#welding_table tr").each(function () {
         var inputPartsArr = [];
 
@@ -325,7 +386,7 @@ $(document).ready(function () {
 
       $.ajax({
 
-        url: 'php/update_wel_process1.php',
+        // url: 'php/update_wel_process1.php',
         method: 'POST',
         data: {
           allWeldingData: JSON.stringify(allWeldingData),
@@ -861,7 +922,167 @@ $(document).ready(function () {
 
 
 
+  $('#godown_filter').on('input', function () {
+    // if ($(this).val().trim() === '') {
+    //   $(this).removeData("godown_id");
+    // }
+    $(this).removeData("godown_id");
+    $('#department_filter').val('').removeData("dept_id");
+    $('#section_filter').val('').removeData("section_id");
 
+    //check the value not empty
+    if ($('#godown_filter').val() != "") {
+      $('#godown_filter').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_creditors_auto.php",
+            type: "get", //send it through get method
+            data: {
+              term: request.term,
+
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.creditor_name,
+                  value: item.creditor_name,
+                  id: item.creditor_id
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("godown_id", ui.item.id);
+          place_filter = ui.item.id;
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
+  $('#department_filter').on('input', function () {
+
+    $(this).removeData("dept_id");
+    $('#section_filter').val('').removeData("section_id");
+    //check the value not empty
+    if ($('#department_filter').val() != "") {
+      $('#department_filter').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_departments_auto.php",
+            type: "get", //send it through get method
+            data: {
+              term: request.term,
+              godown_id: $("#godown_filter").data("godown_id")
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.dep_name,
+                  value: item.dep_name,
+                  id: item.dep_id
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("dept_id", ui.item.id);
+          place_filter = ui.item.id;
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
+
+  $('#section_filter').on('input', function () {
+
+    //check the value not empty     
+    $(this).removeData("sec_id");
+
+    if ($('#section_filter').val() != "") {
+      $('#section_filter').autocomplete({
+        //get data from databse return as array of object which contain label,value
+
+        source: function (request, response) {
+          $.ajax({
+            url: "php/get_sections_auto.php",
+            type: "get", //send it through get method
+            data: {
+              term: request.term,
+              dep_id: $("#department_filter").data("dept_id")
+
+            },
+            dataType: "json",
+            success: function (data) {
+
+              console.log(data);
+              response($.map(data, function (item) {
+                return {
+                  label: item.sec_name,
+                  value: item.sec_name,
+                  id: item.dep_sec_id
+                };
+              }));
+
+            }
+
+          });
+        },
+        minLength: 2,
+        cacheLength: 0,
+        select: function (event, ui) {
+
+          $(this).data("sec_id", ui.item.id);
+          place_filter = ui.item.id;
+
+
+        },
+
+      }).autocomplete("instance")._renderItem = function (ul, item) {
+        return $("<li>")
+          .append("<div><strong>" + item.label + "</strong> - " + item.id + "</div>")
+          .appendTo(ul);
+      };
+    }
+
+  });
 
 
 
@@ -1007,7 +1228,7 @@ $(document).ready(function () {
 
             $("#godown_table_data").append(`
             <tr data-godown_id=${extra_obj.godown_id} data-dept_id=${extra_obj.dep_id} data-section_id=${extra_obj.dep_sec_id} data-machine_id=${extra_obj.dep_sec_machine_id}>
-              <td></td>
+              <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
               <td>${extra_obj.godown_name}</td>
               <td>${extra_obj.dep_name}</td>
               <td>${extra_obj.dep_sec_name}</td>
@@ -1191,8 +1412,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("godown_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           get_department(ui.item.id);
           $("#department_add_btn").removeClass("d-none");
 
@@ -1259,8 +1478,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("dept_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           get_dep_section(ui.item.id);
           $("#department_add_btn").addClass("d-none");
           $("#section_add_btn").removeClass("d-none");
@@ -1349,8 +1566,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("sec_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           get_dep_sec_machine(ui.item.id);
           $("#section_add_btn").addClass("d-none");
           $("#machine_add_btn").removeClass("d-none");
@@ -1437,8 +1652,6 @@ $(document).ready(function () {
         select: function (event, ui) {
 
           $(this).data("mach_id", ui.item.id);
-          //   $('#part_name_out').data("selected-part_id", ui.item.id);
-          //   $('#part_name_out').val(ui.item.part_name)
           // get_dep_section(ui.item.id)
           $("#machine_add_btn").addClass("d-none");
 
@@ -1492,7 +1705,7 @@ $(document).ready(function () {
     var max = $("#max_time").val();
     var cost = $("#cost").val();
     console.log(machine_id, section_id);
-    
+
 
     if ($('#welding_table td.tbl_selected').length > 0) {
       var a = parseInt($('#welding_table td.tbl_selected').html()) - 1;
@@ -1541,7 +1754,7 @@ $(document).ready(function () {
 
         $("#godown_table_data").append(`
         <tr data-godown_id="${godown_id}" data-dept_id="${depart_id}" data-section_id="${section_id}" data-machine_id="${machine_id}">
-          <td></td>
+          <td> <input class="form-check-input" checked type="radio" name="flexRadioDefault" id="default_godown" ></td>
           <td>${godown}</td>
           <td>${depart}</td>
           <td>${section}</td>
@@ -1686,7 +1899,7 @@ function get_dep_sec_machine(sec_id) {
 }
 function insert_dep_sec_machine(sec_id, mach_name) {
   console.log(sec_id, mach_name);
-  
+
   $.ajax({
     url: "php/insert_dep_sec_machine.php",
     type: "get", //send it through get method
@@ -2858,6 +3071,7 @@ function update_input(partId, processId, change_input_id, qty) {
 
 function insert_new_part() {
 
+  var sub_ass = $("#new_sub_ass").is(":checked") ? 1 : 0;
 
   $.ajax({
     url: "php/insert_new_part.php",
@@ -2865,7 +3079,8 @@ function insert_new_part() {
     data: {
       newPartName: $('#newPartName').val(),
       newPartNo: $('#newPartNo').val(),
-      newPartDes: $('#newPartDes').val()
+      newPartDes: $('#newPartDes').val(),
+      sub_ass: sub_ass,
 
     },
     success: function (response) {
