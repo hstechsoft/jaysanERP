@@ -18,9 +18,10 @@ git push origin main
 
 # Push Folder B (second repo)
 Write-Output "Pushing Folder B..."
- cd "E:\web\htdocs\jaysan\php"
+ cd "E:\web\htdocs\jaysan\php"  
     # cd "C:\xampp\htdocs\jaysan\php"
 git add .
 git commit -m "$msg"
 git push origin main
 
+     
