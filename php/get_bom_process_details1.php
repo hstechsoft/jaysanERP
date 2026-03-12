@@ -1,3 +1,20 @@
+<?php
+ include 'db_head.php';
+
+ 
+
+ $process_id = test_input($_GET['process_id']);
+
+ 
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+$data = "'".$data."'";
+return $data;
+}
+  
+$sql = <<<SQL
 WITH RECURSIVE process_wel AS (
     -- Anchor
    select pwt.previous_process_id,
@@ -13,7 +30,7 @@ WITH RECURSIVE process_wel AS (
 
    inner join jaysan_process jp on jp.process_id = pwt.process
     WHERE 
-        pwt.cat = 'out' AND pwt.process_id = 305
+        pwt.cat = 'out' AND pwt.process_id = $process_id
 
     UNION ALL
 
@@ -90,9 +107,22 @@ left JOIN creditors ON creditors.creditor_id = wtm.godown_id
 LEFT JOIN department ON department.dep_id = wtm.dep_id
 LEFT JOIN dep_section ON dep_section.dep_sec_id = wtm.dep_sec_id
 LEFT JOIN  jaysan_machine ON  jaysan_machine.jmid = wtm.machine_id   GROUP BY pw.process_id
-  ORDER by LEVEL DESC
+  ORDER by LEVEL DESC;
+SQL;
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    print json_encode($rows);
+} else {
+  echo "0 result";
+}
+$conn->close();
+
+ ?>
 
 
-
-
-  
