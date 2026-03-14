@@ -741,12 +741,12 @@ $(document).ready(function () {
     $('#addNewProcessModal').modal('show');
   });
 
-$("#set_btn").click(function(){
-  $("#godown_filter, #department_filter, #section_filter").prop("disabled", true);
-})
-$("#refresh_btn").click(function(){
-  window.location.reload();
-})
+  $("#set_btn").click(function () {
+    $("#godown_filter, #department_filter, #section_filter").prop("disabled", true);
+  })
+  $("#refresh_btn").click(function () {
+    window.location.reload();
+  })
 
 
 
@@ -1429,7 +1429,7 @@ $("#refresh_btn").click(function(){
     selectAutocompleteByPartId(part_id); // Replace 1234 with the actual part_id
     get_bom_process_details_summary(part_id, component_cat)
     // get_bom_process_details(part_id, component_cat)
-    // get_bom(part_id, component_cat)
+    get_bom(part_id, component_cat)
   });
 
 
@@ -1448,7 +1448,7 @@ $("#refresh_btn").click(function(){
 
     get_bom_process_details_summary($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     console.log($('#bom_list_select').find(':selected').val());
-    // get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
+    get_bom($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     // get_bom_process_details($('#bom_list_select').find(':selected').data('part_id'), $('#bom_list_select').find(':selected').val())
     sel_comp_cat = $('#bom_list_select').find(':selected').val()
     // $('html, body').animate({
@@ -1473,7 +1473,7 @@ $("#refresh_btn").click(function(){
         $("#process_default").prop("checked", false)
 
       }
-      get_bom(part_id, component_cat)
+      // get_bom(part_id, component_cat)
       get_bom_process_details1(process_id)
 
     }
@@ -1481,6 +1481,11 @@ $("#refresh_btn").click(function(){
       shw_toast("Warning", "Required Data Missing")
     }
   })
+  // $(".add_new_process_btnnnn").click(function () {
+
+  //   get_bom($(this).data("part_id"), $(this).data("component_cat"));
+
+  // })
 
   $("#search_process").on("keyup", function () {
     var value = $(this).val().toLowerCase();
@@ -3107,9 +3112,10 @@ function get_bom_process_details_summary(part_id, component_cat) {
 
 
           });
+          // $(".add_new_process_btnnnn").data({ "part_id": part_id, "component_cat": component_cat });
         }
         else {
-          get_bom(part_id, component_cat)
+          // get_bom(part_id, component_cat)
           $('#multi_process_list').append("<li class='list-group-item'>No Process Found</li>")
           $("#welding_table").empty();
           if ($("#update_btn").hasClass("d-none") == false)
@@ -3185,7 +3191,7 @@ function get_bom(part_id, component_cat) {
               sub_ass = ""
             }
             count = count + 1;
-            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-bal-qty=' ' data-process_details='" + JSON.stringify(obj.process_details) + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
+            $("#bom_list").append("<li data-part_id='" + obj.part_id + "' data-part_no='" + obj.part_no + "' data-part_name='" + obj.part_name + "' data-part_qty='" + obj.qty + "' data-bal-qty=' ' data-process_details='" + obj.process_details + "'  data-process_availble='" + obj.process_availble + "' class='list-group-item'>" + obj.part_name + " - <span class='fw-bold'>" + obj.qty + "</span></span>" + sub_ass + "</li>")
             pname = obj.out_part_name
 
             // $('#bom_table').append("<tr class='small'> <td>"+ count + "</td> <td data-part-id="+obj.part_id+">"+ obj.part_name+ " </td> <td contenteditable='true' class='qty-editable'>"+obj.qty +  "</td> <td><button class='btn btn-outline-danger border-0'><i class='fa fa-trash ' aria-hidden='true'></i></button></td> </tr>") 
@@ -3195,7 +3201,7 @@ function get_bom(part_id, component_cat) {
 
           let main_material =
             count = count + 1;
-          $("#bom_list").append("<li data-part_id='" + $("#bom_list_select").find("option:selected").data("part_id") + "' data-part_no='"+$("#part_no_out").val()+"' data-part_name='"+$("#part_name_out").val()+"' data-part_qty='" + 1 + "' data-bal-qty=' ' data-process_details='" + JSON.stringify($("#bom_list_select").find("option:selected").data("bom_list")) + "'  data-process_availble='" + $("#bom_list_select").find("option:selected").data("process_count") + "' class='list-group-item bold text-bg-info'>" + $("#part_name_out").val() + " - <span class='fw-bold'>" + 1 + "</span></span></li>")
+          $("#bom_list").append("<li data-part_id='" + $("#bom_list_select").find("option:selected").data("part_id") + "' data-part_no='" + $("#part_no_out").val() + "' data-part_name='" + $("#part_name_out").val() + "' data-part_qty='" + 1 + "' data-bal-qty=' ' data-process_details='" + JSON.stringify($("#bom_list_select").find("option:selected").data("bom_list")) + "'  data-process_availble='" + $("#bom_list_select").find("option:selected").data("process_count") + "' class='list-group-item bold text-bg-info'>" + $("#part_name_out").val() + " - <span class='fw-bold'>" + 1 + "</span></span></li>")
 
 
           $('#outpart_txt').text(pname + "(" + component_cat + ")")
