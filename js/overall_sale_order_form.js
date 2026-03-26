@@ -3199,7 +3199,7 @@ function get_sales_order(approve_sts) {
     url: "php/get_sales_report_emp.php",
     type: "get", //send it through get method
     data: {
-      emp_id: current_user_id,
+      emp_id: 'all',
       approve_sts: approve_sts,
       order_cat: "Sales"
     },
@@ -3964,7 +3964,7 @@ function get_sales_order_approval(approve_sts) {
     url: "php/get_sales_report_emp.php",
     type: "get", //send it through get method
     data: {
-      emp_id: current_user_id,
+      emp_id: 'all',
       approve_sts: approve_sts,
       order_cat: "Sales"
     },
@@ -4310,7 +4310,7 @@ function get_req_order(approve_sts) {
     url: "php/get_sales_report_emp.php",
     type: "get", //send it through get method
     data: {
-      emp_id: current_user_id,
+      emp_id: 'all',
       approve_sts: approve_sts,
       order_cat: "Requirement"
     },
@@ -4926,7 +4926,6 @@ function get_jaysan_sales_payment(oid) {
 }
 
 function get_jaysan_sales_payment_m(oid) {
-console.log(oid);
 
 
   $.ajax({
@@ -4958,9 +4957,6 @@ console.log(oid);
             received_details.forEach(function (payment) {
               if (payment.sts == "approved") {
                 sts = "<i class='fa-solid fa-thumbs-up'></i>"
-              }
-              else if (payment.sts == "decline") {
-                sts = "<i class='fa-solid fa-thumbs-down'></i>"
               }
               else
                 sts = "<i class='fa-solid fa-hourglass-half'></i>"
