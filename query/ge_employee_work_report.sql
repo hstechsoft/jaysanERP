@@ -20,7 +20,7 @@ FROM qr_work_entry
     left join production_details_view pv on qr_work_entry.production_id = pv.production_id
     inner join work_done_table wd on qr_work_entry.work_done_id = wd.work_id
     WHERE
-   qr_work_entry.work_done_id = 1865 group by qr_work_entry.qr_work_id),
+   qr_work_entry.work_done_id in()  group by qr_work_entry.qr_work_id),
     qr_summary as ( SELECT qr_summary_wob.*,JSON_ARRAYAGG(JSON_OBJECT('break_time',work_break.break_time,'ext_id',work_break.ext_id,'ex_name',extra_time_master.ex_name)) as break_data,
 
 sum(work_break.break_time) as total_break_time from  qr_summary_wob
@@ -39,8 +39,7 @@ left join assign_product ap on mpt.ass_id = ap.ass_id GROUP BY work_id
 
 
 
-
-
+(select work_id from work_done_table where emp_id = $emp_id and start_date >= '$start_time' and (end_date <= '$end_time' or end_date is null) group by qr_work_entry.qr_work_id)
 
 
 
