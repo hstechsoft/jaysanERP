@@ -57,6 +57,44 @@ $(document).ready(function () {
 
 
 
+function insert_new_process(processId) {
+
+    $.ajax({
+        url: "php/insert_nprocess.php",
+        type: "get", //send it through get method
+        data: {
+
+            process_id: processId,
+            edit_process_id: edit_process_id,
+            input_part_id: sel_input_part_id,
+            output_part_id: sel_output_part_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+
+
+            if (response.trim()) {
+                sessionStorage.setItem('editProcessId', response.trim());
+                sessionStorage.setItem('breadcrumb', $('#out_breadcrumb').html());
+                // Reload the page
+                location.reload();
+            }
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 
