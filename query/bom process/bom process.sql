@@ -50,4 +50,5 @@ WITH RECURSIVE process_flow AS (
 SELECT pf.*, pt.part_name AS input_part_name, pt2.part_name AS output_part_name FROM process_flow pf
 LEFT JOIN parts_tbl pt ON pf.input_part_id = pt.part_id
 LEFT JOIN parts_tbl pt2 ON pf.output_part = pt2.part_id 
+left join jaysan_process 
 ORDER BY level, process_id;
