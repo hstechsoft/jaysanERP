@@ -7,6 +7,7 @@ WITH RECURSIVE process_flow AS (
         i.input_part_id,
         i.previous_process_id,
         i.qty,
+        p.process,
         0 AS level,
         CAST(p.process_id AS CHAR(200)) AS path,
         0 AS is_cycle
@@ -24,6 +25,7 @@ WITH RECURSIVE process_flow AS (
         i2.input_part_id,
         i2.previous_process_id,
         i2.qty,
+        p2.process,
         pf.level + 1,
         CONCAT(pf.path, '->', p2.process_id),
 
@@ -47,8 +49,10 @@ WITH RECURSIVE process_flow AS (
       AND pf.is_cycle = 0
 )
 
-SELECT pf.*, pt.part_name AS input_part_name, pt2.part_name AS output_part_name FROM process_flow pf
+SELECT PF.process_id,pf.output_part,pt2.part_name AS output_part_name,pf.input_part_id, pt.part_name AS input_part_name, jp.process_name AS process_name, jp_in.process_name AS previous_process_name  FROM process_flow pf
 LEFT JOIN parts_tbl pt ON pf.input_part_id = pt.part_id
 LEFT JOIN parts_tbl pt2 ON pf.output_part = pt2.part_id 
-left join jaysan_process 
+left join jaysan_process jp on jp.process_id = pf.process
+left join process_wel_tbl pwl_in on pf.previous_process_id = pwl_in.process_id
+left join jaysan_process jp_in on jp_in.process_id = pwl_in.process
 ORDER BY level, process_id;
