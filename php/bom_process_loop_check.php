@@ -1,3 +1,13 @@
+<?php
+
+
+
+
+
+function correction_check_fn(mysqli $conn)
+{
+  $no_loop = true;
+$sql_loop_check = "
 WITH RECURSIVE process_check AS (
 
     -- 🔹 Start from ALL processes 
@@ -42,4 +52,18 @@ WITH RECURSIVE process_check AS (
 SELECT 
 COUNT(DISTINCT start_process) AS processes_with_cycles
 FROM process_check
-WHERE is_cycle = 1;
+WHERE is_cycle = 1;";
+$result_correction_check = $conn->query($sql_loop_check);
+if ($result_correction_check) {
+    $row = $result_correction_check->fetch_assoc();
+    if ($row['processes_with_cycles'] > 0) {
+        $no_loop = false;
+    }
+}
+return $no_loop;
+
+}
+
+ ?>
+
+

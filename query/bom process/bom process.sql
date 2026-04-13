@@ -47,12 +47,16 @@ WITH RECURSIVE process_flow AS (
 
       -- 🔥 Stop recursion ONLY if already cycle before
       AND pf.is_cycle = 0
-)
+),
 
-SELECT PF.process_id,pf.output_part,pt2.part_name AS output_part_name,pf.input_part_id, pt.part_name AS input_part_name, jp.process_name AS process_name, jp_in.process_name AS previous_process_name  FROM process_flow pf
+input_group as(SELECT pf.process_id,pf.output_part,pt2.part_name AS output_part_name,pf.input_part_id, pt.part_name AS input_part_name,pf.previous_process_id, jp_in.process_name AS previous_process_name, pf.qty,pf.process,jp.process_name AS process_name,pf.level,pf.path  FROM process_flow pf
 LEFT JOIN parts_tbl pt ON pf.input_part_id = pt.part_id
 LEFT JOIN parts_tbl pt2 ON pf.output_part = pt2.part_id 
 left join jaysan_process jp on jp.process_id = pf.process
 left join process_wel_tbl pwl_in on pf.previous_process_id = pwl_in.process_id
 left join jaysan_process jp_in on jp_in.process_id = pwl_in.process
-ORDER BY level, process_id;
+ORDER BY level)
+
+SELECT process_id,output_part,output_part_name, input_part_id,  input_part_name, qty, previous_process_id,  previous_process_name,process,process_name,level,path FROM input_group  ORDER BY level, process_id
+
+-- SELECT process_id,output_part,output_part_name,JSON_ARRAYAGG(JSON_OBJECT('input_part_id', input_part_id, 'input_part_name', input_part_name, 'qty', qty,'previous_process_id', previous_process_id, 'previous_process_name', previous_process_name)) AS input_parts,process,process_name,level,path FROM input_group GROUP BY process_id ORDER BY level, process_id
