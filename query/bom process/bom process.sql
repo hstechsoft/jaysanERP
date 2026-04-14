@@ -57,6 +57,6 @@ left join process_wel_tbl pwl_in on pf.previous_process_id = pwl_in.process_id
 left join jaysan_process jp_in on jp_in.process_id = pwl_in.process
 ORDER BY level)
 
-SELECT process_id,output_part,output_part_name, input_part_id,  input_part_name, qty, previous_process_id,  previous_process_name,process,process_name,level,path FROM input_group  
+-- SELECT process_id,output_part,output_part_name, input_part_id,  input_part_name, qty, previous_process_id,  previous_process_name,process,process_name,level,path FROM input_group  
 
--- SELECT process_id,output_part,output_part_name,JSON_ARRAYAGG(JSON_OBJECT('input_part_id', input_part_id, 'input_part_name', input_part_name, 'qty', qty,'previous_process_id', previous_process_id, 'previous_process_name', previous_process_name)) AS input_parts,process,process_name,level,path FROM input_group GROUP BY process_id ORDER BY level, process_id
+SELECT process_id,output_part,output_part_name,JSON_ARRAYAGG(JSON_OBJECT('input_part_id', input_part_id, 'input_part_name', input_part_name, 'qty', qty,'previous_process_id', previous_process_id, 'previous_process_name', previous_process_name)) AS input_parts,process,process_name,level,path FROM input_group GROUP BY process_id ORDER BY level, process_id

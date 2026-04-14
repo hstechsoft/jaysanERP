@@ -605,15 +605,23 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-12">
+                  <div class="col-6">
                     <div class="form-floating mb-2">
-                      <input type="text" class="form-control rounded-3" id="cost" placeholder="">
+                      <input type="text" class="form-control rounded-3" id="cost" value="0" placeholder="">
                       <label for="cost">Cost
                         <span class="text-danger">*</span> </label>
 
                       <div class="invalid-feedback">
                         Kindly Enter Vaild Data
                       </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="form-check mb-3">
+                      <input class="form-check-input " type="checkbox" value="" id="is_default" style="height: 20px;">
+                      <label class="form-check-label" for="is_default">
+                         Is Default?
+                      </label>
                     </div>
                   </div>
                   <div class="d-flex justify-content-between">
@@ -760,6 +768,29 @@
           <button type="button" class="btn btn-secondary add_new_process_btnnnn" data-bs-dismiss="modal">Add New
             Process</button>
           <button type="button" class="btn btn-primary d-none">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade" id="defaultProcess" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="defaultProcessLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="defaultProcessLabel">Select the Alternative Default Process.</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="default_process_list">
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="default_btn">Set</button>
         </div>
       </div>
     </div>
