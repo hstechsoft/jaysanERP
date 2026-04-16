@@ -2,6 +2,7 @@ WITH RECURSIVE process_flow AS (
 
     -- 🔹 Anchor
     SELECT 
+    p.final_process_id,
         p.process_id,
         p.output_part,
         i.input_part_id,
@@ -20,6 +21,7 @@ WITH RECURSIVE process_flow AS (
 
     -- 🔹 Recursive
     SELECT 
+    p2.final_process_id,
         p2.process_id,
         p2.output_part,
         i2.input_part_id,
@@ -49,7 +51,7 @@ WITH RECURSIVE process_flow AS (
       AND pf.is_cycle = 0
 ),
 
-input_group as(SELECT pf.process_id,pf.output_part,pt2.part_name AS output_part_name,pf.input_part_id, pt.part_name AS input_part_name,pf.previous_process_id, jp_in.process_name AS previous_process_name, pf.qty,pf.process,jp.process_name AS process_name,pf.level,pf.path  FROM process_flow pf
+input_group as(SELECT pf.final_process_id, pf.process_id,pf.output_part,pt2.part_name AS output_part_name,pf.input_part_id, pt.part_name AS input_part_name,pf.previous_process_id, jp_in.process_name AS previous_process_name, pf.qty,pf.process,jp.process_name AS process_name,pf.level,pf.path  FROM process_flow pf
 LEFT JOIN parts_tbl pt ON pf.input_part_id = pt.part_id
 LEFT JOIN parts_tbl pt2 ON pf.output_part = pt2.part_id 
 left join jaysan_process jp on jp.process_id = pf.process
@@ -57,6 +59,13 @@ left join process_wel_tbl pwl_in on pf.previous_process_id = pwl_in.process_id
 left join jaysan_process jp_in on jp_in.process_id = pwl_in.process
 ORDER BY level)
 
-SELECT process_id,output_part,output_part_name, input_part_id,  input_part_name, qty, previous_process_id,  previous_process_name,process,process_name,level,path FROM input_group  
+SELECT input_group.process_id,input_group.final_process_id, input_group.output_part,COALESCE(input_group.output_part_name, CONCAT('semi finished part - ' , final_part.part_name,'(IN -', input_group.process_name, ')'))  as output_part_name, COALESCE(input_group.input_part_id,final_wel.output_part) as input_part_id,  COALESCE(input_group.input_part_name,CONCAT('semi finished part - ' , final_part.part_name,'(from -', input_group.previous_process_name, ')')) as input_part_name, sum(input_group.qty) as qty, input_group.previous_process_id,  input_group.previous_process_name,input_group.process,input_group.process_name,input_group.level,input_group.path FROM input_group  
+left join process_wel_tbl final_wel on final_wel.process_id = input_group.final_process_id
+left join parts_tbl final_part on final_part.part_id = final_wel.output_part
+GROUP BY input_group.process_id,COALESCE(input_group.input_part_id,final_wel.output_part)
+order by input_group.final_process_id 
 
--- SELECT process_id,output_part,output_part_name,JSON_ARRAYAGG(JSON_OBJECT('input_part_id', input_part_id, 'input_part_name', input_part_name, 'qty', qty,'previous_process_id', previous_process_id, 'previous_process_name', previous_process_name)) AS input_parts,process,process_name,level,path FROM input_group GROUP BY process_id ORDER BY level, process_id
+
+
+
+-- SELECT final_process_id,output_part,output_part_name,JSON_ARRAYAGG(JSON_OBJECT('input_part_id', input_part_id, 'input_part_name', input_part_name, 'qty', qty,'previous_process_id', previous_process_id, 'previous_process_name', previous_process_name)) AS input_parts,process,process_name,level,path FROM input_group GROUP BY final_process_id ORDER BY level, final_process_id
