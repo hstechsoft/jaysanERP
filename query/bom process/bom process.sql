@@ -77,8 +77,11 @@ left join department stock_department on stock_department.dep_id = js.dep
 left join department production_department on production_department.dep_id = wtm.dep_id
 left join dep_section stock_sec on stock_sec.dep_sec_id = js.sec
 left join dep_section production_sec on production_sec.dep_sec_id = wtm.dep_sec_id 
-order by process_group.final_process_id, process_group.process_id)
-SELECT  JSON_OBJECT('sec_needed_stock',if(sum(same_sec_stock)>qty,0,qty-sum(same_sec_stock))) as sec_needed_stock, (sum(same_godown_stock)-sum(same_sec_stock) )as internal_transfer, sum(same_godown_stock) as same_godown_stock, sum(same_sec_stock) as same_sec_stock,JSON_ARRAYAGG(JSON_OBJECT('stock_godown_name', stock_godown_name, 'stock_department_name', stock_department_name, 'stock_sec_name', stock_sec_name, 'stock_qty', stock_qty)) as stock_info, sum(stock_qty) as stock_qty, production_godown_name, production_department_name, production_sec_name, production_cost, production_min_time, production_max_time, process_id, final_process_id, output_part, output_part_name, input_part_id, input_part_name, qty, previous_process_id, previous_process_name, process, process_name, level, path FROM stock_group GROUP BY input_part_id,process_id
+order by process_group.final_process_id, process_group.process_id),
+
+stock_cat as(SELECT sum(stock_qty) as total_stock,sum(stock_qty)- sum(same_godown_stock)-sum(same_sec_stock) as outside_stock, sum(same_godown_stock) - sum(same_sec_stock) as godown_stock, sum(same_sec_stock) as same_sec_stock,JSON_ARRAYAGG(JSON_OBJECT('stock_godown_name', stock_godown_name, 'stock_department_name', stock_department_name, 'stock_sec_name', stock_sec_name, 'stock_qty', stock_qty)) as stock_info, sum(stock_qty) as stock_qty, production_godown_name, production_department_name, production_sec_name, production_cost, production_min_time, production_max_time, process_id, final_process_id, output_part, output_part_name, input_part_id, input_part_name, qty, previous_process_id, previous_process_name, process, process_name, level, path FROM stock_group GROUP BY input_part_id,process_id)
+
+SELECT if(outside_stock < qty,qty-total_stock,0) as production_qty, if(same_sec_stock > qty,0,if(godown_stock>(qty-same_sec_stock),qty-same_sec_stock,if(outside_stock > (qty-same_sec_stock-godown_stock),0,qty-same_sec_stock-godown_stock))) as godown_transfer_qty, outside_stock,godown_stock,same_sec_stock,stock_info,stock_qty,production_godown_name,production_department_name,production_sec_name,production_cost,production_min_time,production_max_time,process_id,final_process_id,output_part,output_part_name,input_part_id,input_part_name,qty,previous_process_id,previous_process_name,process,process_name,level,path FROM stock_cat
 
 
 
