@@ -1,8 +1,22 @@
+<?php
+ include 'db_head.php';
+
+$process_id = test_input($_GET['process_id']);
+ 
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+$data = "'".$data."'";
+return $data;
+}
+  
+$sql = <<<SQL
 with RECURSIVE input_group as (
     select 
     previous_process_id, 
     qty,
-    0 as level from input_wel_parts iwp1 WHERE  iwp1.process_id = 2796 
+    0 as level from input_wel_parts iwp1 WHERE  iwp1.process_id = $process_id 
     
     UNION ALL
 SELECT 
@@ -15,7 +29,7 @@ process_available as (
     SELECT previous_process_id as process_available_id, sum(qty) as qty ,level FROM input_group 
     WHERE previous_process_id IS NOT NULL GROUP BY previous_process_id 
     UNION ALL
-    SELECT 2796 as process_available_id,1, 0 as level 
+    SELECT $process_id as process_available_id,1, 0 as level 
 ),
 input_group_details as (
 SELECT process_available_id,
@@ -52,5 +66,29 @@ left join creditors on wtm.godown_id = creditors.creditor_id
 left join department on wtm.dep_id = department.dep_id
 left join dep_section on wtm.dep_sec_id = dep_section.dep_sec_id GROUP BY creditor_id, department.dep_id, dep_section.dep_sec_id  order by level
 
+
+
+
+
+
+
+    
+SQL;
+
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    print json_encode($rows);
+} else {
+  echo "0 result";
+}
+$conn->close();
+
+ ?>
 
 
