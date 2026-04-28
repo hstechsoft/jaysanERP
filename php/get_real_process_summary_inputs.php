@@ -1,10 +1,26 @@
+<?php
+ include 'db_head.php';
+
+$process_id = test_input($_GET['process_id']);
+$qty_needed = test_input($_GET['qty_needed']);
+ 
+ 
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+
+return $data;
+}
+  
+$sql = <<<SQL
 -- Active: 1766425908618@@srv1002.hstgr.io@3306@u333142350_jaysan
 with RECURSIVE input_group as (
     select 
     previous_process_id, 
     qty 
     from input_wel_parts iwp1 
-    WHERE  iwp1.process_id = 2796 
+    WHERE  iwp1.process_id = $process_id 
     
     UNION ALL
 SELECT 
@@ -18,10 +34,10 @@ process_available as (
     SELECT previous_process_id as process_available_id, sum(qty) as qty  FROM input_group 
     WHERE previous_process_id IS NOT NULL GROUP BY previous_process_id 
     UNION ALL
-    SELECT 2796 as process_available_id,1
+    SELECT $process_id as process_available_id,1
 ),
 
-stock_wise as (SELECT process_available.process_available_id, process_available.qty*1 as required_qty,ifnull(sum(js.qty),0) as available_qty, if(ifnull(sum(js.qty),0) < (process_available.qty*1), true, FALSE) as is_not_available FROM process_available 
+stock_wise as (SELECT process_available.process_available_id, process_available.qty* $qty_needed as required_qty,ifnull(sum(js.qty),0) as available_qty, if(ifnull(sum(js.qty),0) < (process_available.qty* $qty_needed), true, FALSE) as is_not_available FROM process_available 
 left join jaysan_stock js on js.process_id = process_available.process_available_id
 GROUP BY process_available.process_available_id),
 --   SELECT * from stock_wise
@@ -40,7 +56,7 @@ GROUP BY process_available.process_available_id),
           
             
         WHERE
-            iwp_parent.process_id = 2796
+            iwp_parent.process_id = $process_id
             and IFNULL((
                 SELECT SUM(js1.qty)
                 FROM jaysan_stock js1
@@ -98,4 +114,26 @@ left join work_time_master wtm on wtm.ori_process_id = process_group.process_id 
 left join creditors production_godown on production_godown.creditor_id = wtm.godown_id
 left join department production_department on production_department.dep_id = wtm.dep_id
 left join dep_section production_sec on production_sec.dep_sec_id = wtm.dep_sec_id 
+
+
+
+    
+SQL;
+
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    print json_encode($rows);
+} else {
+  echo "0 result";
+}
+$conn->close();
+
+ ?>
+
 
