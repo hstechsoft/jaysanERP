@@ -1,21 +1,5 @@
-<?php
- include 'db_head.php';
-
- $oid_arr = ($_GET['oid_arr']);
-
-
- 
- 
-function test_input($data) {
-$data = trim($data);
-$data = stripslashes($data);
-$data = htmlspecialchars($data);
-$data = "'".$data."'";
-return $data;
-}
-
-
- $sql = "SELECT concat(
+-- Active: 1766385460907@@srv1002.hstgr.io@3306@u333142350_jaysan
+SELECT concat(
         '₹', FORMAT(jaysan_payment.amount, 0)
     ) as amount, DATE_FORMAT(
         jaysan_payment.payment_date, '%d-%m-%Y %h:%i %p'
@@ -24,7 +8,7 @@ from jaysan_payment
     inner JOIN sales_order_form on jaysan_payment.oid = sales_order_form.oid
 WHERE
     jaysan_payment.sts = 'approved'
-    and sales_order_form.order_no in ($oid_arr)
+    and sales_order_form.order_no in (460,461)
 
     UNION ALL
 
@@ -42,21 +26,4 @@ from sale_payment_advance
   
 WHERE
    
-     sales_order_form.order_no in ($oid_arr)";
-
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $rows = array();
-    while($r = mysqli_fetch_assoc($result)) {
-        $rows[] = $r;
-    }
-    print json_encode($rows);
-} else {
-  echo "0 result";
-}
-$conn->close();
-
- ?>
-
-
+     sales_order_form.order_no in (460,461)
