@@ -232,6 +232,9 @@ $(document).ready(function () {
 
     $('#print_button').on('click', function () {
 
+        var loc = window.location.origin + "/jaysan/img/jaysan_logo.png";
+
+        $("#dcf_report img").first().attr("src", loc);
         var dcf_id = $(this).val();
 
         if (window.AndroidBridge) {
@@ -268,9 +271,9 @@ $(document).ready(function () {
                 },
                 success: function (res) {
 
-                    let blob = new Blob([data], { type: 'application/pdf' });
-                    let url = URL.createObjectURL(blob);
-                    window.open(url);
+                    // let blob = new Blob([data], { type: 'application/pdf' });
+                    // let url = URL.createObjectURL(blob);
+                    // window.open(url);
                     // 'res' is the PDF blob
                     const reader = new FileReader();
                     reader.onloadend = function () {
@@ -307,6 +310,7 @@ $(document).ready(function () {
         } else {
             // You are in a regular mobile or desktop browser
             console.log("Browser detected");
+
             print()
         }
 
