@@ -9,7 +9,8 @@ with RECURSIVE input_group as (
     UNION ALL
 SELECT 
     iwp2.previous_process_id, 
-    iwp2.qty
+    iwp2.qty*ig.qty as qty,
+    
     from input_wel_parts iwp2
 inner JOIN input_group ig ON iwp2.process_id = ig.previous_process_id 
 ),

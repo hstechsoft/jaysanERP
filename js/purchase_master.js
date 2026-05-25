@@ -51,6 +51,8 @@ $(document).ready(function () {
     $('#part_name').on('input', function () {
         //check the value not empty
         $(this).removeData("part_id");
+        $("#godown_tbody").empty();
+        $(".godown_section").addClass('d-none');
         if ($('#part_name').val() != "") {
             $('#part_name').autocomplete({
                 //get data from databse return as array of object which contain label,value
@@ -294,7 +296,7 @@ $(document).ready(function () {
         var unit = $("#unit").val();
 
         if (unit == 'hrs') {
-            
+
             min = Number(min) * 60;
             max = Number(max) * 60;
         }
@@ -329,6 +331,7 @@ $(document).ready(function () {
         if (part_id) {
             $("#part_name").data("part_id", part_id).val($(this).text().trim());
             purchase_process_entry(part_id);
+            clear();
         }
         else {
             salert("Warning", "Data Missing!, Try Later.", "warning");
@@ -557,17 +560,20 @@ function purchase_process_entry(part_id) {
                                         </tr>`)
                                 })
                             }
+                            else {
+                                $("#godown_tbody").append(`<tr><td colspan='6'><div class="text-center text-muted py-5">
+                                                                <i class="fa fa-table fa-2x mb-2"></i>
+                                                                <p class="mb-0">
+                                                                    Data Table Area<br><span class='text-danger'>No Vendor Found.</span>
+                                                                </p>
+                                                            </div></td></tr>
+                                                        `);
+                            }
                         }
                     })
                 }
                 else {
-                    $("#godown_tbody").append(`<div class="text-center text-muted py-5">
-                                            <i class="fa fa-table fa-2x mb-2"></i>
-                                            <p class="mb-0">
-                                                Data Table Area
-                                            </p>
-                                        </div>
-                    `);
+                    salert("Warning", response, "warning");
                 }
             }
 
@@ -753,11 +759,14 @@ function get_purchase_process_recent() {
 
                     console.log(response);
 
-
+                    var count = 0;
                     obj.forEach(function (obj) {
+                        count += 1;
                         $("#parts_list").append(`<li class="list-group-item" data-part_id='${obj.part_id}'>${obj.part_name}</li>`);
 
                     });
+
+                    $("#part_count").text(count)
                 }
                 else {
                     $("#parts_list").append(`<li class="list-group-item"'>No Data Found</li>`)
