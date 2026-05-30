@@ -21,8 +21,9 @@
 
   <style>
     @media (max-width: 767px) {
+
       table th,
-      table td{
+      table td {
         font-size: 10px;
         padding: 3px;
       }
@@ -67,10 +68,20 @@
             </div>
           </div>
 
+          <div class="form-floating mb-3">
+            <select class="form-select" id="reject_to">
+              <option selected disabled>Choose...</option>
+              <option value="puraches">MRF Puraches</option>
+              <option value="tally">MRF Tally</option>
+              <option value="mrf">MRF</option>
+            </select>
+            <label for="reject_to">Reject to</label>
+          </div>
+
         </div>
         <div class="modal-footer d-flex justify-content-between">
           <button type="submit" class="btn btn-danger " id="reject_btn">Reject</button>
-          <button type="submit" class="btn btn-secondary " id="redo_btn">REDO</button>
+          <!-- <button type="submit" class="btn btn-secondary " id="redo_btn">REDO</button> -->
         </div>
       </div>
     </div>
@@ -602,7 +613,8 @@
         <div class="p-2 rounded-4 shadow-sm bg-light " style="max-height: 80vh; overflow-y: auto;">
           <div class="table-responsive">
             <table class="table caption-top table-bordered  text-center">
-              <caption>Material Request Form - Purchase Entry <input type="text" class="float-lg-end" id="mrf_search" placeholder="Search"></caption>
+              <caption>Material Request Form - Purchase Entry <input type="text" class="float-lg-end" id="mrf_search"
+                  placeholder="Search"></caption>
               <thead>
                 <tr class="small">
                   <th scope="col">#</th>
@@ -658,13 +670,53 @@
 
 
 
+  <!-- Modal -->
+  <div class="modal fade" id="previous_form_modal" tabindex="-1" aria-labelledby="previous_form_modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="previous_form_modalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table class="table small caption-top table-bordered table-striped ">
+              <caption></caption>
+              <thead>
+
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Part</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+
+                </tr>
+              </thead>
+              <tbody id="previous_form_tbody">
+
+
+              </tbody>
+
+
+            </table>
+          </div>
+
+          <div id="print_previous_form"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
 
 
-
-<div id='footer' class="mt-auto"></div>
+  <div id='footer' class="mt-auto"></div>
 
 
 
@@ -694,6 +746,7 @@
   <script src="js/printThis.js" type="module"></script>
   <!-- external js -->
 
+  <script src="js/mrf_report.js" type="module"></script>
   <script src="js/material_request_form_report.js" type="module"></script>
   <script src="js/material_request_form_md1.js" type="module"></script>
   <script src="js/menu.js" type="module"></script>
