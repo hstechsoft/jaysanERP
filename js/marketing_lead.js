@@ -28,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const demoRef = ref(db, 'demo');
+var clicked_capture_live_pic = 0;
 
 onValue(demoRef, (snapshot) => {
   if (snapshot.exists()) {
@@ -43,14 +44,40 @@ onValue(demoRef, (snapshot) => {
 
 window.onLocationReceived = function (lat, lng) {
   console.log("GPS Location received:", lat, lng);
-
+  // alert("GPS Location received:\nLatitude: " + lat + "\nLongitude: " + lng);
   // Example: Show it in an alert or update your UI
   // alert("Latitude: " + lat + "\nLongitude: " + lng);
 
   // You can now use lat and lng for your business logic
   // For example, update a hidden input or send to your server via AJAX
-  $("#lat_input").val(lat);
-  $("#lng_input").val(lng);
+
+  if (lat !== undefined && lat !== "" && lng !== undefined && lng !== "") {
+
+    $("#loca").html("Location received: Lat " + lat + ", Lng " + lng+ " / "+ clicked_capture_live_pic);
+    $("#lat_input").val(lat);
+    $("#lng_input").val(lng);
+
+    if (clicked_capture_live_pic == 1) {
+    $(".waiting").addClass("d-none");
+      $("#lead_attachment_mobile").prop("disabled", true);
+      clicked_capture_live_pic = 0;
+      captureWithDbData();
+    } 
+  } 
+  else {
+    $("#loca").html(`Current Location: <span id="current_location">Not received yet</span>`);
+    swal.fire({
+      title: "Warning",
+      text: "GPS location not received yet. Please Turn On The Location and try again.",
+      icon: "warning",
+      confirmButtonText: "OK"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.AndroidBridge.openLocationSettings();
+      };
+    });
+  }
+
 };
 
 // End Update
@@ -94,18 +121,20 @@ $(document).ready(function () {
     }
   });
 
+  // setTimeout(() => {
+  // $("#demo").trigger("click");}, 500);
 
 
+  AndroidBridge.getLocation();
 
-  $("#demo").on("click", function (event) {
-    event.preventDefault();
-    // TODO: handle click here
-    AndroidBridge.vibrate(200);
-    alert("vibrate")
-    console.log("vibrate");
+  // $("#demo").on("click", function (event) {
+  //   event.preventDefault();
+  //   // TODO: handle click here
+  //   AndroidBridge.vibrate(200);
+  //   console.log("vibrate");
 
-    AndroidBridge.getLocation();
-  });
+  //   AndroidBridge.getLocation();
+  // });
 
 
   $("#qr_btn").on("click", function (event) {
@@ -119,7 +148,14 @@ $(document).ready(function () {
   // 1. Capture a live photo (Auto-compressed to < 256KB)
   $("#lead_attachment_mobile").on("click", function (event) {
     event.preventDefault();
-    captureWithDbData();
+
+    clicked_capture_live_pic = 1;
+
+    $(".waiting").removeClass("d-none");
+
+    AndroidBridge.getLocation();
+
+
   });
 
   $("#select_any_file_btn").on("click", function (event) {
@@ -235,8 +271,8 @@ function insert_mlead() {
       dated: get_cur_millis(),
       emp_id: current_user_id,
       attach_id: attach_id,
-      latti: latti,
-      longi: longi
+      latti: $("#lat_input").val(),
+      longi: $("#lng_input").val()
 
 
 
