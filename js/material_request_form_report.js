@@ -4,12 +4,11 @@ window.demo = function () {
   console.log("Demo function is working!");
   // Add your logic here
 
-
   $("#department_txt").html("selector");
 };
 window.get_material_request_form_details_print = function (mrf_id) {
 
-       $("#mrf_report_card,").removeClass("d-none");
+       $("#mrf_report_card").removeClass("d-none");
   $('html, body').animate({
     scrollTop: $(document).height()
   }, 500);
