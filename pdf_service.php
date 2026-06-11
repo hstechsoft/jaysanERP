@@ -209,7 +209,7 @@ return [
     'message' => '✅ PDF generated successfully!',
     'email_status' => $email_status,
     'file_path' => $params['save_path'],
-    'file_name' => $params['file_name'],
+    'pdf_file_name' => $file_fullname,
     'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path'])
 ];
 }
