@@ -185,13 +185,7 @@ if (!empty($params['email_to'])) {
     $email_status = '📄 File saved (email not sent)';
 }
 // if stream is yes, output PDF directly to browser
-if (strtolower($params['stream']) === 'yes') {
-      ob_end_clean(); // VERY IMPORTANT
 
-    return $pdfOutput;
-   
-}
-else
 // ========= Return JSON =========
 {
 
