@@ -1,33 +1,35 @@
 <?php
 
-ini_set('display_errors', 0);
+ require __DIR__ . '/vendor/autoload.php';
 
-require __DIR__ . '/vendor/autoload.php';
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+function generatePDF(array $params)
+{
+
 
 // ========= Collect Parameters =========
 $params = [
-    'save_path'     => $_POST['save_path'] ?? '',
-    'unique_file'   => $_POST['unique_file'] ?? 'no',
-    'file_name'     => $_POST['file_name'] ?? 'invoice.pdf',
-    'header_html'   => $_POST['header_html'] ?? '',
-    'footer_html'   => $_POST['footer_html'] ?? '',
-    'body_html'     => urldecode($_POST['body_html'] ?? '<h1>No data provided</h1>'),
-    'orientation'   => $_POST['orientation'] ?? 'portrait',
-    'paper_size'    => $_POST['paper_size'] ?? 'A4',
-    'margin_top'    => $_POST['margin_top'] ?? '80px',
-    'margin_bottom' => $_POST['margin_bottom'] ?? '50px',
-    'margin_left'   => $_POST['margin_left'] ?? '40px',
-    'margin_right'  => $_POST['margin_right'] ?? '40px',
-    'email_to'      => $_POST['email_to'] ?? '',
-    'email_subject' => $_POST['email_subject'] ?? 'Invoice',
-    'email_body'    => $_POST['email_body'] ?? 'Please find your invoice attached.',
-    'watermark_text'=> $_POST['watermark_text'] ?? '',
-    'stream'         => $_POST['stream'] ?? 'no'
+    'save_path'     => $params['save_path'] ?? '',
+    'unique_file'   => $params['unique_file'] ?? 'no',
+    'file_name'     => $params['file_name'] ?? 'invoice.pdf',
+    'header_html'   => $params['header_html'] ?? '',
+    'footer_html'   => $params['footer_html'] ?? '',
+    'body_html'     => urldecode($params['body_html'] ?? '<h1>No data provided</h1>'),
+    'orientation'   => $params['orientation'] ?? 'portrait',
+    'paper_size'    => $params['paper_size'] ?? 'A4',
+    'margin_top'    => $params['margin_top'] ?? '80px',
+    'margin_bottom' => $params['margin_bottom'] ?? '50px',
+    'margin_left'   => $params['margin_left'] ?? '40px',
+    'margin_right'  => $params['margin_right'] ?? '40px',
+    'email_to'      => $params['email_to'] ?? '',
+    'email_subject' => $params['email_subject'] ?? 'Invoice',
+    'email_body'    => $params['email_body'] ?? 'Please find your invoice attached.',
+    'watermark_text'=> $params['watermark_text'] ?? '',
+    'stream'         => $params['stream'] ?? 'no'
 ];
 
 // ========= Prepare Save Path =========
@@ -58,7 +60,7 @@ $cssPath = __DIR__ . '/invoice_style.css';
 $css = file_exists($cssPath) ? file_get_contents($cssPath) : '';
 
 $css = str_replace(
-    ['80px', '40px', '50px', '40px'],
+    ['80px', '35px', '50px', '40px'],
     [$params['margin_top'], $params['margin_right'], $params['margin_bottom'], $params['margin_left']],
     $css
 );
@@ -149,7 +151,7 @@ $canvas->page_text(
 $pdfOutput = $dompdf->output();
 if (file_put_contents($params['save_path'], $pdfOutput) === false) {
     header('Content-Type: application/json');
-    echo json_encode(['status' => 'error', 'message' => "❌ Could not save file at {$params['save_path']}"]);
+    return json_encode(['status' => 'error', 'message' => "❌ Could not save file at {$params['save_path']}"]);
     exit;
 }
 
@@ -183,21 +185,30 @@ if (!empty($params['email_to'])) {
 // if stream is yes, output PDF directly to browser
 if (strtolower($params['stream']) === 'yes') {
       ob_end_clean(); // VERY IMPORTANT
-    header('Content-Type: application/pdf');
-    header('Content-Disposition: inline; filename="' . basename($params['save_path']) . '"');
-    echo $pdfOutput;
+
+    return $pdfOutput;
    
 }
 else
 // ========= Return JSON =========
 {
-header('Content-Type: application/json');
-echo json_encode([
-    'pdf_content' => $pdfOutput,
+
+// return json_encode([
+//     'status' => 'ok',
+//     'message' => '✅ PDF generated successfully!',
+//     'email_status' => $email_status,
+//     'file_path' => $params['save_path'],
+//     'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path'])
+// ]);
+
+return [
     'status' => 'ok',
+    'pdf_content' => $pdfOutput,
     'message' => '✅ PDF generated successfully!',
     'email_status' => $email_status,
     'file_path' => $params['save_path'],
     'download_url' => 'pdf_download.php?file=' . urlencode($params['save_path'])
-]);
+];
+}
+
 }

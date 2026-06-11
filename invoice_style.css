@@ -30,7 +30,44 @@ body {
     page-break-after: always;
 }
 
+ul.bootstrap-list,
+ol.bootstrap-list {
+    padding-left: 2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
 
+ul.bootstrap-list li,
+ol.bootstrap-list li {
+    margin-bottom: 0.25rem;
+}
+
+.list-group {
+    padding-left: 0;
+    margin-bottom: 1rem;
+}
+
+.list-group-item {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    list-style: none;
+}
+
+.list-group-item + .list-group-item {
+    border-top: 0;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+}
+
+.list-group-item:last-child {
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
 
 
 
