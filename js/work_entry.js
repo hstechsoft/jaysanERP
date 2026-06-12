@@ -50,6 +50,13 @@ $(document).ready(function () {
   load_extra_time_table();
   check_login();
 
+    $(".extra_time_search").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+
+        $("#extra_time_tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
 
 
   $('#employeeProcessModal').on('show.bs.modal', function () {
@@ -1250,7 +1257,7 @@ $(document).ready(function () {
             scrollTop: $("#workChart").offset().top
           }, 500);
 
-          get_work_summary($("#emp").val(), qrValue, '', JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id);
+          get_work_summary_admin($("#emp").val(), qrValue, '', JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id, work_end_time);
           console.log(qrValue, process_part_array, se.godown_id, se.dep_id, se.sec_id);
 
         }
@@ -1667,12 +1674,12 @@ $(document).ready(function () {
 
   $("#summay_btn").on("click", function () {
 
-    if ($("#paused_work_tbody tr").length <= 0) {
+    if ($("#paused_work_tbody tr").length <= 0 && $("#day_end_time").val()) {
       $("#final_summary").removeClass("d-none");
       get_final_summary_admin();
     }
     else {
-      salert("Warning", "First Complete all the paused work.", "warning");
+      salert("Warning", "First Complete all the paused work / Fill the End Time.", "warning");
     }
 
 
@@ -1701,7 +1708,7 @@ $(document).ready(function () {
 
       if (result.isConfirmed) {
 
-        work_day_end(work_done_id);
+        work_day_end_admin(work_done_id, day_end_time);
 
       }
     });
@@ -1836,7 +1843,7 @@ $(document).ready(function () {
 
     $("#end_day_work").data("process_part_array", process_part_array);
     $("#end_day_work").data("qr_id", '');
-    get_current_work_break($("#emp").val(), work_end_time);
+    get_current_work_break_admin($("#emp").val(), work_end_time);
 
 
   });
@@ -1861,15 +1868,16 @@ $(document).ready(function () {
 
     console.log(process_part_array, break_time_array)
     var se = sec_details()
+    var work_end_time = $("#end_time").val();
 
-    if (!se.godown_id || !se.dep_id || !se.sec_id) {
-      salert("Warning", "Select Section First", "warning");
+    if (!se.godown_id || !se.dep_id || !se.sec_id || !work_end_time) {
+      salert("Warning", "Select Section First / Fill End Time.", "warning");
       return;
     }
 
     if (process_part_array.length > 0 || qr_work_id) {
 
-      get_work_summary($("#emp").val(), qr_work_id, JSON.stringify(break_time_array), JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id);
+      get_work_summary_admin($("#emp").val(), qr_work_id, JSON.stringify(break_time_array), JSON.stringify(process_part_array), se.godown_id, se.dep_id, se.sec_id, work_end_time);
       console.log(se.godown_id, se.dep_id, se.sec_id);
       $('html, body').animate({
         scrollTop: $("#workChart").offset().top
@@ -2018,7 +2026,7 @@ $(document).ready(function () {
     });
   });
 
-  $("#images_summary_btnn").on("click", function () {
+  $("#image_summary_btnn").on("click", function () {
 
     const element = document.getElementById("pdfContentt");
 
@@ -2627,10 +2635,10 @@ function sec_details() {
   return { godown_id, dep_id, sec_id };
 }
 
-function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id) {
+function get_work_summary_admin(emp_id, qr_work_id, break_time_array, process_part_array, godown_id, dep_id, sec_id, work_end_time) {
 
   $.ajax({
-    url: "php/get_work_summary.php",
+    url: "php/get_work_summary_admin.php",
     type: "post",
     data: {
       emp_id,
@@ -2639,7 +2647,8 @@ function get_work_summary(emp_id, qr_work_id, break_time_array, process_part_arr
       process_part_array,
       godown_id,
       dep_id,
-      sec_id
+      sec_id,
+      work_end_time
     },
 
     success: function (response) {
@@ -3156,6 +3165,7 @@ function get_final_summary_admin() {
     type: "get",
     data: {
       emp_id: $("#emp").val(),
+      work_end_time : $("#day_end_time").val()
     },
 
     success: function (response) {
@@ -3167,7 +3177,7 @@ function get_final_summary_admin() {
       try {
         data = JSON.parse(response);
         $("#summay_btn").addClass("d-none")
-        $("#last_end_btn, .day_end_time").removeClass("d-none")
+        $("#last_end_btn").removeClass("d-none")
       } catch (e) {
         salert("Invalid response");
         $("#final_summary").addClass("d-none");
@@ -3592,16 +3602,17 @@ function get_final_summary_admin() {
   });
 }
 
-function work_day_end(work_done_id) {
+function work_day_end_admin(work_done_id, day_end_time) {
 
-  console.log(work_done_id);
+  console.log(work_done_id, day_end_time);
 
   $.ajax({
-    url: "php/work_day_end.php",
+    url: "php/work_day_end_admin.php",
     type: "post", //send it through get method
     data: {
 
       work_done_id: work_done_id,
+      day_end_time: day_end_time
     },
     success: function (response) {
       console.log(response);
@@ -3670,7 +3681,7 @@ function insert_work_done_admin(emp_id, qr_work_id, break_time_array, process_pa
         salert(msg);
         $("#setting_part_tbody").empty();
         $("#setting_part_table").addClass("d-none");
-        get_current_work_details(current_user_id)
+        get_current_work_details(emp_id)
       }
 
 
@@ -3721,9 +3732,11 @@ function update_chasis_no(ass_id, chasis_no) {
 
 }
 
-function get_current_work_break(emp_id, work_end_time) {
+function get_current_work_break_admin(emp_id, work_end_time) {
+  console.log(emp_id, work_end_time);
+  
   $.ajax({
-    url: "php/get_current_work_break.php",
+    url: "php/get_current_work_break_admin.php",
     type: "get", //send it through get method
     data: {
       emp_id: emp_id,
@@ -3845,7 +3858,7 @@ function insert_work_done_table_admin(user_id, godown_id, department_id, section
 
         $("#start_section").addClass("d-none");
         $("#after_start").removeClass("d-none");
-        get_current_work_details(current_user_id);
+        get_current_work_details(user_id);
       }
 
 
@@ -3922,7 +3935,7 @@ function insert_qr_work_entry(emp_id, qr_code, sec_id, work_done_id) {
 
       if (response.trim() == "ok") {
         $("#start_work").prop("disabled", true).text("Time Started");
-        get_current_work_details(current_user_id);
+        get_current_work_details(emp_id);
         // get_current_work_break(current_user_id);
       }
 
@@ -4198,7 +4211,7 @@ function get_current_work_details(emp_id) {
             $("#timing_section").addClass("d-none");
           }
 
-          $("#day_start_time").text(obj.start_time).data("work_done_id", obj.work_done_id);
+          $("#day_start_time_at").text(obj.day_start_time).data("work_done_id", obj.work_done_id);
           $("#batch_id").text("JS" + obj.work_done_id);
 
           let in_process_work_entries = Array.isArray(obj.in_process_work_entries) ? obj.in_process_work_entries : [];

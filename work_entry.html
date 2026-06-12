@@ -261,6 +261,27 @@
       box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
     }
 
+    #workChart {
+      width: 400px !important;
+      height: 400px !important;
+      margin: auto;
+      display: block;
+    }
+
+    #finalWorkChart {
+      width: 400px !important;
+      height: 400px !important;
+      margin: auto;
+      display: block;
+    }
+
+    #workChart_report {
+      width: 400px !important;
+      height: 400px !important;
+      margin: auto;
+      display: block;
+    }
+
     /* header */
 
     .start-header h1 {
@@ -527,7 +548,7 @@
 <body>
   <div class="modal fade" id="extra_time_master" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="extra_time_masterLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable     ">
+    <div class="modal-dialog modal-dialog-scrollable  modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="extra_time_masterLabel">Extra Time Creation</h5>
@@ -615,7 +636,12 @@
               <thead class="table-primary small">
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
+                  <th class="d-flex">Name
+                    <div class="input-group input-group-sm mb-3">
+                      <span class="input-group-text">🔍</span>
+                      <input type="text" class="form-control extra_time_search" placeholder="Search Extra Time">
+                    </div>
+                  </th>
                   <th>Type</th>
                   <th>Start</th>
                   <th>End</th>
@@ -624,7 +650,7 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody class="small"></tbody>
+              <tbody class="small" id="extra_time_tbody"></tbody>
             </table>
           </div>
         </div>
@@ -1198,7 +1224,7 @@
 
       <div class="container py-2 d-none" id="after_start">
         <div class="d-flex justify-content-between" style="font-size: 15px;">
-          <p class="text-center">Your Day Started At <b id="day_start_time" class="badge bg-success"></b>
+          <p class="text-center">Your Day Started At <b id="day_start_time_at" class="badge bg-success"></b>
           </p>
           <p class="text-center">Your Batch ID <b id="batch_id" class="badge bg-primary"></b>
           </p>
@@ -1309,7 +1335,7 @@
                           <label for="end_time">End Time</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary " id="add_setting_part_btn">Add
+                        <button type="submit" class="btn btn-primary my-2" id="add_setting_part_btn">Add
                           Work</button>
 
                         <div class="card shadow p-3 mt-2 text-center report-card">
@@ -1377,7 +1403,7 @@
         </div>
 
 
-        <div class="table-responsive my-2" style="max-height: 25vh; overflow-y: auto;">
+        <div class="table-responsive my-2" style="max-height: 25vh; overflow-y: auto; display: none;">
           <table class="table caption-top table-bordered table-striped ">
             <caption class="text-danger" style="font-size: 15px">Paused Works</caption>
             <thead style="position: sticky; z-index: 5; top: 0; background-color: #d9eaff;">
@@ -1409,7 +1435,7 @@
                 Work Completed List
               </button>
             </h6>
-            <div id="work_completed_list" class="accordion-collapse collapse " aria-labelledby="headingOne2"
+            <div id="work_completed_list" class="accordion-collapse collapse show" aria-labelledby="headingOne2"
               data-bs-parent="#accordionExample">
               <div class="accordion-body">
                 <div class="card shadow-sm">
@@ -1536,11 +1562,11 @@
 
         </div>
 
-        
-          <div class="form-floating my-2 d-none day_end_time">
-            <input type="datetime-local" class="form-control rounded-3" id="day_end_time" placeholder="">
-            <label for="day_end_time">Day End Time</label>
-          </div>
+
+        <div class="form-floating my-2">
+          <input type="datetime-local" class="form-control rounded-3" id="day_end_time" placeholder="">
+          <label for="day_end_time">Day End Time</label>
+        </div>
 
         <div class="d-flex justify-content-center mt-1">
           <button type="button" class="btn btn-secondary " id="summay_btn">Work Summary</button>
