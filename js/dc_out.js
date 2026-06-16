@@ -233,128 +233,145 @@ $(document).ready(function () {
 
         $(".out_stock").append(`<strong class='text-secodary small'>${output_part_name} <span class='float-end badge bg-success'>${output_part_qty} - Qty</span></strong>`);
 
+        let firstEligibleFound = false;
+
         if (Array.isArray(stockData)) {
 
             stockData.forEach(function (item, index) {
 
                 let reserveBody = "";
 
+                // Check if current row should be disabled
+                let isDisabled = (item.same_des_godown == 1 || item.godown == 1233);
+
+                // Determine value
+                let qtyValue = 0;
+
+                if (!isDisabled && !firstEligibleFound) {
+                    qtyValue = need_qty;
+                    firstEligibleFound = true;
+                }
+
                 if (item.reserve_details && item.reserve_details.length > 0) {
 
                     item.reserve_details.forEach(function (reserve) {
 
                         reserveBody += `
-                        <div class="reserve-type-card">
+                            <div class="reserve-type-card">
 
-                            <div class="reserve-type-header">
-                                ${val(reserve.reserve_type).toUpperCase()}
-                            </div>
+                                <div class="reserve-type-header">
+                                    ${val(reserve.reserve_type).toUpperCase()}
+                                </div>
 
-                            <div class="p-2">
+                                <div class="p-2">
 
-                                <table class="table table-sm table-bordered mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Type ID</th>
-                                            <th>Qty</th>
-                                            <th>Reserve ID</th>
-                                        </tr>
-                                    </thead>
+                                    <table class="table table-sm table-bordered mb-0" ${item.reserve_qty == 0 ? 'disabled' : ''}>
+                                        <thead>
+                                            <tr>
+                                                <th>Type ID</th>
+                                                <th>Qty</th>
+                                                <th>Reserve ID</th>
+                                            </tr>
+                                        </thead>
 
-                                    <tbody>
-                    `;
+                                        <tbody>
+                            `;
 
-                        if (reserve.details && reserve.details.length > 0) {
+                        if (reserve.reserve_details && reserve.reserve_details.length > 0 && item.reserve_qty > 0) {
 
-                            reserve.details.forEach(function (detail) {
+                            reserve.reserve_details.forEach(function (detail) {
 
                                 reserveBody += `
-                                <tr>
-                                    <td>${val(reserve.reserve_type)}</td>
-                                    <td>${num(detail.reserve_qty)}</td>
-                                    <td>${num(detail.reserve_id)}</td>
-                                </tr>
-                            `;
+                                    <tr>
+                                        <td>${val(reserve.reserve_type)}</td>
+                                        <td>${num(detail.reserve_qty)}</td>
+                                        <td>${num(detail.reserve_id)}</td>
+                                    </tr>
+                                    `;
                             });
+                        }
+                        else {
+                            reserveBody += `<tr><td colspan='3'><div class="text-danger text-center">No Reserve Details Available</div></td></tr>`;
                         }
 
                         reserveBody += `
-                                    </tbody>
-                                </table>
+                            </tbody>
+                        </table>
 
-                            </div>
+                    </div>
 
-                        </div>
-                    `;
+                </div>`;
                     });
                 }
 
                 $("#stock_reserve_accordion").append(`
 
-                <div class="accordion-item">
+                                    <div class="accordion-item">
 
-                    <h2 class="accordion-header">
+                                        <h2 class="accordion-header">
 
-                        <button class="accordion-button collapsed"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#stockReserve${index}">
+                                            <button class="accordion-button collapsed"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#stockReserve${index}">
 
-                            <div class="w-100">
+                                                <div class="w-100">
 
-                                <div class="row align-items-center">
+                                                    <div class="row align-items-center">
 
-                                    <div class="col-md-6 text-start">
-                                        <small class="text-muted">Godown</small><br>
-                                        <span class="fw-semibold small">
-                                            ${val(item.godown_name)}
-                                        </span>
-                                    </div>
+                                                        <div class="col-md-6 text-start">
+                                                            <small class="text-muted">Godown</small><br>
+                                                            <span class="fw-semibold small">
+                                                                ${val(item.godown_name)}
+                                                            </span>
+                                                        </div>
 
-                                    <div class="col-2 text-center">
-                                        <small class="text-muted">Stock</small><br>
-                                        <span class="badge bg-primary">
-                                            ${num(item.qty)}
-                                        </span>
-                                    </div>
+                                                        <div class="col-2 text-center">
+                                                            <small class="text-muted">Stock</small><br>
+                                                            <span class="badge bg-primary">
+                                                                ${num(item.qty)}
+                                                            </span>
+                                                        </div>
 
-                                    <div class="col-2 text-center">
-                                        <small class="text-muted">Reserved</small><br>
-                                        <span class="badge bg-warning text-dark">
-                                            ${num(item.reserve_qty)}
-                                        </span>
-                                    </div>
+                                                        <div class="col-2 text-center">
+                                                            <small class="text-muted">Reserved</small><br>
+                                                            <span class="badge bg-warning text-dark">
+                                                                ${num(item.reserve_qty)}
+                                                            </span>
+                                                        </div>
 
-                                    <div class="col-2 text-center">
-                                        <input type="number" class="form-control form-control-sm rounded-3" value=${index == 0 ? need_qty : 0} (${item.same_des_godown == 1 ? "disabled" : ''})
-                                            id="allo_qty" data-stock_id="${item.stock_id}" placeholder='Qty'>
-                                    </div>
+                                                        <div class="col-2 text-center">
+                                                            <input type="number"
+                                                                class="form-control form-control-sm rounded-3"
+                                                                value="${qtyValue}"
+                                                                ${isDisabled ? "disabled" : ""}
+                                                                id="allo_qty"
+                                                                data-stock_id="${item.stock_id}"
+                                                                placeholder="Qty">
+                                                        </div>
 
+                                                    </div>
 
-                                </div>
+                                                </div>
 
-                            </div>
+                                            </button>
 
-                        </button>
+                                        </h2>
 
-                    </h2>
+                                        <div id="stockReserve${index}"
+                                            class="accordion-collapse collapse"
+                                            data-bs-parent="#stock_reserve_accordion">
 
-                    <div id="stockReserve${index}"
-                         class="accordion-collapse collapse"
-                         data-bs-parent="#stock_reserve_accordion">
+                                            <div class="accordion-body">
 
-                        <div class="accordion-body">
+                                                ${reserveBody}
 
+                                            </div>
 
-                            ${reserveBody || '<div class="text-muted">No Reserve Details Available</div>'}
+                                        </div>
 
-                        </div>
-
-                    </div>
-
-                </div>
-
-            `);
+                                    </div>`
+                );
             });
         }
 
@@ -476,9 +493,7 @@ $(document).ready(function () {
 
                     </div>
 
-                </div>
-
-            `);
+                </div>`);
             });
         }
 
@@ -559,16 +574,9 @@ $(document).ready(function () {
             }
         })
 
-
-        // var stock_id_str = stock_id.join(",");
-        // var qty_cou_str = qty_cou.join(",");
-
         console.log(stock_id_qty);
-        // console.log(qty_cou_str);
-        // console.log(qty);
 
         row.find("td").eq(4).find("input").data("stock_id_qty", stock_id_qty);
-        // row.find("td").eq(4).find("input").data("qty_cou", qty_cou_str);
         row.find("td").eq(4).find("input").val(qty);
 
 
@@ -595,6 +603,14 @@ $(document).ready(function () {
         let contact_no = $("#contact_no").val() || '';
         let vehicle_description = $("#vehicle_description").val() || '';
         let e_invoice = $("#e_invoice").val() || '';
+        let mode_of_payment = $("#mode_of_payment").val() || '';
+        let supplier_ref_order_no = $("#supplier_ref_order_no").val() || '';
+        let dispatch_doc_no = $("#dispatch_doc_no").val() || '';
+        let dispatched_through = $("#vehicle_type").val() || '';
+        let date_time_of_issue = $("#date_time_of_issue").val() || '';
+        let duration_of_process = $("#duration_of_process").val() || '';
+        let nature_of_processing = $("#nature_of_processing").val() || '';
+        let challan_no = $("#challan_no").val() || '';
 
         let emp_id = current_user_id;
         let dc_type = "dc";
@@ -628,11 +644,6 @@ $(document).ready(function () {
                     qty: qty,
                     rate: rate,
                 });
-                dc_process.push({
-                    process_id: process_id,
-                    qty: qty,
-                    rate: rate,
-                });
                 stock_id_qty.forEach(item => {
                     dc_parts_location.push({
                         emp_id: emp_id,
@@ -640,6 +651,18 @@ $(document).ready(function () {
                         qty: item.qty
                     });
                 });
+
+                let existing = dc_process.find(item => item.process_id == process_id);
+
+                if (existing) {
+                    existing.qty += qty;
+                } else {
+                    dc_process.push({
+                        process_id: process_id,
+                        qty: qty,
+                        rate: 0
+                    });
+                }
             }
         });
 
@@ -663,10 +686,10 @@ $(document).ready(function () {
             return;
         }
 
-        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
+        console.log(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, parts, dc_parts_location, dc_process);
 
 
-        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, JSON.stringify(parts), JSON.stringify(dc_parts_location), JSON.stringify(dc_process));
+        insert_delivery_challan(dc_no, dc_date, transport_mode, vehicle_description, vehicle_no, driver_name, contact_no, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, from_godown_id, godown_id, bill_to, ship_to, transport_godown, JSON.stringify(parts), JSON.stringify(dc_parts_location), JSON.stringify(dc_process));
     })
 
     $("#transport_modal_btn").on("click", function () {
@@ -872,7 +895,7 @@ function get_company_dc(godown_id) {
 
 }
 
-function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, transport_godown, dc_parts, dc_parts_location, dc_process) {
+function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, vehicle_no, driver_name, driver_contact, mode_of_payment, supplier_ref_order_no, dispatch_doc_no, dispatched_through, date_time_of_issue, duration_of_process, nature_of_processing, challan_no, emp_id, dc_type, dc_from, dc_to, bill_to, ship_to, transport_godown, dc_parts, dc_parts_location, dc_process) {
 
     $.ajax({
         url: "php/insert_delivery_challan.php",
@@ -886,14 +909,14 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, 
             vehicle_no: vehicle_no,
             driver_name: driver_name,
             driver_contact: driver_contact,
-            mode_of_payment: '',
-            supplier_ref_order_no: '',
-            dispatch_doc_no: '',
-            dispatched_through: '',
-            date_time_of_issue: '',
-            duration_of_process: '',
-            nature_of_processing: '',
-            challan_no: '',
+            mode_of_payment: mode_of_payment,
+            supplier_ref_order_no: supplier_ref_order_no,
+            dispatch_doc_no: dispatch_doc_no,
+            dispatched_through: dispatched_through,
+            date_time_of_issue: date_time_of_issue,
+            duration_of_process: duration_of_process,
+            nature_of_processing: nature_of_processing,
+            challan_no: challan_no,
             emp_id: emp_id,
             dc_type: dc_type,
             dc_from: dc_from,
@@ -909,14 +932,12 @@ function insert_delivery_challan(dc_no, dc_date, transport_mode, transport_des, 
             console.log(response);
 
             console.log(response.status);
-            console.log(
-                'http://localhost/jaysan/' + response.download_url
-            );
+            console.log('http://localhost/jaysan/' + response.download_url);
+
             if (response.status == 'ok') {
 
                 window.open(
-                    'http://localhost/jaysan/' + response.download_url,
-                    '_blank'
+                    'http://localhost/jaysan/' + response.download_url, '_blank'
                 );
 
             }
@@ -952,8 +973,8 @@ function get_transport_all(godown_id) {
 
             if (response.trim() != "error") {
                 $(".dc_details").empty();
-                $("#transport_modal").modal('show');
                 if (response.trim() != "0 results") {
+                    $("#transport_modal").modal('show');
 
                     var obj = JSON.parse(response);
                     var count = 0;
