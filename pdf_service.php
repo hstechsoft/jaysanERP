@@ -199,7 +199,7 @@ if (!empty($params['email_to'])) {
 
 return [
     'status' => 'ok',
-    'pdf_content' => $pdfOutput,
+    
     'message' => '✅ PDF generated successfully!',
     'email_status' => $email_status,
     'file_path' => $params['save_path'],
