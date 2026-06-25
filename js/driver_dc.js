@@ -54,6 +54,7 @@ $(document).ready(function () {
         $(this).removeData("godown_id");
         $("#dc_switch").prop("checked", false);
         $(".dc_details").empty();
+        $(".dc_filess").prop("disabled", true);
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -91,7 +92,7 @@ $(document).ready(function () {
 
                     $(this).data("godown_id", ui.item.id);
                     get_transport_parts_dc(ui.item.id);
-
+                    $(".dc_filess").prop("disabled", false);
 
                 },
 
@@ -134,7 +135,7 @@ $(document).ready(function () {
         if ($(this).is(":checked")) {
             $(".dc_title").text("DC Unload Details");
             $(this).next('label').text("DC Load Details");
-            get_transport_unload_parts($('#godown').data("godown_id"))
+            get_transport_unload_parts($('#godown').data("godown_id"));
         }
         else {
             $(".dc_title").text("DC Load Details");
@@ -156,11 +157,113 @@ $(document).ready(function () {
         }
     })
 
+    // $("#dc_file_upload").on("change", function () {
+    //     if (this.files.length > 0) {
+
+    //         let godown_id = $("#godown").data("godown_id");
+    //         let file = this.files[0];
+
+    //         let formData = new FormData();
+    //         formData.append("file", file);
+    //         formData.append("godown_id", godown_id);
+    //         $(".loading").removeClass("d-none");
+
+    //         upload_dc(formData);
+    //     }
+    // });
+
+    $("#dc_file_upload").on("click", function (event) {
+        event.preventDefault();
+        uploadFile();
+    });
+
+
+    window.onLocationReceived = function (lat, lng) {
+        console.log("GPS Location received:", lat, lng);
+
+        // Example: Show it in an alert or update your UI
+        // alert("Latitude: " + lat + "\nLongitude: " + lng);
+
+        // You can now use lat and lng for your business logic
+        // For example, update a hidden input or send to your server via AJAX
+        $("#lat_input").val(lat);
+        $("#lng_input").val(lng);
+        get_godown_location(lat, lng)
+    };
+
+    // Global callbacks called by the Android app
+    window.onUploadSuccess = function (response) {
+        console.log("Upload Success:", response);
+        $(".loading").addClass("d-none");
+        salert("Success", "Image Uploaded Successfully.", "succes");
+    };
+
+    window.onUploadError = function (error) {
+        $(".loading").addClass("d-none");
+        console.error("Upload Error:", error);
+        salert("Warning", "Upload failed. Error code: " + error, "warning");
+    };
+
+
+
+    if (phone_id) {
+
+        AndroidBridge.getLocation();
+    }
+
+    $("#dc_file").on("click", function (event) {
+        event.preventDefault();
+        captureWithDbData();
+
+    });
+
+    $("#save_map_btn").on("click", function () {
+
+        let lati = $("#lat_input").val();
+        let long = $("#lng_input").val();
+
+        let godown_id = $("#godown").data("godown_id");
+
+        if (lati && long && godown_id) {
+            update_godown_location1(lati, long, godown_id);
+        } else {
+            salert(
+                "Warning",
+                "Data Is Missing! Please provide map coordinates and vendor.",
+                "warning"
+            );
+        }
+    });
+
 
 
 
 });
 
+
+function upload_dc(formData) {
+
+    $.ajax({
+        url: "php/upload_dc.php",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "Success") {
+                $(".loading").addClass("d-none");
+                alert("DC uploaded successfully");
+            }
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
 
 
 function get_godown_wise_process(godown_id) {
@@ -481,6 +584,7 @@ function get_transport_parts_dc(godown_id) {
 
                         $(".dc_details").append(html);
 
+                        // $("#dc_file_upload").trigger("click");
                     });
 
                 }
@@ -586,7 +690,7 @@ function get_transport_unload_parts(godown_id) {
                                                         </strong>
 
                                                         <span class="badge bg-primary">
-                                                            ${item.reserve_type.toUpperCase()}
+                                                            ${item.reserve_type}
                                                         </span>
                                                     </div>
 
@@ -616,32 +720,32 @@ function get_transport_unload_parts(godown_id) {
 
                                         ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
 
-                            group.parts.forEach(function (part) {
+                            // group.parts.forEach(function (part) {
 
-                                stock_id_qty.push({
-                                    stock_reserve_id: part.stock_reserve_id,
-                                    qty: part.qty
-                                });
+                            stock_id_qty.push({
+                                stock_reserve_id: group.stock_reserve_id,
+                                qty: group.qty
+                            });
 
-                                html += `
+                            html += `
                                         <div class="d-flex justify-content-between align-items-center py-1 border-bottom">
 
                                             <div class="flex-grow-1 pe-2">
                                                 <div class="fw-semibold small">
-                                                    ${part.part_name}
+                                                    ${group.part_name}
                                                 </div>
 
                                                 <small class="text-muted">
-                                                    ${part.process_name}
+                                                    ${group.process_name}
                                                 </small>
                                             </div>
 
                                             <span class="badge bg-secondary">
-                                                ${part.qty}
+                                                ${group.qty}
                                             </span>
 
                                         </div>`;
-                            });
+                            // });
 
                             html += `</div>`;
                         });
@@ -653,6 +757,7 @@ function get_transport_unload_parts(godown_id) {
 
                         $(".dc_details").append(html);
 
+                        // $("#dc_file_upload").trigger("click");
                     });
 
                 }
@@ -714,6 +819,70 @@ function un_load_transport(stock_json, godown_id) {
 
 }
 
+function get_godown_location(lat, lng) {
+
+    $.ajax({
+        url: "php/get_godown_location.php",
+        type: "get",
+        data: {
+            latti: lat,
+            longi: lng,
+        },
+
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() != "error") {
+                if (response.trim() != "0 result") {
+                    alert();
+                }
+            }
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
+
+function update_godown_location1(lati, long, godown_id) {
+
+    console.log(lati, long, godown_id);
+
+    $.ajax({
+        url: "php/update_godown_location.php",
+        type: "post", //send it through get method
+        data: {
+
+            latti: lati,
+            longi: long,
+            creditor_id: godown_id,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() == "ok") {
+                salert("Success", "Location Saved Successfully.", "success");
+            }
+            else {
+                salert("Warning", response, "warning");
+            }
+
+
+
+
+
+
+        },
+        error: function (xhr) {
+            //Do Something to handle error
+        }
+    });
+
+
+
+
+}
 
 
 
@@ -761,11 +930,34 @@ function insert_new_process(processId) {
 
 
 
+function uploadFile() {
+    $(".loading").removeClass("d-none");
+    var myParams = { "godown_id": $("#godown").data("godown_id"), };
+    var url = 'https://jaysan.cloud/php/upload_dc.php';
+    // Parameters are passed as the second argument
+    if (window.AndroidBridge) {
+        AndroidBridge.pickFile("*/*", JSON.stringify(myParams), url);
+    }
+
+
+}
 
 
 
+function captureWithDbData() {
+    $(".loading").removeClass("d-none");
+    var params = {
+        "godown_id": $("#godown").data("godown_id"),
+    };
 
+    var url = 'https://jaysan.cloud/php/upload_dc.php';
 
+    if (window.AndroidBridge) {
+        // Kotlin will take the photo, compress it, 
+        // and include these params in the POST request to app_upload.php
+        AndroidBridge.takePhoto(JSON.stringify(params), url);
+    }
+}
 
 
 
