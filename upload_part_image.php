@@ -18,12 +18,14 @@ if($_FILES['file']['name'] != ''){
       
        
     }
-        $target_path = $target_path . $file_name; 
+        // $target_path = $target_path . $file_name; 
 
         $FileType = strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));    
        
     
-       
+       $filename1 =   "part_" . $part_id . "_" . time() . "." . $FileType;
+    $target_path = $target_path . $filename1; 
+
     // Resize the image
     $max_width = 800;  // Set the desired width
     $max_height = 800; // Set the desired height
@@ -97,13 +99,12 @@ if($_FILES['file']['name'] != ''){
     }
 
   
-    echo $target_path;
     
-$sql = "UPDATE parts_tbl SET part_image = '$file_name'  where part_id = $part_id";
+$sql = "UPDATE parts_tbl SET part_image = '$filename1'  where part_id = $part_id";
   
   if ($conn->query($sql) === TRUE) {
     
-    echo $target_path;
+echo "ok";
 
 
 
