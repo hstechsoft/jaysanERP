@@ -39,4 +39,4 @@ input_group AS (
 )
 
 SELECT *
-FROM input_group;
+FROM input_group;E
