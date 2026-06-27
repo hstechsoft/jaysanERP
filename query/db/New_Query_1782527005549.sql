@@ -7,8 +7,6 @@ stock AS (
     GROUP BY process_id
 ),
 input_group AS (
-
-    -- Anchor
     SELECT
         iwp.previous_process_id,
         (60 * iwp.qty) AS required_qty,
@@ -20,8 +18,6 @@ input_group AS (
     WHERE iwp.process_id = 2796
 
     UNION ALL
-
-    -- Recursive
     SELECT
         child.previous_process_id,
         ig.produce_qty * child.qty AS required_qty,
@@ -37,6 +33,5 @@ input_group AS (
         ON s.process_id = child.previous_process_id
     WHERE ig.produce_qty > 0
 )
-
 SELECT *
-FROM input_group;E
+FROM input_group;
