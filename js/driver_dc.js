@@ -30,6 +30,17 @@ $(document).ready(function () {
         }
     );
 
+    Fancybox.bind("[data-fancybox='attachments']", {
+        Toolbar: {
+            display: [
+                "zoom",
+                "fullscreen",
+                "slideshow",
+                "download",
+                "close"
+            ]
+        }
+    });
 
     $("#part_search").on("keyup", function () {
 
@@ -46,6 +57,7 @@ $(document).ready(function () {
     });
 
     check_login();
+    get_dc_attachment(current_user_id, '', '', 'create');
 
     $("#unamed").text(localStorage.getItem("ls_uname"))
 
@@ -55,6 +67,8 @@ $(document).ready(function () {
         $("#dc_switch").prop("checked", false);
         $(".dc_details").empty();
         $(".dc_filess").prop("disabled", true);
+        $(".alert_text").text('');
+        $("#dc_switch").prop("checked", false);
 
         //check the value not empty
         if ($('#godown').val() != "") {
@@ -135,11 +149,13 @@ $(document).ready(function () {
         if ($(this).is(":checked")) {
             $(".dc_title").text("DC Unload Details");
             $(this).next('label').text("DC Load Details");
+            $(".alert_text").text('');
             get_transport_unload_parts($('#godown').data("godown_id"));
         }
         else {
             $(".dc_title").text("DC Load Details");
             $(this).next('label').text("DC Unload Details");
+            $(".alert_text").text('');
             get_transport_parts_dc($('#godown').data("godown_id"));
         }
     })
@@ -188,6 +204,9 @@ $(document).ready(function () {
         // For example, update a hidden input or send to your server via AJAX
         $("#lat_input").val(lat);
         $("#lng_input").val(lng);
+
+        $("#loc_status").removeClass("text-danger");
+        $("#loc_status").addClass("text-success");
         get_godown_location(lat, lng)
     };
 
@@ -195,7 +214,8 @@ $(document).ready(function () {
     window.onUploadSuccess = function (response) {
         console.log("Upload Success:", response);
         $(".loading").addClass("d-none");
-        salert("Success", "Image Uploaded Successfully.", "succes");
+        get_dc_attachment(current_user_id, '', '', 'create');
+        salert("Success", "Image Uploaded Successfully.", "success");
     };
 
     window.onUploadError = function (error) {
@@ -235,6 +255,32 @@ $(document).ready(function () {
         }
     });
 
+    $("#godown_list_tbody").on("click", ".select_btn", function () {
+        let godown_name = $(this).data("creditor_name");
+        let godown_id = $(this).val();
+
+        if (godown_id && godown_name) {
+            $("#godown_list_modal").modal("hide");
+            $("#godown").data("godown_id", godown_id).val(godown_name);
+            $(".alert_text").text('');
+            $(".dc_filess").prop("disabled", false);
+            get_transport_parts_dc($('#godown').data("godown_id"));
+        }
+        else {
+            salert("Warning", "Data Missing!, Try Again.", "warning");
+        }
+
+    })
+
+    $("#grid").on("change", function () {
+        if ($(this).is(":checked")) {
+            $(".attech_col").removeClass("col-4").addClass("col-12");
+            $("label[for='grid']").addClass("text-warning");
+        } else {
+            $(".attech_col").removeClass("col-12").addClass("col-4");
+            $("label[for='grid']").removeClass("text-warning");
+        }
+    });
 
 
 
@@ -342,6 +388,63 @@ function get_godown_wise_process(godown_id) {
 
 
 
+}
+
+function get_dc_attachment(emp_id, godown, dc_id, dc_status) {
+    $.ajax({
+        url: "php/get_dc_attachment.php",
+        type: "get",
+        data: {
+            emp_id: emp_id,
+            godown: godown,
+            dc_id: dc_id,
+            dc_status: dc_status,
+        },
+        success: function (response) {
+            console.log(response);
+
+            if (response.trim() != "error") {
+
+                $("#attachment_list").empty();
+
+                if (response.trim() != "0 result") {
+
+                    let obj = JSON.parse(response);
+                    var count = 0;
+
+                    obj.forEach(function (item) {
+
+                        count += 1;
+
+                        $("#attachment_list").append(`
+                            <div class="col-4 attech_col">
+                                <a href="${item.path}"
+                                data-fancybox="attachments"
+                                data-caption="Attachment Date: ${item.dated}">
+                                    <img src="${item.path}"
+                                        class="img-fluid rounded border shadow-sm"
+                                        style="cursor:pointer;">
+                                </a>
+                            </div>
+                        `);
+
+                    });
+
+                    $("#attachment_count").text(count);
+
+                } else {
+
+                    $("#attachment_list").html(`
+                        <p class="text-center text-danger">
+                            No Attachments Found.
+                        </p>
+                    `);
+
+                }
+            }
+
+        }
+    })
 }
 
 
@@ -589,7 +692,7 @@ function get_transport_parts_dc(godown_id) {
 
                 }
                 else {
-                    salert("Warning", "No DC Found for this Vendor To Load", "warning");
+                    $(".alert_text").text("No DC Found for this Vendor To Load");
                 }
             }
 
@@ -690,11 +793,11 @@ function get_transport_unload_parts(godown_id) {
                                                         </strong>
 
                                                         <span class="badge bg-primary">
-                                                            ${item.reserve_type}
+                                                            ${item.dc_date}
                                                         </span>
                                                     </div>
 
-                                                    <div class="small text-muted mt-1">
+                                                    <div class="small text-muted mt-1  d-none">
                                                         <span class="fw-semibold">${item.bill_to}</span>
                                                         <i class="fa fa-arrow-right mx-1"></i>
                                                         <span class="fw-semibold">${item.ship_to}</span>
@@ -714,11 +817,11 @@ function get_transport_unload_parts(godown_id) {
                                 <div class="border rounded p-2 mb-2 bg-light">
 
                                     <div class="d-flex flex-wrap gap-1 mb-2">
-                                        <span class="badge bg-success">
+                                        <span class="badge bg-success d-none">
                                             ${group.creditor_name}
                                         </span>
 
-                                        ${group.dep_name ? `<span class="badge bg-warning text-dark">${group.dep_name}</span>` : ''}</div>`;
+                                        ${group.dep_name ? `<span class="badge bg-warning text-dark  d-none">${group.dep_name}</span>` : ''}</div>`;
 
                             // group.parts.forEach(function (part) {
 
@@ -762,8 +865,7 @@ function get_transport_unload_parts(godown_id) {
 
                 }
                 else {
-                    $("#dc_switch").prop("checked", false).trigger('change');
-                    salert("Warning", "No DC Found for this Vendor To Unload", "warning");
+                    $(".alert_text").text("No DC Found for this Vendor To Unload");
                 }
             }
 
@@ -832,9 +934,49 @@ function get_godown_location(lat, lng) {
         success: function (response) {
             console.log(response);
 
-            if (response.trim() != "error") {
-                if (response.trim() != "0 result") {
-                    alert();
+            if (response.trim() !== "error") {
+                $("#godown_list_tbody").empty();
+                if (response.trim() !== "0 result") {
+                    var obj = JSON.parse(response);
+                    if (obj.length == 1) {
+                        $("#godown_status").text('Found 1 Godown').addClass("bg-success");
+                        obj.forEach(function (item) {
+                            $(".dc_filess").prop("disabled", false);
+                            get_transport_parts_dc(item.creditor_id);
+                            $("#godown").data("godown_id", item.creditor_id).val(item.creditor_name);
+                        })
+                    }
+                    else {
+                        $("#godown_list_modal").modal("show");
+                        var count = 0;
+                        obj.forEach(function (item) {
+                            count += 1;
+                            $("#godown_list_tbody").append(`
+                                <li class="list-group-item godown-item">
+                                    <div class="godown-details">
+                                        <h6 class="godown-name mb-1">${item.creditor_name}</h6>
+                                        <span class="godown-distance">
+                                            <i class="fa-solid fa-location-dot me-1"></i>
+                                            ${item.distance_m} Meters Away
+                                        </span>
+                                    </div>
+
+                                    <button
+                                        class="btn btn-success btn-sm select_btn"
+                                        value="${item.creditor_id}"
+                                        data-creditor_name="${item.creditor_name}">
+                                        <i class="fa-solid fa-circle-check me-1"></i>
+                                        Select
+                                    </button>
+                                </li>
+                            `);
+                        });
+                        $("#godown_status").text('Found ' + count + ' Godown').addClass("bg-success");
+
+                    }
+                }
+                else {
+                    $("#godown_status").text('No Godown').addClass("bg-danger");
                 }
             }
         },
@@ -932,7 +1074,7 @@ function insert_new_process(processId) {
 
 function uploadFile() {
     $(".loading").removeClass("d-none");
-    var myParams = { "godown_id": $("#godown").data("godown_id"), };
+    var myParams = { "godown_id": $("#godown").data("godown_id"), "emp_id": current_user_id };
     var url = 'https://jaysan.cloud/php/upload_dc.php';
     // Parameters are passed as the second argument
     if (window.AndroidBridge) {
@@ -948,6 +1090,7 @@ function captureWithDbData() {
     $(".loading").removeClass("d-none");
     var params = {
         "godown_id": $("#godown").data("godown_id"),
+        "emp_id": current_user_id,
     };
 
     var url = 'https://jaysan.cloud/php/upload_dc.php';
