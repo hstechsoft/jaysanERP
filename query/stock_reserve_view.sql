@@ -68,6 +68,7 @@ select
     sec_name,
     stock_qty as qty,
     sum(total_reserved_qty) as reserve_qty,
+    stock_qty- sum(ifnull(total_reserved_qty,0)) as available_qty,
     JSON_ARRAYAGG(JSON_OBJECT('reserve_type',reserve_type, 'reserve_details', reserve_details)) as reserve_details
 
 from 
