@@ -98,7 +98,7 @@ if ($_FILES['file']['name'] != '') {
         imagedestroy($src);
     }
 
-    echo $target_path;
+    echo $lead_id;
 } else {
     echo "There was an error uploading the file, please try again!";
 }
