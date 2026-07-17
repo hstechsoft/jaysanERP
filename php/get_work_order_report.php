@@ -1,4 +1,22 @@
-with wo_details as(select JSON_ARRAYAGG(JSON_OBJECT(
+<?php
+ include 'db_head.php';
+
+
+function test_input($data) {
+$data = trim($data);
+$data = stripslashes($data);
+$data = htmlspecialchars($data);
+
+return $data;
+}
+
+
+
+// combine both results
+
+  
+
+ $sql = "with wo_details as(select JSON_ARRAYAGG(JSON_OBJECT(
     'created_by', emp.emp_name,
     'created_date', wo.created_date,
     'hour_since', time_diff(wo.created_date,now(),'hour'),  
@@ -110,9 +128,26 @@ sum(total_required_qty) as total_input_required_qty,
 sum(needed) as total_input_needed,
 sum(total_internal_reserve_qty) as total_internal_reserve_qty,
 total_exreserve_qty
-from rm_con GROUP BY process_id
-
-
+from rm_con GROUP BY process_id";
  
+
+
+// echo "sql: " . $sql . "<br>";
+
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $rows = array();
+    while($r = mysqli_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    print json_encode($rows);
+} else {
+  echo "0 result";
+}
+$conn->close();
+
+ ?>
 
 
