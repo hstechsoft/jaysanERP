@@ -141,13 +141,13 @@ WITH
             left join stock_view sv on case
                 when iq.input_part_id is not null then sv.part_id = iq.input_part_id
                 and sv.godown <=> iq.godown
-                and sv.dep <=> iq.dep
-                and sv.sec <=> iq.sec
+                -- and sv.dep <=> iq.dep
+                -- and sv.sec <=> iq.sec
                 and sv.reserve_type = 'work_order'
                 else sv.process_id = iq.previous_process_id
                 and sv.godown <=> iq.godown
-                and sv.dep <=> iq.dep
-                and sv.sec <=> iq.sec
+                -- and sv.dep <=> iq.dep
+                -- and sv.sec <=> iq.sec
                 and sv.reserve_type = 'work_order'
             end
 
