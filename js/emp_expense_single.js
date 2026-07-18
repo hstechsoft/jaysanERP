@@ -19,10 +19,65 @@ $(document).ready(function () {
   check_login();
 
   get_expense_summary_single();
-  get_exp_cat_all()
+  // get_exp_cat_all()
   $("#unamed").text(localStorage.getItem("ls_uname"))
 
   $('#pay_date').val(get_today_date());
+
+  $('#exp_category').on('input',function(){
+     //check the value not empty
+    //  alert()
+         if($('#exp_category').val() !="")
+         {
+           $('#exp_category').autocomplete({
+             //get data from databse return as array of object which contain label,value
+  
+             source: function(request, response) {
+               $.ajax({
+                 url: "php/get_exp_cat_auto.php",
+                 type: "get", //send it through get method
+                 data: {
+                 
+                  cat: $('#exp_category').val(),
+  
+               },
+               dataType: "json", 
+                 success: function (data) {
+  
+               console.log(data);
+               response($.map(data, function(item) {
+                 return {
+                     label: item.exp_cat,
+                     value: item.exp_cat,
+                     // id: item.part_id,
+                     // part_name: item.part_name
+                 };
+             }));
+  
+                 }
+  
+               });
+             },
+             minLength: 2,
+             cacheLength: 0,
+             select: function(event, ui) {
+  
+             //   $(this).data("selected-part_id", ui.item.id);
+             //   $('#part_name_out').data("selected-part_id", ui.item.id);
+             //   $('#part_name_out').val(ui.item.part_name)
+             //  get_bom(ui.item.id)
+  
+  
+             } ,
+  
+           }).autocomplete("instance")._renderItem = function(ul, item) {
+             return $("<li>")
+                 .append("<div>"+item.label+ "</div>")
+                 .appendTo(ul);
+         };
+         }
+  
+        });
 
   $('#sel_all_chk').change(function () {
     if (this.checked) {
@@ -52,6 +107,17 @@ $(document).ready(function () {
     $("#exp_amount").val("");
     get_expense_approve_sts("no");
 
+    if (!$("#bulk_delete_btn").hasClass("d-none")) {
+
+      $("#bulk_delete_btn").addClass("d-none");
+      $("#bulk_delete_cancel_btn").addClass("d-none");
+      isSelectionMode = false;
+
+    }
+    document.getElementById("exp_table").scrollIntoView({
+      behavior: "smooth"
+    });
+
   });
 
 
@@ -62,7 +128,16 @@ $(document).ready(function () {
     $("#exp_description").val("");
     $("#exp_amount").val("");
     get_expense_approve_sts("decline");
+    if (!$("#bulk_delete_btn").hasClass("d-none")) {
 
+      $("#bulk_delete_btn").addClass("d-none");
+      $("#bulk_delete_cancel_btn").addClass("d-none");
+      isSelectionMode = false;
+
+    }
+    document.getElementById("exp_table").scrollIntoView({
+      behavior: "smooth"
+    });
   });
 
 
@@ -143,7 +218,7 @@ $(document).ready(function () {
     }
     else {
       $("#fuel_vehicel_type").prop("disabled", true);
-      $("#exp_category").val($("#fuel_check_box").data("cate") ? $("#fuel_check_box").data("cate"):"null");
+      $("#exp_category").val($("#fuel_check_box").data("cate") ? $("#fuel_check_box").data("cate") : "null");
       $("#start_km").prop("disabled", true);
       $("#end_km").prop("disabled", true);
       $("#fuel_add").prop("disabled", true);
@@ -179,10 +254,10 @@ $(document).ready(function () {
     var total_km = parseFloat(ekm) - parseFloat(skm);
     var km_amount = parseFloat(v_type) * total_km
     if (v_type == 3) {
-      $("#exp_description").val("Two wheeler "+skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
+      $("#exp_description").val("Two wheeler " + skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
 
     } else {
-      $("#exp_description").val("Four wheeler "+skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
+      $("#exp_description").val("Four wheeler " + skm + "Km to " + ekm + "Km = " + total_km + "Total Km");
 
     }
 
@@ -234,7 +309,7 @@ $(document).ready(function () {
         $("#bulk_delete_btn").removeClass("d-none");
         $("#bulk_delete_cancel_btn").removeClass("d-none");
 
-      }, 2000);  // 2-second long press
+      }, 1000);  // 1-second long press
     }
   });
 
@@ -523,7 +598,7 @@ function get_expenses_single(exp_date) {
 }
 
 function insert_emp_expense(date, category, description, amount) {
-console.log(date, category, description, amount, current_user_id, work_id);
+  console.log(date, category, description, amount, current_user_id, work_id);
 
   let exp_date = date;
 
@@ -760,49 +835,49 @@ function formatDateYYYYMMDD(ms) {
 
 
 
-function get_exp_cat_all() {
-  $.ajax({
-    url: "php/get_exp_cat_all.php",
-    type: "get", //send it through get method
-    data: {
+// function get_exp_cat_all() {
+//   $.ajax({
+//     url: "php/get_exp_cat_all.php",
+//     type: "get", //send it through get method
+//     data: {
 
 
 
-    },
-    success: function (response) {
-      console.log(response)
+//     },
+//     success: function (response) {
+//       console.log(response)
 
-      if (response.trim() != "error") {
-        if (response.trim() != "0 result") {
-          var obj = JSON.parse(response);
-
-
-
-          obj.forEach(function (obj) {
-
-
-            $("#exp_category").append(" <option>" + obj.exp_cat + "</option>");
-
-          });
-        }
+//       if (response.trim() != "error") {
+//         if (response.trim() != "0 result") {
+//           var obj = JSON.parse(response);
 
 
 
+//           obj.forEach(function (obj) {
 
+
+//             $("#exp_category").append(" <option>" + obj.exp_cat + "</option>");
+
+//           });
+//         }
 
 
 
 
-      }
 
 
-    },
-    error: function (xhr) {
-      //Do Something to handle error
-    }
-  });
 
-}
+
+//       }
+
+
+//     },
+//     error: function (xhr) {
+//       //Do Something to handle error
+//     }
+//   });
+
+// }
 
 function insert_expense() {
   console.log($('#exp_table tr').length)
