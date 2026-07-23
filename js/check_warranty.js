@@ -78,7 +78,7 @@ get_deler_report()
             {
               date_query_start = "'"+  ($('#search_start_date').val()) + "'"
               date_query_end = "'"+  ($('#search_end_date').val())+ "'"
-              // get_deler_report()
+              get_deler_report()
           
               console.log(date_query_start)
             }
@@ -259,8 +259,6 @@ console.log(response)
    {
     var extension = obj.dimage.split('.').pop()
     var pn = (obj.chasis_no).replace(/\//g, '%23@%23')
-    console.log(dealer_id);
-    
      attach = "attachment/delivery/"+ dealer_id + "/" +  pn+      "." + extension
     
   
