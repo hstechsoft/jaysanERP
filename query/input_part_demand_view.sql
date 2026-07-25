@@ -124,6 +124,7 @@ WITH
             input_wel_parts iwp
             JOIN work_order_qty woq ON iwp.process_id = woq.process_id
     ),
+
     input_reserve as (
         
            SELECT
@@ -162,6 +163,42 @@ WITH
                 iq.sec
               
             
+    ),
+    dc as (
+               SELECT
+        iq.process_id AS work_process_id,
+        iq.work_orders,
+        iq.pending_qty,
+        iq.input_part_id,
+        iq.previous_process_id,
+        iq.required_qty,
+        iq.godown,
+        iq.dep,
+        iq.sec,
+        sum(sv.reserve_qty) as reserve_qty
+    FROM input_qty iq
+            left join stock_view sv on case
+                when iq.input_part_id is not null then sv.part_id = iq.input_part_id
+                and sv.godown <=> iq.godown
+                -- and sv.dep <=> iq.dep
+                -- and sv.sec <=> iq.sec
+                and sv.reserve_type = 'dc'
+                else sv.process_id = iq.previous_process_id
+                and sv.godown <=> iq.godown
+                -- and sv.dep <=> iq.dep
+                -- and sv.sec <=> iq.sec
+                and sv.reserve_type = 'dc'
+            end
+
+            GROUP BY
+                iq.process_id,
+              
+                iq.input_part_id,
+              
+               
+                iq.godown,
+                iq.dep,
+                iq.sec
     )
 SELECT
     ir.work_process_id,
