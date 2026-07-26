@@ -207,12 +207,12 @@ GROUP BY
     dep,
     sec,
      total_reserve_qty,
-   needed,
+   needed-IFNULL(dc.qty, 0) - IFNULL(transport.qty, 0) AS needed,
    dc.qty  as dc_qty,
    transport.qty as transport_qty
    from input_demand
- left join dc on input_demand.input_part_id <=> dc.part_id and input_demand.work_process_id <=> dc.process_id and input_demand.godown <=> dc.des_godown
- left join transport on input_demand.input_part_id <=> transport.part_id and input_demand.work_process_id <=> transport.process_id and input_demand.godown <=> transport.des_godown
+ left join dc on input_demand.input_part_id <=> dc.part_id and input_demand.previous_process_id <=> dc.process_id and input_demand.godown <=> dc.des_godown
+ left join transport on input_demand.input_part_id <=> transport.part_id and input_demand.previous_process_id <=> transport.process_id and input_demand.godown <=> transport.des_godown
 
 --  CREATE OR REPLACE VIEW input_part_demand_view AS
 -- WITH
