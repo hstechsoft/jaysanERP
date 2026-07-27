@@ -50,5 +50,9 @@ iv.previous_process_id,iv.required_qty,iv.godown,iv.dep,iv.sec,iv.total_reserve_
  jpv.input_parts
  from iv_deatils iv  
  left join jaysan_process_view jpv on iv.work_process_id <=> jpv.process_id
- left join job_work_reserved jwr on iv.input_part_id <=> jwr.part_id and iv.previous_process_id <=> jwr.process_id GROUP BY iv.work_process_id,iv.godown
+ left join job_work_reserved jwr on iv.input_part_id <=> jwr.part_id and iv.previous_process_id <=> jwr.process_id 
+ 
+
+ 
+ GROUP BY iv.work_process_id,iv.godown
 
