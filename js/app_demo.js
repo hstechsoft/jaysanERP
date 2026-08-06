@@ -52,7 +52,48 @@ $("#camera_btn").on("click", function(event) {
 });
 
 
+$("#location_btn").on("click", function(event) {
+  event.preventDefault();
+  AndroidBridge.startLocationTracking("https://jaysan.cloud/php/insert_phone_location_app.php", 60000, "HIGH");
+});
 
+$("#location_stop_btn").on("click", function(event) {
+  event.preventDefault();
+  AndroidBridge.stopLocationTracking();
+});
+
+
+$("#authentication_btn").on("click", function(event) {
+  event.preventDefault();
+  if (window.AndroidBridge) {
+     AndroidBridge.authenticate();
+  } 
+})
+
+$("#btn-pick-contact").on("click", function(event) {
+  event.preventDefault();
+  if (window.AndroidBridge) {
+     AndroidBridge.pickContact();
+  } 
+})
+
+
+$('#call-btn').click(function() {
+    var phoneNumber = "+918838457691"; // Get this from your form or database
+    
+    if (window.AndroidBridge) {
+        AndroidBridge.makeCall(phoneNumber);
+    }
+});
+
+// call log
+$('#call-log-btn').click(function() {
+  console.log("fetch log");
+  
+    if (window.AndroidBridge) {
+      AndroidBridge.getCallLogs(50);
+    }
+  })
 });
 
 function captureWithDbData() {
@@ -66,6 +107,53 @@ var url = "https://jaysan.cloud/php/upload_dc.php";
     }
 }
 
+window.onCallLogsReceived = function(logs) { 
+    console.log("Received " + logs.length + " call logs.");
+    
+    // for each log
+    logs.forEach(function(log) {
+          console.log("Call from: " + log.number);
+    console.log("Name: " + log.name);
+    console.log("Type: " + log.type); // INCOMING, OUTGOING, MISSED
+    console.log("Duration: " + log.duration + " seconds");
+    
+    var callDate = new Date(log.date);
+    console.log("Date: " + callDate.toLocaleString());
+        console.log("sim_id: " + log.sim_id);
+    console.log("--------------------------------------------------");
+    })
+};
+
+
+/**
+ * SUCCESS CALLBACK
+ * This is called automatically by Android after you pick a contact.
+ */
+window.onContactPicked = function(name, phone, email) {
+    console.log("Contact Received:", name, phone, email);
+    
+ 
+};
+window.onAuthSuccess = function() {
+    // 1. Show a loading spinner
+   console.log("ok");
+   
+
+    // 2. Since the device confirmed the user's identity,
+    // you can now use Firebase's persisted login or 
+    // a saved token to log them in automatically.
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // User is already logged in via Firebase Persistence
+           console.log(user);
+           
+        } else {
+            // If they aren't logged into Firebase, redirect to standard login
+            console.log("pleas login ");
+            
+        }
+    });
+};
 // Global callbacks called by the Android app
 window.onUploadSuccess = function (response) {
     console.log("Upload Success:", response);
