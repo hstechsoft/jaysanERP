@@ -1743,13 +1743,18 @@ function get_process_summary_godown(process_id) {
 
         success: function (response) {
 
-            $("#timing_dounut_chart, #timing_dounut_chart_modal").empty();
-            $("#cost_bar_chart, #cost_bar_chart_modal").empty();
+            console.log(response);
+
 
             if (response.trim() === "error") {
                 salert("Error", "Server Error", "error");
                 return;
             }
+
+            $("#timing_dounut_chart").empty();
+            $("#timing_dounut_chart_modal").empty();
+            $("#cost_bar_chart").empty();
+            $("#cost_bar_chart_modal").empty();
 
             if (response.trim() === "0 result") {
                 $("#bom_required_material_table_body").append("<tr><td>No BOM Material</td></tr>");
@@ -1779,7 +1784,12 @@ function get_process_summary_godown(process_id) {
             let totalMin = minTimes.reduce((a, b) => a + b, 0);
             let totalMax = maxTimes.reduce((a, b) => a + b, 0);
 
-            $("#donut_center_text, #donut_center_text_modal").html(`
+            $("#donut_center_text").html(`
+                <div>Min: ${totalMin} mins</div>
+                <div>Max: ${totalMax} mins</div>
+            `);
+
+            $("#donut_center_text_modal").html(`
                 <div>Min: ${totalMin} mins</div>
                 <div>Max: ${totalMax} mins</div>
             `);
@@ -1839,9 +1849,59 @@ function get_process_summary_godown(process_id) {
             );
             donutChart.render();
 
+            var donutOptions1 = {
+                chart: {
+                    type: 'donut',
+                    // height: 330
+                },
+
+                series: maxTimes,
+
+                labels: companyNames.map(name =>
+                    name.length > 20 ? name.substring(0, 20) + '...' : name
+                ),
+
+                legend: {
+                    position: 'bottom'
+                },
+
+                dataLabels: {
+                    enabled: false
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: function (val, opts) {
+                            let index = opts.seriesIndex;
+                            let min = minTimes[index];
+                            let max = maxTimes[index];
+
+                            return `Min: ${min} mins | Max: ${max} mins`;
+                        }
+                    }
+                },
+
+                // 🔥 STATIC CENTER CONTENT
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: false
+                            }
+                        }
+                    }
+                },
+
+                title: {
+                    text: "Max Time by Company",
+                    align: "center"
+                }
+            };
+
+
             var donutChartModal = new ApexCharts(
                 document.querySelector("#timing_dounut_chart_modal"),
-                donutOptions
+                donutOptions1
             );
             donutChartModal.render();
 
@@ -1919,9 +1979,77 @@ function get_process_summary_godown(process_id) {
             );
             barChart.render();
 
+
+            var barOptions1 = {
+                chart: {
+                    type: 'bar',
+                    // height: 320,
+                    background: '#f8f9fa' // 🎨 light background
+                },
+
+                colors: ['#008FFB', '#168612', '#FEB019', '#FF4560', '#775DD0', '#3F51B5'],
+
+                series: [{
+                    name: "Cost",
+                    data: costs
+                }],
+
+                xaxis: {
+                    categories: companyNames.map(name =>
+                        name.length > 15 ? name.substring(0, 15) + '...' : name
+                    ),
+                    labels: {
+                        rotate: -30,
+                        style: {
+                            fontSize: '11px'
+                        }
+                    }
+                },
+
+                plotOptions: {
+                    bar: {
+                        borderRadius: 5,
+                        columnWidth: '50%',
+                        distributed: true,
+                        dataLabels: {
+                            position: 'center' // 🔥 inside bar
+                        }
+                    }
+                },
+
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        borderRadius: 5,
+                        distributed: true
+                    }
+                },
+
+                dataLabels: {
+                    enabled: true,
+                    formatter: val => "₹" + val,
+                    style: {
+                        fontSize: '11px',
+                        colors: ['#000000']
+                    }
+                },
+
+                tooltip: {
+                    y: {
+                        formatter: val => "₹" + val
+                    }
+                },
+
+                title: {
+                    text: "Cost by Company",
+                    align: "center"
+                }
+            };
+
+
             var barChartModal = new ApexCharts(
                 document.querySelector("#cost_bar_chart_modal"),
-                barOptions
+                barOptions1
             );
             barChartModal.render();
 
