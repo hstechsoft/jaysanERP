@@ -32,6 +32,7 @@ group by
     mas.path,
     mas.nesting_type,
     mas.std_length,
+    mas.weight as raw_mat_weight,
     mas.run_time as master_run_time,
     JSON_ARRAYAGG(
         JSON_OBJECT(
