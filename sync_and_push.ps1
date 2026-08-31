@@ -14,7 +14,7 @@ Write-Output "Pushing Folder A..."
 cd (Get-Location)
 git add .
 git commit -m "$msg"
-git push origin main
+git push origin main   
 
 
 # Push Folder B (second repo)
