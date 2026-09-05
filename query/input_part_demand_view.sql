@@ -44,7 +44,7 @@ WITH
     input_qty AS (
         -- get input for demand process
         SELECT
-            iwp.process_id ,
+            iwp.process_id as work_process_id,
             iwp.input_part_id,
             -- if input part_id is not null previous process_id change to null
             CASE
@@ -62,75 +62,79 @@ WITH
             input_wel_parts iwp
             JOIN work_order_qty woq ON iwp.process_id = woq.process_id
     ),
-    input_reserve as (
-        
-           SELECT
-        iq.process_id AS work_process_id,
-        iq.work_orders,
-        iq.pending_qty,
-        iq.input_part_id,
-        iq.previous_process_id,
-        iq.required_qty,
-        iq.godown,
-        iq.dep,
-        iq.sec,
-        sum(sv.reserve_qty) as reserve_qty
-    FROM input_qty iq
-            left join stock_view sv on 
-            sv.part_id <=> iq.input_part_id
-                and sv.godown <=> iq.godown and sv.process_id <=> iq.previous_process_id  and sv.reserve_type = 'work_order'
-            GROUP BY
-                iq.process_id,
-                iq.input_part_id,
-                iq.previous_process_id,
-              
-               
-                iq.godown,
-                iq.dep,
-                iq.sec
-              
-            
-    )
-     ,
-
-input_demand as(SELECT
-    ir.work_process_id,
-    ir.work_orders,
-    ir.pending_qty AS pending_process_qty,
-    ir.input_part_id,
-    ir.previous_process_id,
-    ir.required_qty,
-    ir.godown,
-    ir.dep,
-    ir.sec,
-    IFNULL(ir.reserve_qty, 0) AS total_reserve_qty,
-    ir.required_qty - IFNULL(ir.reserve_qty, 0) AS needed
-FROM input_reserve ir
-
-),
-            transport as (
-               select tp.part_id,tp.process_id,sum(tp.qty) as qty,tdc.des_godown from transport_parts tp
- inner join transport_dc tdc on tp.transport_dc_id = tdc.transport_dc_id where tdc.sts = 'transport' GROUP BY tp.part_id,tp.process_id,tdc.des_godown
- 
+    internal_reserved as (
+        select work_process_id,
+        godown,
+        dep,
+        sec,
+        part_id ,
+          CASE
+                WHEN part_id IS NOT NULL THEN NULL
+                ELSE process_id
+            END AS process_id,
+            qty from input_demand WHERE cat = "work_order" 
     ),
-        dc as (
-               select tp.part_id,tp.process_id,sum(tp.qty) as qty,tdc.des_godown from transport_parts tp
- inner join transport_dc tdc on tp.transport_dc_id = tdc.transport_dc_id where tdc.sts = 'create' GROUP BY tp.part_id,tp.process_id,tdc.des_godown
- 
+        stock_transfer as (
+        select work_process_id,
+        godown,
+        dep,
+        sec,
+        part_id ,
+          CASE
+                WHEN part_id IS NOT NULL THEN NULL
+                ELSE process_id
+            END AS process_id,
+            qty from input_demand WHERE cat = "stock_transfer" 
+    ),
+       dc as (
+        select work_process_id,
+        godown,
+        dep,
+        sec,
+        part_id ,
+          CASE
+                WHEN part_id IS NOT NULL THEN NULL
+                ELSE process_id
+            END AS process_id,
+            qty from input_demand WHERE cat = "dc" 
+    ),
+        transport as (
+        select work_process_id,
+        godown,
+        dep,
+        sec,
+        part_id ,
+          CASE
+                WHEN part_id IS NOT NULL THEN NULL
+                ELSE process_id
+            END AS process_id,
+            qty from input_demand WHERE cat = "transport" 
     )
-    SELECT work_process_id,
-    work_orders,
-  pending_process_qty,
-    input_part_id,
-    previous_process_id,
-    required_qty,
-    godown,
-    dep,
-    sec,
-     total_reserve_qty,
-   needed-IFNULL(dc.qty, 0) - IFNULL(transport.qty, 0) AS needed,
-   dc.qty  as dc_qty,
-   transport.qty as transport_qty
-   from input_demand
- left join dc on input_demand.input_part_id <=> dc.part_id and input_demand.previous_process_id <=> dc.process_id and input_demand.godown <=> dc.des_godown
- left join transport on input_demand.input_part_id <=> transport.part_id and input_demand.previous_process_id <=> transport.process_id and input_demand.godown <=> transport.des_godown
+
+    select iq.work_process_id,
+        iq.work_orders,
+         iq.pending_qty as pending_process_qty,
+           iq.input_part_id,
+           iq.previous_process_id,
+             iq.required_qty,
+         
+          
+           iq.godown,
+           iq.dep,
+           iq.sec,
+         
+        
+           ir.qty as total_reserve_qty,
+           st.qty as stock_allocation_qty,
+           dc.qty as dc_qty,
+           tr.qty as transport_qty,
+           iq.required_qty - (ifnull(ir.qty,0) + ifnull(st.qty,0) + ifnull(dc.qty,0) + ifnull(tr.qty,0)) as needed
+
+    from input_qty iq 
+    left join internal_reserved ir on iq.work_process_id = ir.work_process_id and iq.input_part_id <=> ir.part_id and iq.previous_process_id <=> ir.process_id and iq.godown <=> ir.godown and iq.dep <=> ir.dep and iq.sec <=> ir.sec
+
+    left join stock_transfer st on iq.work_process_id = st.work_process_id and iq.input_part_id <=> st.part_id and iq.previous_process_id <=> st.process_id and iq.godown <=> st.godown and iq.dep <=> st.dep and iq.sec <=> st.sec
+
+    left join dc  on iq.work_process_id = dc.work_process_id and iq.input_part_id <=> dc.part_id and iq.previous_process_id <=> dc.process_id and iq.godown <=> dc.godown and iq.dep <=> dc.dep and iq.sec <=> dc.sec
+
+left JOIN transport tr on iq.work_process_id = tr.work_process_id and iq.input_part_id <=> tr.part_id and iq.previous_process_id <=> tr.process_id and iq.godown <=> tr.godown and iq.dep <=> tr.dep and iq.sec <=> tr.sec
