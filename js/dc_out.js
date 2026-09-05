@@ -5,6 +5,7 @@ var current_user_id = localStorage.getItem("ls_uid");
 var current_user_name = localStorage.getItem("ls_uname");
 var physical_stock_array = [];
 let allBomData = [];
+let allReserveData = [];
 
 let current_stock = [];
 let historyQueue = [];
@@ -831,7 +832,11 @@ $(document).ready(function () {
 
             // let part_name = $(this).find("td").eq(0).text();
             let part_id = $(this).data("part_id");
+            let work_process_id = $(this).data("work_process_id");
             let part_pre_process_id = $(this).data("part_pre_process_id");
+            let godown_id = $(this).data("godown_id");
+            let department_id = $(this).data("department_id");
+            let section_id = $(this).data("section_id");
             // let process_name = $(this).find("td").eq(1).text();
             // let process_id = $(this).data("process_id");
             let qty = parseFloat($(this).find(".qty_input").val()) || 0;
@@ -848,6 +853,10 @@ $(document).ready(function () {
             dc_parts.push({
                 part_id: part_id,
                 part_pre_process_id: part_pre_process_id,
+                work_process_id: work_process_id,
+                godown_id: godown_id,
+                department_id: department_id,
+                section_id: section_id,
                 qty: qty,
                 rate: rate,
             });
@@ -871,6 +880,8 @@ $(document).ready(function () {
             // }
             // }
         });
+
+        console.log(dc_parts);
 
         if (dc_parts.length == 0) {
             salert("Warning", "Please select at least one part", "warning");
@@ -947,6 +958,15 @@ $(document).ready(function () {
         var needed_qty = $(this).data("needed_qty");
         var enter_qty = $(this).val();
         var need = qty > needed_qty ? needed_qty : qty;
+        var input_part_id = $(this).data("input_part_id");
+
+        console.log(allReserveData);
+
+
+        if (allReserveData.find(data => data.input_part_id === input_part_id).reserveQty < enter_qty) {
+            salert("Warning", "Entered quantity exceeds the reserved quantity " + allReserveData.find(data => data.input_part_id === input_part_id).reserveQty, "warning");
+            return;
+        }
 
         if (enter_qty < 1) {
             $(this).val(1);
@@ -959,15 +979,20 @@ $(document).ready(function () {
     $("#dc_list_tbody").on("click", ".btn-add", function () {
 
         let currentRow = $(this).closest("tr");
-        let work_process_id = currentRow.data("work_process_id");
 
-        let rows = $("#dc_list_tbody").find("tr[data-work_process_id='" + work_process_id + "']");
+        let work_process_id = currentRow.data("work_process_id");
+        let godown_id = currentRow.data("godown_id");
+        let department_id = currentRow.data("department_id");
+        let section_id = currentRow.data("section_id");
+
+        let rows = $("#dc_list_tbody").find(
+            "tr[data-work_process_id='" + work_process_id + "']"
+        );
 
         let process = currentRow.find("span").text().trim();
-        let part = currentRow.find("strong").text().trim();
+        let part = currentRow.find("td:eq(3)").find("strong").text().trim();
 
         let chk_count = 0;
-
 
         rows.each(function () {
 
@@ -975,62 +1000,102 @@ $(document).ready(function () {
 
             let chk = row.find(".reserve_check");
 
-            if (chk.is(":checked")) {
-
-                chk_count++;
-
-                let qtyInput = row.find(".reserve_qty");
-
-                let qty = qtyInput.val();
-                let availableQty = qtyInput.data("qty");
-
-                let reserveLocation = row.find("td").eq(4).text().trim();
-
-                $("#selected_part_tbody").append(`
-                <tr
-                    data-part_pre_process_id="${chk.data("previous_process_id")}"
-                    data-part_id="${chk.data("input_part_id")}"
-                    data-stock_reserve_id="${chk.data("stock_reserve_id")}"
-                    data-stock_id="${chk.data("stock_id")}">
-
-                    <td>${part}</td>
-
-                    <td>${process}</td>
-
-                    <td>${reserveLocation}</td>
-
-                    <td>${availableQty}</td>
-
-                    <td>
-                        <input
-                            type="number"
-                            class="form-control form-control-sm qty_input"
-                            value="${qty}"
-                            max="${availableQty}"
-                            disabled>
-                    </td>
-
-                    <td>
-                        <input
-                            type="number"
-                            class="form-control form-control-sm rate_input"
-                            value="0">
-                    </td>
-
-                    <td class="amount_td">0</td>
-
-                </tr>
-            `);
-
-                currentRow.find("td").find(".btn-add").prop("disabled", true);
+            if (!chk.is(":checked")) {
+                return;
             }
 
+            chk_count++;
+
+            let qtyInput = row.find(".reserve_qty");
+
+            let qty = parseFloat(qtyInput.val()) || 0;
+            let availableQty = parseFloat(qtyInput.data("qty")) || 0;
+
+            let input_part_id = chk.data("input_part_id");
+
+            // Find existing reserve data
+            let reserveData = allReserveData.find(
+                data => data.input_part_id == input_part_id
+            );
+
+            if (!reserveData) {
+                salert(
+                    "Warning",
+                    "Reserve data not found for input part.",
+                    "warning"
+                );
+                return;
+            }
+
+            // Check available reserve quantity
+            if (reserveData.reserve_qty < qty) {
+
+                salert(
+                    "Warning",
+                    "Entered quantity exceeds available reserve quantity " +
+                    reserveData.reserve_qty,
+                    "warning"
+                );
+
+                return;
+            }
+
+            // Reduce reserve quantity ONCE
+            reserveData.reserve_qty -= qty;
+
+            let reserveLocation = row.find("td").eq(4).text().trim();
+
+            $("#selected_part_tbody").append(`
+            <tr
+                data-part_pre_process_id="${chk.data("previous_process_id")}"
+                data-work_process_id="${row.data("work_process_id")}"
+                data-part_id="${input_part_id}"
+                data-stock_reserve_id="${chk.data("stock_reserve_id")}"
+                data-stock_id="${chk.data("stock_id")}"
+                data-godown_id="${godown_id}"
+                data-department_id="${department_id}"
+                data-section_id="${section_id}">
+
+                <td>${part}</td>
+
+                <td>${process}</td>
+
+                <td>${reserveLocation}</td>
+
+                <td>${availableQty}</td>
+
+                <td>
+                    <input
+                        type="number"
+                        class="form-control form-control-sm qty_input"
+                        value="${qty}"
+                        max="${availableQty}"
+                        disabled>
+                </td>
+
+                <td>
+                    <input
+                        type="number"
+                        class="form-control form-control-sm rate_input"
+                        value="0">
+                </td>
+
+                <td class="amount_td">0</td>
+
+            </tr>
+        `);
+
+            // Disable Add button
+            currentRow.find(".btn-add").prop("disabled", true);
         });
 
         if (chk_count === 0) {
-            salert("Warning", "At least one item must be selected.", "warning");
+            salert(
+                "Warning",
+                "At least one item must be selected.",
+                "warning"
+            );
         }
-
     });
 });
 
@@ -1051,6 +1116,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
             if (response.trim() !== "error") {
                 $("#dc_list_tbody").html("");
+                allReserveData = [];
 
                 if (response.trim() !== "0 result") {
 
@@ -1086,7 +1152,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                             if (reserve.length == 0) {
 
-                                let html = `<tr data-work_process_id=${item.work_process_id}>`;
+                                let html = `<tr data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
                                 if (firstMainRow) {
 
@@ -1095,6 +1161,10 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                         <td rowspan="${totalRowspan}">
                                             ${item.creditor_name}
+                                            
+                                            ${item.dep_name ? " - " + item.dep_name : ""}
+
+                                            ${item.sec_name ? " - " + item.sec_name : ""}
                                         </td>
 
                                         <td rowspan="${totalRowspan}">
@@ -1157,7 +1227,11 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                 reserve.forEach(function (stock, reserveIndex) {
 
-                                    let html = `<tr  data-work_process_id=${item.work_process_id}>`;
+                                    if (allReserveData.findIndex(data => data.input_part_id === part.input_part_id) < 0) {
+                                        allReserveData.push({ input_part_id: part.input_part_id, reserve_qty: stock.reserve_qty });
+                                    }
+
+                                    let html = `<tr  data-work_process_id="${item.work_process_id}" data-godown_id="${item.godown}" data-department_id="${item.dep}" data-section_id="${item.sec}">`;
 
 
                                     if (firstMainRow) {
@@ -1169,6 +1243,10 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
 
                                             <td rowspan="${totalRowspan}">
                                                 ${item.creditor_name}
+                                                
+                                                ${item.dep_name ? " - " + item.dep_name : ""}
+
+                                                ${item.sec_name ? " - " + item.sec_name : ""}
                                             </td>
 
                                             <td rowspan="${totalRowspan}">
@@ -1226,6 +1304,7 @@ function get_dc_demand_report(des_godown, source_godown, process_id) {
                                                 value="${stock.reserve_qty > part.needed ? part.needed : stock.reserve_qty}"
                                                 data-qty="${stock.reserve_qty}"
                                                 data-needed_qty="${part.needed}"
+                                                data-input_part_id="${part.input_part_id}"
                                                 min="1"
                                                 max="${stock.reserve_qty > part.needed ? part.needed : stock.reserve_qty}"
                                                 step="1"
@@ -1727,7 +1806,7 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
                     const project = window.location.pathname.split('/')[1];
 
                     console.log(`${window.location.origin}/${project}/${i.download_url}`);
-                    
+
                     window.open(`${window.location.origin}/${project}/${i.download_url}`, '_blank');
 
                     setTimeout(() => {
@@ -1736,9 +1815,9 @@ function insert_dc_trip(current_godown, destination, source_godown, dc_no, dc_da
 
                 }
                 else {
-                        salert("Warning", i.error, "warning");
-                    }
-                });
+                    salert("Warning", i.error, "warning");
+                }
+            });
             // if (response.trim() == "ok") {
             //     // window.location.reload();
             // }
