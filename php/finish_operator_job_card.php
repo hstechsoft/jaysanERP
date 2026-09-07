@@ -78,7 +78,7 @@ if($laser_process_part != "NULL")
     {
         $process_id = "NULL";
     }
-  $sql_insert_output = "INSERT INTO jaysan_stock (process_id, godown, dep, sec, qty, batch_id,part_id,process_id) VALUES ($process_id, $godown, $dep, $sec, $produced_qty, '$batch_id', $laser_process_part, $process_id) ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
+  $sql_insert_output = "INSERT INTO jaysan_stock (process_id, godown, dep, sec, qty, batch_id,part_id) VALUES ($process_id, $godown, $dep, $sec, $produced_qty, '$batch_id', $laser_process_part) ON DUPLICATE KEY UPDATE qty = qty + $produced_qty";
 
 
 
