@@ -22,6 +22,7 @@ CREATE OR REPLACE VIEW nesting_details_view AS
      mas.nes_master_id as nesting_id,
       mas.nesting_name,
     mas.material_id,
+    mas.weight as raw_material_weight,
     mas.path,
     mas.nesting_type,
     mas.std_length,
