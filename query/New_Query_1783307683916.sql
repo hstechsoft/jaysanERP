@@ -61,7 +61,7 @@ with
         from
             job_card_view
         GROUP BY
-            nesting_details_id
+            job_card_view.nesting_details_id
     ),
             laser_machine_summary as (
                 select
