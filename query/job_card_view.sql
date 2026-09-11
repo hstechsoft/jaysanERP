@@ -22,6 +22,7 @@ select
     laser_job_card.job_card_id,
     laser_job_card.scarp_qty,
     laser_job_card.nesting_details_id,
+    laser_job_card.finished_date,
     emp.emp_name as operator_name
    
 from

@@ -1,0 +1,112 @@
+-- Active: 1766425908618@@srv1002.hstgr.io@3306@u333142350_jaysan
+with jcard as (select 
+ assign_date,
+    shift,
+   jmid,
+   run_time,
+   handling_time,
+   godown_id,
+   dep_id,
+   dep_sec_id,
+     godown,
+    dep,
+    sec,
+   machine_name,
+    assigned_by,
+    laser_machine_id,
+    qty,
+    remark,
+    operator_id,
+    status,
+    scarp_weight,
+    job_card_id,
+    scarp_qty,
+    nesting_details_id,
+    finished_date,
+    operator_name from job_card_view where shift = 'day' and jmid = 1 and status = 'create' and assigned_by = '141'),
+    jcard_summary as (select 
+    JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'assign_date', assign_date,
+            'shift', shift,
+            'jmid', jmid,
+            'run_time', run_time,
+            'handling_time', handling_time,
+            'godown_id', godown_id,
+            'dep_id', dep_id,
+            'dep_sec_id', dep_sec_id,
+            'godown', godown,
+            'dep', dep,
+            'sec', sec,
+            'machine_name', machine_name,
+            'assigned_by', assigned_by,
+            'laser_machine_id', laser_machine_id,
+            'qty', qty,
+            'remark', remark,
+            'operator_id', operator_id,
+            'status', status,
+            'scarp_weight', scarp_weight,
+            'job_card_id', job_card_id,
+            'scarp_qty', scarp_qty,
+            'finished_date', finished_date,
+            'operator_name', operator_name
+        )
+    ) as job_card_details,
+
+   sum(ifnull(run_time, 0)) as total_run_time,
+   sum(ifnull(handling_time, 0)) as total_handling_time,
+    sum(ifnull(qty, 0)) as total_qty,
+    sum(ifnull(scarp_weight, 0)) as total_scarp_weight,
+    sum(ifnull(scarp_qty, 0)) as total_scarp_qty,
+    nesting_details_id
+   from jcard GROUP BY nesting_details_id),
+    laser_summary as (
+        select 
+       ndv.nesting_id,
+ndv.nesting_name,
+ndv.material_id,
+ndv.path,
+ndv.nesting_type,
+ndv.std_length,
+ndv.material_name,
+ndv.scrap_name,
+ndv.master_created_by,
+ndv.master_created_name,
+ndv.nesting_parts_details,
+ ndv.nesting_details_id,
+ ndv.created_by_name,
+ ndv.created_by,
+ ndv.material_qty
+         from nesting_details_view ndv WHERE ndv.nesting_id = 1 and ndv.material_id = 1 and ndv.nesting_details_id = 1 and ndv.created_by = '141' 
+    ),
+    jc_unassign as(
+        select ifnull(sum(qty), 0) as total_qty, nesting_details_id from laser_job_card GROUP BY nesting_details_id
+    )
+    select ls.nesting_id,
+ls.nesting_name,
+ls.material_id,
+ls.path,
+ls.nesting_type,
+ls.std_length,
+ls.material_name,
+ls.scrap_name,
+ls.master_created_by,
+ls.master_created_name,
+ls.nesting_parts_details,
+ ls.nesting_details_id,
+ ls.created_by_name,
+ ls.created_by,
+ ls.material_qty,
+ jc.job_card_details,
+ jc.total_run_time,
+ jc.total_handling_time,
+ jc.total_qty,
+ jc.total_scarp_weight,
+ jc.total_scarp_qty,
+ ju.total_qty as assigned_qty,
+ ls.material_qty - ju.total_qty as remaining_unassigned_qty,
+jc.total_run_time + jc.total_handling_time as total_time
+  from laser_summary ls
+  left join jc_unassign ju on ls.nesting_details_id = ju.nesting_details_id
+ left JOIN jcard_summary jc on ls.nesting_details_id = jc.nesting_details_id
+
