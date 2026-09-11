@@ -23,7 +23,8 @@ select
     laser_job_card.scarp_qty,
     laser_job_card.nesting_details_id,
     laser_job_card.finished_date,
-    emp.emp_name as operator_name
+    emp.emp_name as operator_name,
+    assign_emp.emp_name as assigned_by_name
    
 from
     laser_job_card
@@ -33,3 +34,4 @@ from
     left join department dep on jm.dep_id = dep.dep_id
     left join dep_section sec on jm.dep_sec_id = sec.dep_sec_id
     left join employee emp on laser_job_card.operator_id = emp.emp_id
+    left join employee assign_emp on laser_job_card.assigned_by = assign_emp.emp_id
