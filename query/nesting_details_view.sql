@@ -61,7 +61,7 @@ CREATE OR REPLACE VIEW nesting_details_view AS
  nm.std_length,
  nm.material_name,
  nm.scrap_name,
- nm.scarp_weight,
+ nm.scarp_weight as master_scarp_weight,
  nm.master_created_by,
  nm.master_created_name,
  nm.nesting_parts_details,
