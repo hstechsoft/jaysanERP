@@ -48,7 +48,9 @@ LEFT JOIN delivery_challan dc
 --    AND inv.invoice_id = sr.reserve_type_id
 
 
-group by js.part_id,js.process_id,js.godown,js.dep,js.sec,sr.reserve_type )
+group by js.part_id,js.process_id,js.godown,js.dep,js.sec,sr.reserve_type ),
+
+reserve_summary as (
 select
     part_id,
     process_id,
@@ -74,10 +76,33 @@ from
     stock_reserved
 GROUP BY
     part_id,
+   
     process_id,
     godown,
     dep,
-    sec
+    sec)
+    SELECT
+     rs.part_id,
+      if(rs.part_id is null,jpv.final_part,parts_tbl.part_name) as rpart_name,
+    rs.process_id,
+    jpv.process_name as rprocess_name,
+    godown,
+    dep,
+    sec,
+    batch_id,
+    stock_id,
+    reserve_type_id,
+    stock_reserve_id,
+    creditor_name,
+    dep_name,
+    sec_name,
+    qty,
+    reserve_qty,
+    available_qty,
+  reserve_details from 
+    reserve_summary rs
+    left join parts_tbl on rs.part_id = parts_tbl.part_id
+    left join jaysan_process_view jpv on jpv.process_id = rs.process_id
 
 
  
