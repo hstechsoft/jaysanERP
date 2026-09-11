@@ -49,9 +49,6 @@ LEFT JOIN delivery_challan dc
 
 
 group by js.part_id,js.process_id,js.godown,js.dep,js.sec,sr.reserve_type )
-
-
-
 select
     part_id,
     process_id,
@@ -69,7 +66,9 @@ select
     stock_qty as qty,
     sum(total_reserved_qty) as reserve_qty,
     stock_qty- sum(ifnull(total_reserved_qty,0)) as available_qty,
-    JSON_ARRAYAGG(JSON_OBJECT('reserve_type',reserve_type, 'reserve_details', reserve_details)) as reserve_details
+    -- if reserve qty is null empty JSON_ARRAY
+    if( sum(total_reserved_qty) is null, null, JSON_ARRAYAGG(JSON_OBJECT('reserve_type',reserve_type, 'reserve_details', reserve_details))) as reserve_details
+   
 
 from 
     stock_reserved
