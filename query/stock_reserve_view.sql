@@ -76,7 +76,6 @@ from
     stock_reserved
 GROUP BY
     part_id,
-   
     process_id,
     godown,
     dep,
