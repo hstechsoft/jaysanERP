@@ -6,7 +6,7 @@
         sof.customer_id,
         sof.order_type,
      sof.emp_id,
-     (select emp_name from employee where emp_id= sof.emp_id) as emp_name,
+        employee.emp_name,
         sof.oe_supply,
         sof.commitment_date,
         sof.dated,
@@ -32,6 +32,7 @@
     FROM
         `sales_order_form` sof
     LEFT JOIN customer ON sof.customer_id = customer.cus_id
+    left join employee on sof.emp_id = employee.emp_id
     
 )
 SELECT
@@ -45,14 +46,7 @@ SELECT
     sop.price,
     jpm.model_name,
     jpm.product_id,
-    (
-    SELECT
-        jaysan_final_product.product_name
-    FROM
-        jaysan_final_product
-    WHERE
-        jaysan_final_product.product_id = jpm.product_id
-) AS product,
+  jfp.product_name as product,
 jmt.type_name
 
 FROM
@@ -62,3 +56,6 @@ LEFT JOIN jaysan_product_model jpm ON
     sop.model_id = jpm.model_id
 LEFT JOIN jaysan_model_type jmt ON
     sop.type_id = jmt.mtid
+
+LEFT JOIN jaysan_final_product jfp
+    ON jfp.product_id = jpm.product_id
