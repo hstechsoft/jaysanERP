@@ -2,7 +2,7 @@
 
 ini_set('display_errors', 0);
 
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Dompdf\Dompdf;
 use Dompdf\Options;

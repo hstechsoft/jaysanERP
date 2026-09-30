@@ -1,5 +1,5 @@
 <?php
-require 'stockservice.php';
+require_once 'stockservice.php';
 
 $stockservice = new stockservice();
 $stockservice -> consumestock();
