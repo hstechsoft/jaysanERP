@@ -450,9 +450,9 @@ $(document).ready(function () {
         var qty = parseFloat($(this).val()) || 0;
 
 
-        if (godown == '' || qty <= 0) {
+        if (godown == '') {
 
-            salert("Warning", "Select Godown and Qty must be greater than 0.", "warning");
+            salert("Warning", "Select Godown.", "warning");
 
             return;
         }
@@ -981,6 +981,7 @@ console.log(godown, dep, sec, process_id, qty, manual_part_id);
             process_id: process_id,
             qty: qty,
             manual_part_id: manual_part_id,
+            emp_id: current_user_id,
         },
         success: function (response) {
             console.log(response);
