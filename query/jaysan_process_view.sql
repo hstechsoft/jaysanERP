@@ -18,7 +18,7 @@
                     pwt.process_id,
                     jp.process_name,
                     pwt.output_part,
-                  if(pwt.output_part is null,CONCAT('semi finished part of ',pt_process_final.part_name),pt_process_final.part_name)  as final_part,
+                  if(pwt.output_part is null,CONCAT('semi finished part of ',pt_process_final.part_name,' (',jp.process_name,')'),pt_process_final.part_name)  as final_part,
                   pt_process_final.part_name as final_part_only,
                   pt_process_final.part_id as final_part_id
                   
