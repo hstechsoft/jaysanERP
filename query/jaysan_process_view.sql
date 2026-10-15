@@ -16,6 +16,7 @@
                     iwp.previous_process_id,
                     iwp.qty,
                     pwt.process_id,
+                    pwt.component_cat,
                     pwt.is_default,
                     pwt.final_process_id,
                     jp.process_name,
@@ -40,9 +41,9 @@
             
             left join process_wel_tbl pwt_process_final on pwt_process_final.process_id = pwt.final_process_id
             left join parts_tbl pt_process_final on pt_process_final.part_id = pwt_process_final.output_part),
-            process_group as(SELECT  JSON_ARRAYAGG(JSON_OBJECT('part',part,'input_part',input_part_id,'qty',qty,'previous_process_id',previous_process_id)) as input_parts, process_id,is_default,final_process_id,process_name,final_part,final_part_only,final_part_id,output_part from process_input group by process_id)
+            process_group as(SELECT  JSON_ARRAYAGG(JSON_OBJECT('part',part,'input_part',input_part_id,'qty',qty,'previous_process_id',previous_process_id)) as input_parts, process_id,is_default,component_cat,final_process_id,process_name,final_part,final_part_only,final_part_id,output_part from process_input group by process_id)
 
-                SELECT input_parts,pg.is_default,
+                SELECT input_parts,pg.is_default,pg.component_cat,
                pg.process_id,pg.final_process_id,process_name,
                if(wtm.godown_id is null,NULL, JSON_ARRAYAGG(JSON_OBJECT('godown_id',wtm.godown_id,'dep_id',wtm.dep_id,'sec_id',wtm.dep_sec_id,'godown_name' ,creditors.creditor_name,'department',department.dep_name,'section',dep_section.sec_name,'cost',cost,'max_time',max_time,'min_time',min_time,'wtid',wtid))) as godown_details,
                final_part,final_part_only,final_part_id,output_part 
