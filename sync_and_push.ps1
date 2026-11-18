@@ -3,7 +3,7 @@ param([string]$msg)
 
 # Source and Destination
 $SRC = Join-Path (Get-Location) "php"       # only copy /php subfolder
-   # $DEST = "E:\web\htdocs\jaysan\php"     
+   $DEST = "E:\web\htdocs\jaysan\php"     
     #    $DEST = "C:\xampp\htdocs\jaysan\php"         # destination (adjust path)
 
 Write-Output "Copying /php folder..."
