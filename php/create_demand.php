@@ -4,6 +4,7 @@
  $proces_id = isset($_POST['process_id']) ? test_input($_POST['process_id']) : '2796';
  $created_by = isset($_POST['created_by']) ? test_input($_POST['created_by']) : '141';
  $due_date = isset($_POST['due_date']) ? test_input($_POST['due_date']) : date('Y-m-d');
+//  
  $plan_name = isset($_POST['plan_name']) ? test_input($_POST['plan_name']) : 'Plan for Process ID: '.$proces_id;
  $production_qty = isset($_POST['production_qty']) ? test_input($_POST['production_qty']) : '100';
  $assign_id_json = isset($_POST['assign_id']) ? ($_POST['assign_id']) : '[]';
