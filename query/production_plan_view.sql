@@ -3,6 +3,7 @@ select
     pp.created_by,
     date_only (pp.dated) as production_plan_date,
     pp.planner_id,
+    pp.due_date,
     pp.remark,
     pp_employee.emp_name as pp_created_by_name,
     soiv.*,
